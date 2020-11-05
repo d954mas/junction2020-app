@@ -20,35 +20,3 @@ background_color {
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
 max_nodes: 2
-spine_scenes {
-  name: "shaman_ball"
-  spine_scene: "/assets/spine/effects/ranger_ball/ranger_ball.spinescene"
-}
-spine_scenes {
-  name: "shaman_ball_tail"
-  spine_scene: "/assets/spine/effects/ranger_ball/ranger_ball_tail.spinescene"
-}
-spine_scenes {
-  name: "enemy_drake_soldier"
-  spine_scene: "/assets/spine/enemy1/enemy_drake_soldier.spinescene"
-}
-spine_scenes {
-  name: "enemy_drake_flyer"
-  spine_scene: "/assets/spine/enemy_2/enemy_drake_flyer.spinescene"
-}
-spine_scenes {
-  name: "enemy_drake_sorcerer"
-  spine_scene: "/assets/spine/enemy_3/enemy_drake_sorcerer.spinescene"
-}
-spine_scenes {
-  name: "hero_ranger"
-  spine_scene: "/assets/spine/hero_ranger/hero_ranger.spinescene"
-}
-spine_scenes {
-  name: "hero_shaman"
-  spine_scene: "/assets/spine/hero_shaman/hero_shaman.spinescene"
-}
-spine_scenes {
-  name: "hero_warrior"
-  spine_scene: "/assets/spine/hero_warrior/hero_warrior.spinescene"
-}

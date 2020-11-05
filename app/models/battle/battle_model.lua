@@ -1,9 +1,5 @@
 local COMMON = require "libs.common"
-local LevelModel = require "models.battle.unit.level_model"
-local BattleView = require "scenes.battle.view.battle_view"
-local CommandsExecutor = require "scenes.battle.commands.command_executor"
 local INTENTS = require "libs_project.intents"
-local COMMANDS = require "scenes.battle.commands.commands"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 ---@class BattleModel
 local Battle = COMMON.class("BattleModel")
@@ -11,13 +7,6 @@ local Battle = COMMON.class("BattleModel")
 ---@param world World
 function Battle:initialize(world)
     self.world = world
-    self.haxe_battle_model = COMMON.meta_getter(function()
-        return self.world.speech.shared.world.battleModel
-    end)
-    self.haxe_battle_storage = COMMON.meta_getter(function()
-        return self.world.speech.shared.world.storage.battle
-    end)
-    self.user_turn_in_view = true
 
     self.level_model = LevelModel(self.world)
     self.word_current = nil

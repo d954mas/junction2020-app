@@ -1,8 +1,10 @@
 [project]
-title = speechgame
+title = junctiongame
 version = 0.1.0
 write_log = 0
 compress_archive = 1
+publisher = unnamed
+developer = unnamed
 custom_resources = 
 bundle_exclude_resources = 
 bundle_resources = assets/bundle
@@ -53,17 +55,18 @@ max_draw_calls = 1024
 max_characters = 8192
 max_debug_vertices = 10000
 texture_profiles = /render/fast.texture_profiles
-verify_graphics_calls = 1
+verify_graphics_calls = 0
+memory_size = 512
 
 [shader]
 output_spirv = 0
 
 [sound]
 gain = 1
-max_sound_data = 128
-max_sound_buffers = 32
-max_sound_sources = 16
-max_sound_instances = 256
+max_sound_data = 64
+max_sound_buffers = 8
+max_sound_sources = 8
+max_sound_instances = 8
 max_component_count = 64
 
 [resource]
@@ -86,6 +89,9 @@ max_count = 8
 
 [model]
 max_count = 8
+
+[mesh]
+max_count = 128
 
 [gui]
 max_count = 32
@@ -116,12 +122,13 @@ localizations = en
 [android]
 version_code = 1
 minimum_sdk_version = 16
-target_sdk_version = 28
+target_sdk_version = 29
 package = com.justai.monstrarium
 manifest = /platform/android/AndroidManifest.xml
 iap_provider = GooglePlay
 input_method = KeyEvent
 immersive_mode = 0
+display_cutout = 1
 debuggable = 0
 gcm_sender_id = 
 push_field_text = 
@@ -146,14 +153,16 @@ show_made_with_defold = 0
 scale_mode = stretch
 
 [particle_fx]
-max_count = 8
-max_particle_count = 4096
+max_count = 4
+max_particle_count = 1024
 
 [iap]
 auto_finish_transactions = 1
 
 [network]
 http_timeout = 0
+http_thread_count = 4
+http_cache_enabled = 1
 
 [library]
 include_dirs = 
@@ -170,6 +179,7 @@ track_cpu = 1
 
 [liveupdate]
 settings = /liveupdate.settings
+enabled = 1
 
 [tilemap]
 max_count = 0

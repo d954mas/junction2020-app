@@ -1,5 +1,5 @@
 [project]
-title = junction game
+title = junctiongame
 version = 0.1.0
 dependencies = https://github.com/AGulev/jstodef/archive/1.1.0.zip,https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip
 custom_resources = 
@@ -84,7 +84,7 @@ iap_provider =
 
 [html5]
 archive_location_prefix = archive
-htmlfile = /platform/web/engine_template_sber.html
+htmlfile = /platform/web/engine_template.html
 show_fullscreen_button = 0
 show_made_with_defold = 0
 scale_mode = stretch

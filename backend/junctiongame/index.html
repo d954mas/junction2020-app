@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>speechgame 0.1.0</title>
+    <title>junctiongame 0.1.0</title>
     <style type='text/css'>
 	/* Disable user selection to avoid strange bug in Chrome on Windows:
 	* Selecting a text outside the canvas, then clicking+draging would
@@ -31,7 +31,7 @@
         overflow-y: scroll;
         overflow-x: scroll;
         top: 0;
-        background: rgba(128,128,128,0.5);}
+        background: rgba(32,32,32,0.9);}
 
     .log-warn { color: orange;  pointer-events: none; }
     .log-error { color: red;  pointer-events: none; }
@@ -99,21 +99,22 @@
         z-index: 4
     }
 
-		.canvas-app-progress {
-		position: absolute;
-		background-color: #d1dbeb;
-		height: 6px;
-		margin-top: -6px;
-		width: 100%;
-	}
+	.canvas-app-progress {
+	position: absolute;
+	background-color: #d1dbeb;
+	height: 4%;
+	margin-top:-2%;
+	width: 100%;
+	z-index: 2;
+}
 
 	.canvas-app-progress-bar {
 		font-size: 12px;
-		height: 6px;
+		height: 100%;
 		color: rgb(255, 255, 255);
 		background-color: #1a72eb;
 		text-align: center;
-		line-height: 20px;
+		line-height: 100%;
 	}
 
 
@@ -149,17 +150,29 @@
 	//	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafcff', endColorstr='#f5f9ff', GradientType=1 );
 	}
 
-	.canvas-app-canvas {
-		background-repeat:no-repeat;
-		background-position: center center;
+.canvas-app-canvas {
+	background-repeat:no-repeat;
+	background-position: center center;
 
-        background-size: 100%;
-        background-image: url("load.webp");
-	}
+	background-size: 100%;
+	background-image: url("load.webp");
+	z-index: 1;
+}
+.canvas-app-bg {
+	background-repeat:no-repeat;
+	background-position: center center;
+
+	background-size: 100%;
+	background-image: url("load.webp");
+	z-index: 3;
+	position: absolute;
+	display :none
+}
 
     </style>
 
-    <script src​=​"​https://www.gstatic.com/assistant/interactivecanvas/api/interactive_canvas_eap.min.js​"​></script>
+    <script type="text/javascript"
+            src="https://www.gstatic.com/assistant/interactivecanvas/api/interactive_canvas_eap.min.js"></script>
 
 
 
@@ -167,16 +180,13 @@
 
 <body>
 <div id="app-container" class="canvas-app-container">
+    <canvas id="canvas-bg" class="canvas-app-bg" tabindex="0" width="1280"
+            height="680"></canvas>
     <canvas id="canvas" class="canvas-app-canvas" tabindex="1" width="1280"
             height="680"></canvas>
-
-    <div class="buttons-background">
-        
-        
-    </div>
 </div>
 
-    <div id="log-container">
+    <div id="log-container" style="display: none">
         <button type="button" id="btn_hide" style="position: fixed; margin-top:200px">HIDE !</button>
         <pre id="log" style="pointer-events:none;"></pre>
     </div>
@@ -206,7 +216,7 @@
 		// dmengine*.wasm is hardcoded in the built JS loader for WASM,
 		// we need to replace it here with the correct project name.
 		if (path == "dmengine.wasm" || path == "dmengine_release.wasm" || path == "dmengine_headless.wasm") {
-			path = "speechgame.wasm";
+			path = "junctiongame.wasm";
 		}
 		return scriptDirectory + path;
 	};
@@ -226,6 +236,7 @@
 		var app_container = document.getElementById('app-container');
 		var log_container = document.getElementById('log-container');
 		var game_canvas = document.getElementById('canvas');
+		var game_bg = document.getElementById('canvas-bg');
 		var innerWidth = window.innerWidth;
 		var innerHeight = window.innerHeight - buttonHeight-header_height;
 		var width = 1280;
@@ -242,7 +253,7 @@
         if(innerHeight>innerWidth){
             height = innerWidth * 680/1280;
             app_container.style.marginTop = ((innerHeight - height) / 2 ) + "px";
-            log_container.style.marginTop = ((innerHeight - height) / 2 ) + "px";
+            //  log_container.style.marginTop = ((innerHeight - height) / 2 ) + "px";
         }
 
 
@@ -254,6 +265,8 @@
         log_container.style.height = height + buttonHeight + "px";
 		game_canvas.width = width;
 		game_canvas.height = height;
+        game_bg.width = width;
+        game_bg.height = height;
 	}
 
 	function resize_game_canvas(){
@@ -283,22 +296,15 @@
 	window.addEventListener('orientationchange', resize_game_canvas, false);
 
 	function load_engine() {
-		var engineJS = document.createElement('script');
-		engineJS.type = 'text/javascript';
-		if (Module['isWASMSupported']) {
-			engineJS.src = 'speechgame_wasm.js';
-		} else {
-			engineJS.src = 'speechgame_asmjs.js';
-		}
-		document.head.appendChild(engineJS);
+        EngineLoader.load("canvas", "junctiongame");
 	}
 
         function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
-            fixLoggingFunc('log');
-            fixLoggingFunc('debug');
-            fixLoggingFunc('warn');
-            fixLoggingFunc('error');
-            fixLoggingFunc('info');
+         //   fixLoggingFunc('log');
+          //  fixLoggingFunc('debug');
+          //  fixLoggingFunc('warn');
+           // fixLoggingFunc('error');
+          //  fixLoggingFunc('info');
 
             function fixLoggingFunc(name) {
                 console['old' + name] = console[name];
@@ -376,6 +382,7 @@
                     if(typeof elem !== "undefined" &&  elem !== null) {elem.dispatchEvent(new_event);}
                     log.style.display = 'block';
                 }
+                 log.style.display = 'block';
             }
         };
 
