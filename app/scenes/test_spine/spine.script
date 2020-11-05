@@ -1,0 +1,9 @@
+go.property("anim", hash("idle"))
+go.property("skin", hash("no_skin"))
+function init(self)
+	print("change anim: ".. self.anim) 
+	spine.play_anim("#spine", self.anim, go.PLAYBACK_LOOP_FORWARD)
+	if self.skin ~= hash("no_skin") then
+		spine.set_skin("#spine", self.skin)
+	end
+end

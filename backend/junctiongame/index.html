@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="rd-cN2PGN7qJlw91ZDc1Mx0SPc75mj_A30kOzhgxU6s" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>speechgame 0.1.0</title>
+    <style type='text/css'>
+	/* Disable user selection to avoid strange bug in Chrome on Windows:
+	* Selecting a text outside the canvas, then clicking+draging would
+	* drag the selected text but block mouse down/up events to the engine.
+	*/
+	body {
+	
+		position: fixed; /* Prevent overscroll */
+	
+		margin:0;
+		padding:0;
+	}
+
+    #log-container {width: 100%;
+        height: 100%;  z-index: 1;
+        position: fixed;
+        left: 0;
+
+        overflow-y: scroll;
+        overflow-x: scroll;
+        top: 0;
+        background: rgba(128,128,128,0.5);}
+
+    .log-warn { color: orange;  pointer-events: none; }
+    .log-error { color: red;  pointer-events: none; }
+    .log-info { color: skyblue;  pointer-events: none; }
+    .log-log { color: silver;  pointer-events: none; }
+
+    .log-warn, .log-error { font-weight: bold; }
+
+	.canvas-app-container {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+
+	.canvas-app-container:-webkit-full-screen {
+		/* Auto width and height in Safari/Chrome fullscreen. */
+		width: auto;
+		height: auto;
+	}
+
+	#canvas {
+		outline: none;
+		border: 0;
+		width: 100%;
+		vertical-align: bottom;
+		z-index:1;
+	}
+
+	canvas:focus, canvas:active {
+		outline: none;
+		border: 0;
+		ie-dummy: expression(this.hideFocus=true);
+		-moz-outline-style: none;
+	}
+
+
+	div {
+		-webkit-tap-highlight-color: rgba(0,0,0,0);
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+    .overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: rgba(255,0,0,1);
+        z-index: 0;
+    }
+    .overlay2 {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 200px;
+        z-index: 4
+    }
+
+		.canvas-app-progress {
+		position: absolute;
+		background-color: #d1dbeb;
+		height: 6px;
+		margin-top: -6px;
+		width: 100%;
+	}
+
+	.canvas-app-progress-bar {
+		font-size: 12px;
+		height: 6px;
+		color: rgb(255, 255, 255);
+		background-color: #1a72eb;
+		text-align: center;
+		line-height: 20px;
+	}
+
+
+	.link, .button {
+		font-family: sans-serif;
+		font-size: 14px;
+		font-weight: normal;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: normal;
+		letter-spacing: 0px;
+		padding-top: 12px;
+	}
+
+	.buttons-background {
+		background-color: #ffffff;
+		width: 100%;
+		height: 42px;
+	}
+
+	body {
+		background-color: #ffffff;
+	}
+
+	.canvas-app-container {
+	//	background: rgba(250,252,255,1);
+	//	background: -moz-linear-gradient(-45deg, rgba(250,252,255,1) 0%, rgba(250,252,255,1) 50%, rgba(245,249,255,1) 50%, rgba(245,249,255,1) 100%);
+	//	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(250,252,255,1)), color-stop(50%, rgba(250,252,255,1)), color-stop(50%, rgba(245,249,255,1)), color-stop(100%, rgba(245,249,255,1)));
+	//	background: -webkit-linear-gradient(-45deg, rgba(250,252,255,1) 0%, rgba(250,252,255,1) 50%, rgba(245,249,255,1) 50%, rgba(245,249,255,1) 100%);
+	//	background: -o-linear-gradient(-45deg, rgba(250,252,255,1) 0%, rgba(250,252,255,1) 50%, rgba(245,249,255,1) 50%, rgba(245,249,255,1) 100%);
+	//	background: -ms-linear-gradient(-45deg, rgba(250,252,255,1) 0%, rgba(250,252,255,1) 50%, rgba(245,249,255,1) 50%, rgba(245,249,255,1) 100%);
+	//	background: linear-gradient(135deg, rgba(250,252,255,1) 0%, rgba(250,252,255,1) 50%, rgba(245,249,255,1) 50%, rgba(245,249,255,1) 100%);
+	//	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafcff', endColorstr='#f5f9ff', GradientType=1 );
+	}
+
+	.canvas-app-canvas {
+		background-repeat:no-repeat;
+		background-position: center center;
+
+        background-size: 100%;
+        background-image: url("load.webp");
+	}
+
+    </style>
+
+    <script src​=​"​https://www.gstatic.com/assistant/interactivecanvas/api/interactive_canvas_eap.min.js​"​></script>
+
+
+
+</head>
+
+<body>
+<div id="app-container" class="canvas-app-container">
+    <canvas id="canvas" class="canvas-app-canvas" tabindex="1" width="1280"
+            height="680"></canvas>
+
+    <div class="buttons-background">
+        
+        
+    </div>
+</div>
+
+    <div id="log-container">
+        <button type="button" id="btn_hide" style="position: fixed; margin-top:200px">HIDE !</button>
+        <pre id="log" style="pointer-events:none;"></pre>
+    </div>
+
+<!-- -->
+<script id='engine-loader' type='text/javascript' src="dmloader.js"></script>
+<!-- -->
+<script id='engine-setup' type='text/javascript'>
+    //https://forum.defold.com/t/how-html-flag-persistent-storage-worked/64253/
+    Module.persistentStorage = false;
+	var extra_params = {
+		archive_location_filter: function( path ) {
+			return ("archive" + path + "");
+		},
+		engine_arguments: ["--verify-graphics-calls=false",],
+		custom_heap_size: 134217728,
+		persistent_storage: false,
+		disable_context_menu: true
+	}
+
+	Module['onRuntimeInitialized'] = function() {
+		Module.runApp("canvas", extra_params);
+	};
+
+	Module["locateFile"] = function(path, scriptDirectory)
+	{
+		// dmengine*.wasm is hardcoded in the built JS loader for WASM,
+		// we need to replace it here with the correct project name.
+		if (path == "dmengine.wasm" || path == "dmengine_release.wasm" || path == "dmengine_headless.wasm") {
+			path = "speechgame.wasm";
+		}
+		return scriptDirectory + path;
+	};
+
+	var is_iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+	var buttonHeight = 0;
+
+
+	// Resize on init, screen resize and orientation change
+	function base_resize_game_canvas(header_height) {
+		header_height = header_height || 0;
+		// Hack for iOS when exit from Fullscreen mode
+		if (is_iOS) {
+			window.scrollTo(0, 0);
+		}
+
+		var app_container = document.getElementById('app-container');
+		var log_container = document.getElementById('log-container');
+		var game_canvas = document.getElementById('canvas');
+		var innerWidth = window.innerWidth;
+		var innerHeight = window.innerHeight - buttonHeight-header_height;
+		var width = 1280;
+		var height = 680;
+		var targetRatio = width / height;
+		var actualRatio = innerWidth / innerHeight;
+	
+	
+		//Stretch
+        app_container.style.marginTop = header_height + "px";
+        width = innerWidth;
+        height = innerHeight;
+
+        if(innerHeight>innerWidth){
+            height = innerWidth * 680/1280;
+            app_container.style.marginTop = ((innerHeight - height) / 2 ) + "px";
+            log_container.style.marginTop = ((innerHeight - height) / 2 ) + "px";
+        }
+
+
+	
+	
+	
+		app_container.style.width = width + "px";
+		app_container.style.height = height + buttonHeight + "px";
+        log_container.style.height = height + buttonHeight + "px";
+		game_canvas.width = width;
+		game_canvas.height = height;
+	}
+
+	function resize_game_canvas(){
+		window.interactiveCanvas.getHeaderHeightPx().then(
+				result => {
+                    if(result === 56){
+                        result = 128;
+                    }
+					// первая функция-обработчик - запустится при вызове resolve
+					console.log("Fulfilled: " + result); // result - аргумент resolve
+                   // document.getElementById("text").textContent="Fulfilled: "  + result;
+					base_resize_game_canvas(result)
+					},error => {
+					// вторая функция - запустится при вызове reject
+					console.log("Rejected: " + error); // error - аргумент reject
+					base_resize_game_canvas(0)
+				}
+		);
+	}
+	//hide first resize.Wait for canvas return data;
+	var app_container = document.getElementById('app-container');
+	app_container.style.width = 0;
+	app_container.style.height = 0;
+
+	resize_game_canvas();
+	window.addEventListener('resize', resize_game_canvas, false);
+	window.addEventListener('orientationchange', resize_game_canvas, false);
+
+	function load_engine() {
+		var engineJS = document.createElement('script');
+		engineJS.type = 'text/javascript';
+		if (Module['isWASMSupported']) {
+			engineJS.src = 'speechgame_wasm.js';
+		} else {
+			engineJS.src = 'speechgame_asmjs.js';
+		}
+		document.head.appendChild(engineJS);
+	}
+
+        function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
+            fixLoggingFunc('log');
+            fixLoggingFunc('debug');
+            fixLoggingFunc('warn');
+            fixLoggingFunc('error');
+            fixLoggingFunc('info');
+
+            function fixLoggingFunc(name) {
+                console['old' + name] = console[name];
+                console[name] = function(...arguments) {
+                    const output = produceOutput(name, arguments);
+                    const eleLog = eleLocator();
+
+                    if (autoScroll) {
+                        const eleContainerLog = eleOverflowLocator();
+                        const isScrolledToBottom = eleContainerLog.scrollHeight - eleContainerLog.clientHeight <= eleContainerLog.scrollTop + 1;
+                        eleLog.innerHTML += output + "<br>";
+                        if (isScrolledToBottom) {
+                            eleContainerLog.scrollTop = eleContainerLog.scrollHeight - eleContainerLog.clientHeight;
+                        }
+                    } else {
+                        eleLog.innerHTML += output + "<br>";
+                    }
+
+                    console['old' + name].apply(undefined, arguments);
+                };
+            }
+
+            function produceOutput(name, args) {
+                return args.reduce((output, arg) => {
+                    return output +
+                        "<span class=\"log-" + (typeof arg) + " log-" + name + "\">" +
+                        (typeof arg === "object" && (JSON || {}).stringify ? JSON.stringify(arg) : arg) +
+                        "</span>&nbsp;";
+                }, '');
+            }
+        }
+
+        rewireLoggingToElement(
+            () => document.getElementById("log"),
+            () => document.getElementById("log-container"), true);
+
+
+        window.debug_game = {};
+        window.debug_game.show_logs = function (show) {
+              var log = document.getElementById("log-container");
+              if(show){
+                  log.style.display = "block";
+              }else{
+                  log.style.display = "none";
+              }
+          }
+
+       window.debug_game.show_logs(false);
+        var log = document.getElementById("log-container");
+        var elem = document.getElementById('app-container');
+        var eventHandler = function(e) {
+            if(log.style.display === 'block'){
+                log.style.display = 'none';
+                var new_event = new MouseEvent(e.type, e);
+                let elem = document.elementFromPoint(e.clientX, e.clientY)
+                if(typeof elem !== "undefined" &&  elem !== null) {elem.dispatchEvent(new_event);}
+                log.style.display = 'block';
+            }
+
+        };
+
+        //log.onclick = eventHandler;
+        log.onmousedown = eventHandler;
+        log.onmouseup= eventHandler;
+        log.onmouseover = eventHandler;
+        log.onmouseout = eventHandler;
+        log.onmousemove = eventHandler;
+
+        var eventHandlerTouch = function(e) {
+            if(log.style.display === 'block'){
+                log.style.display = 'none';
+                var new_event = new TouchEvent(e.type, e);
+                if(new_event.touches[0]){
+                    let elem = document.elementFromPoint(new_event.touches[0].clientX, new_event.touches[0].clientY);
+                    if(typeof elem !== "undefined" &&  elem !== null) {elem.dispatchEvent(new_event);}
+                    log.style.display = 'block';
+                }
+            }
+        };
+
+        log.addEventListener("touchstart",eventHandlerTouch,false);
+        log.addEventListener("touchend",eventHandlerTouch,false);
+        log.addEventListener("touchmove",eventHandlerTouch,false);
+        log.addEventListener("touchcancel",eventHandlerTouch,false);
+
+       var btn_hide =  document.getElementById("btn_hide");
+         btn_hide.onclick  =  function () {
+             console.log("btn clicked");
+             window.debug_game.show_logs(log.style.display === 'none');
+         };
+
+</script>
+<script id='engine-start' type='text/javascript'>
+		load_engine();
+
+</script>
+
+
+<script id='register_cb_for_canvas' type='text/javascript'>
+		window.interactiveCanvasUpdateEvents = [];
+		var callbacks = {
+			onUpdate : function(data) {
+			//	console.log("onUpdateSaved",data);
+				window.interactiveCanvasUpdateEvents.push(data);
+			},
+			onTtsMark : function(markName){}
+		};
+		// called by the Interactive Canvas web app once web app has loaded to
+		// register callbacks
+		window.interactiveCanvas.ready(callbacks);
+
+</script>
+</body>
+</html>

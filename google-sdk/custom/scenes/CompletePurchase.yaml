@@ -1,0 +1,14 @@
+conditionalEvents:
+- condition: scene.slots.status == "FINAL"
+  handler:
+    staticPromptName: static_prompt_2
+    webhookHandler: CompletePurchase
+  transitionToScene: Main
+slots:
+- commitBehavior:
+    writeSessionParam: CompletePurchase
+  config: $session.params.purchase
+  name: CompletePurchase
+  required: true
+  type:
+    name: actions.type.CompletePurchaseValue

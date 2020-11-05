@@ -1,0 +1,2 @@
+---@class SharedHaxe
+local Shared = {}

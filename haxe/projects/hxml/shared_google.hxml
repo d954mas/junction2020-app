@@ -1,0 +1,35 @@
+-cp shared/src
+-D analyzer-optimize
+-D speech_platform=google
+-dce full
+
+-lib random
+-lib jsoni18n
+-lib hxArbitraryPrecisionInt
+-lib seedyrng
+
+-resource ./shared/data/eng/localization.json@localization_eng
+-resource ./shared/data/ru/localization.json@localization_ru
+-resource ./shared/data/ru/speech_commands.json@speech_commands_ru
+-resource ./shared/data/eng/speech_commands.json@speech_commands_en
+-resource ./shared/data/configs_ru.json@game_configs_ru
+-resource ./shared/data/configs_en.json@game_configs_en
+-resource ./shared/data/ru/match_words_ru.json@match_words_ru
+-resource ./shared/data/eng/match_words_en.json@match_words_en
+
+--macro nullSafety("shared", Loose)
+--each
+
+--macro exclude("EReg",true)
+-D lua-ver 5.1
+-lua ./shared/bin/lua/src/shared.lua
+--macro include('', true, null, ['shared/src'])
+
+
+--next
+-js ./shared/bin/js/src/shared.js
+--macro include('', true, null, ['shared/src'])
+
+--next
+-java ./shared/bin/java/src/shared
+--macro include('', true, null, ['shared/src'])

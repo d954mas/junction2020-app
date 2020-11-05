@@ -1,0 +1,43 @@
+requiref = require -- to fix cyclic dependencies
+local RX = require "libs.rx"
+local SOUNDS = require "libs.sounds"
+local COMMON = require "libs.common"
+local LOCALE = require "assets.localization.localization" --init localization
+local FACTORIES = require "collections.loader.factories"
+
+local Script = COMMON.new_n28s()
+
+function Script:init()
+	self:init_random()
+	factory.create(FACTORIES.DEBUG_GUI)
+	self:show_init()
+end
+
+function Script:init_random()
+	math.randomseed(os.time())
+	math.random()
+	math.random()
+	math.random()
+end
+
+
+function Script:update(dt)
+	dt = dt * COMMON.GLOBAL.speed_game
+	RX.MainScheduler:update(dt)
+	COMMON.APPLICATION.THREAD:update(dt)
+	SOUNDS:update(dt)
+end
+
+
+function Script:show_init()
+	msg.post("/init#collectionproxy", COMMON.HASHES.MSG_LOAD)
+end
+
+function Script:on_message(message_id, message, sender)
+	if message_id == COMMON.HASHES.MSG_PROXY_LOADED then
+		msg.post(sender, COMMON.HASHES.MSG_ENABLE)
+		msg.post(sender, COMMON.HASHES.INPUT_ACQUIRE_FOCUS)
+	end
+end
+
+COMMON.N28S.register(Script)

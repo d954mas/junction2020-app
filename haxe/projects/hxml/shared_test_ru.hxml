@@ -1,0 +1,48 @@
+-cp shared/src
+-cp shared/test
+-D analyzer-optimize
+-D UTEST_PRINT_TESTS
+-dce full
+
+
+-lib random
+-lib jsoni18n
+-lib utest
+-lib hxArbitraryPrecisionInt
+-lib seedyrng
+
+-resource ./shared/data/eng/localization.json@localization_eng
+-resource ./shared/data/ru/localization.json@localization_ru
+-resource ../../data/play_words.json@play_words_eng
+-resource ./shared/data/configs_ru.json@game_configs_ru
+-resource ./shared/data/configs_en.json@game_configs_en
+-resource ./shared/data/ru/speech_commands.json@speech_commands_ru
+-resource ./shared/data/eng/speech_commands.json@speech_commands_en
+-resource ./shared/data/ru/match_words_ru.json@match_words_ru
+-resource ./shared/data/eng/match_words_en.json@match_words_en
+
+--macro nullSafety("shared", Loose)
+-main TestRunner
+
+-D locale_ru 
+
+
+--each
+
+-cmd echo js
+--macro exclude("EReg",true)
+-js ./shared/bin/js/test/shared.js
+-cmd node ./shared/bin/js/test/shared.js
+--next
+
+-cmd echo lua
+-D lua-ver 5.1
+--macro exclude("EReg",true)
+-lua ./shared/bin/lua/test/shared.lua
+-cmd lua ./shared/scripts/replace_lua_requare_test.lua
+-cmd lua ./shared/bin/lua/test/shared.lua
+
+--next
+-cmd echo java
+-java ./shared/bin/java/test/shared
+-cmd java -jar ./shared/bin/java/test/shared/TestRunner.jar

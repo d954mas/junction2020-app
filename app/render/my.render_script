@@ -1,0 +1,261 @@
+local COMMON = require "libs.common"
+local CONSTANTS = require "libs.constants"
+local CAMERAS = require "libs_project.cameras"
+local SM = require "libs.sm.sm"
+local TAG = "Render"
+local HASH_CAMERA_3D = hash("/camera_battle_3d")
+
+---@class Render
+local Render = COMMON.new_n28s()
+--region init
+function Render:init()
+	self.clear_color = vmath.vector4(1, 1, 1, 0)
+	--самый первый размер это размер игры. Иначе камеры плохо отрабатывыют в html  билде
+	self.screen_size = {
+		w = CONSTANTS.HTML5 and render.get_width() or render.get_window_width(),
+		h = CONSTANTS.HTML5 and render.get_height() or render.get_window_height(),
+	}
+	self.config_size = {
+		w = render.get_width(),
+		h = render.get_height()
+	}
+	self.size = {
+		w = render.get_width();
+		h = render.get_height()
+	}
+
+	self:window_size_changed()
+
+	self:init_predicates()
+	self:init_render_targets()
+	self:init_buffers()
+	self:init_constants_buffers()
+	self:register_messages()
+	self.clear = { [render.BUFFER_COLOR_BIT] = self.clear_color, [render.BUFFER_DEPTH_BIT] = 1, [render.BUFFER_STENCIL_BIT] = 0 }
+	COMMON.RENDER = self
+end
+
+function Render:create_render_target(name, params)
+	-- render target buffer parameters
+	local color_params = { format = params.format or render.FORMAT_RGBA,
+						   width = assert(params.w),
+						   height = assert(params.h),
+						   min_filter = params.min_filter or render.FILTER_LINEAR,
+						   mag_filter = params.mag_filter or render.FILTER_LINEAR,
+						   u_wrap = params.u_wrap or render.WRAP_CLAMP_TO_EDGE,
+						   v_wrap = params.v_wrap or render.WRAP_CLAMP_TO_EDGE }
+	local depth_params = { format = render.FORMAT_DEPTH,
+						   width = params.w,
+						   height = params.h,
+						   u_wrap = params.u_wrap or render.WRAP_CLAMP_TO_EDGE,
+						   v_wrap = params.v_wrap or render.WRAP_CLAMP_TO_EDGE }
+	return {
+		target = render.render_target(assert(name), { [render.BUFFER_COLOR_BIT] = color_params, [render.BUFFER_DEPTH_BIT] = depth_params }),
+		w = params.w,
+		h = params.h
+	}
+end
+
+function Render:init_render_targets()
+	self.targets = {}
+end
+
+function Render:init_buffers()
+	self.buffers = {}
+end
+
+function Render:init_predicates()
+	self.predicates = {
+		tile = render.predicate({ "tile" }),
+		bg = render.predicate({ "bg" }),
+		--chars in battle
+		tile3d = render.predicate({ "tile3d" }),
+		tile3d2 = render.predicate({ "tile3d2" }),
+		tile3d3 = render.predicate({ "tile3d3" }),
+		tile3d4 = render.predicate({ "tile3d4" }),
+
+		--above battle_gui
+		battle_top = render.predicate({ "battle_top" }),
+
+		gui = render.predicate({ "gui" }),
+		gui_battle = render.predicate({ "gui_battle" }),
+		gui_map = render.predicate({ "gui_map" }),
+
+		text = render.predicate({ "text" }),
+		text_in_go = render.predicate({ "text_in_go" }),
+		particle = render.predicate({ "particle" }),
+	}
+
+end
+
+function Render:init_constants_buffers()
+	self.constants_buffers = {
+
+	}
+end
+
+function Render:register_messages()
+	self.msg_receiver = COMMON.MSG()
+	self.msg_receiver:add("window_resized", function(...)
+		local prev_w = self.screen_size.w
+		local prev_h = self.screen_size.h
+		self.screen_size.w = render.get_window_width()
+		self.screen_size.h = render.get_window_height()
+		if (prev_w ~= self.screen_size.w or prev_h ~= self.screen_size.h) then
+			self:window_size_changed()
+			COMMON.EVENT_BUS:event(COMMON.EVENTS.WINDOW_RESIZED, { width = self.screen_size.w, height = self.screen_size.h, prev_width = prev_w, prev_height = prev_h })
+		end
+	end)
+end
+--endregion
+
+
+function Render:window_size_changed()
+	self.gui_proj = vmath.matrix4_orthographic(0, self.screen_size.w, 0, self.screen_size.h, -1, 1)
+	self.empty_view = vmath.matrix4()
+end
+
+
+--region draw
+
+function Render:render_gui()
+	-- GUI Rendering
+	render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y, CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
+	render.set_view(self.empty_view)
+	render.set_projection(CAMERAS.current and CAMERAS.current.gui_proj or self.gui_proj)
+
+	render.enable_state(render.STATE_STENCIL_TEST)
+	render.draw(self.predicates.gui)
+	render.draw(self.predicates.text)
+	render.disable_state(render.STATE_STENCIL_TEST)
+end
+
+function Render:render_gui_battle()
+	if (CAMERAS.current == CAMERAS.battle_camera) then
+		-- GUI Rendering
+		render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y, CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
+		render.set_view(self.empty_view)
+		render.set_projection(CAMERAS.current and CAMERAS.current.gui_proj or self.gui_proj)
+
+		render.enable_state(render.STATE_STENCIL_TEST)
+		render.draw(self.predicates.gui_battle)
+	--	render.draw(self.predicates.text)
+		render.disable_state(render.STATE_STENCIL_TEST)
+	end
+end
+
+function Render:render_gui_map()
+	if (CAMERAS.current == CAMERAS.map_camera) then
+		-- GUI Rendering
+		render.set_view(CAMERAS.current:get_view())
+		render.set_projection(CAMERAS.current:get_proj())
+
+		render.enable_state(render.STATE_STENCIL_TEST)
+		render.draw(self.predicates.gui_map)
+		render.draw(self.predicates.text_in_go)
+		render.disable_state(render.STATE_STENCIL_TEST)
+	end
+end
+
+function Render:render_sprites_3d()
+	local scene_state = SM:get_scene_by_name(SM.SCENES.BATTLE)._state
+	if scene_state == "RUNNING" or scene_state == "PAUSED" then
+		render.set_viewport(CAMERAS.battle_camera3d.viewport.x, CAMERAS.battle_camera3d.viewport.y, CAMERAS.battle_camera3d.viewport.width, CAMERAS.battle_camera3d.viewport.height)
+
+		render.set_view(CAMERAS.battle_camera3d:get_view())
+		render.set_projection(CAMERAS.battle_camera3d:get_proj())
+
+		render.set_depth_mask(true)
+		render.enable_state(render.STATE_DEPTH_TEST)
+		render.disable_state(render.STATE_STENCIL_TEST)
+		render.enable_state(render.STATE_BLEND)
+		render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
+		render.enable_state(render.STATE_CULL_FACE)
+		render.set_cull_face(render.FACE_FRONT)
+
+		render.set_depth_func(render.COMPARE_FUNC_LESS)
+
+		render.draw(self.predicates.tile3d)
+		render.draw(self.predicates.tile3d2)
+		render.draw(self.predicates.tile3d3)
+		render.draw(self.predicates.tile3d4)
+
+		render.set_depth_mask(false)
+		render.disable_state(render.STATE_DEPTH_TEST)
+		render.disable_state(render.STATE_CULL_FACE)
+	end
+
+end
+
+function Render:render_sprites()
+	render.set_view(CAMERAS.current:get_view())
+	render.set_projection(CAMERAS.current:get_proj())
+
+	render.set_depth_mask(false)
+	render.disable_state(render.STATE_DEPTH_TEST)
+	render.disable_state(render.STATE_STENCIL_TEST)
+	render.disable_state(render.STATE_CULL_FACE)
+	render.enable_state(render.STATE_BLEND)
+	render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
+
+	render.draw(self.predicates.tile)
+	render.draw(self.predicates.particle)
+	render.draw_debug3d()
+end
+
+function Render:render_bg()
+	render.set_view(CAMERAS.current:get_view())
+	render.set_projection(CAMERAS.current:get_proj())
+
+	render.set_depth_mask(false)
+	render.disable_state(render.STATE_DEPTH_TEST)
+	render.disable_state(render.STATE_STENCIL_TEST)
+	render.disable_state(render.STATE_CULL_FACE)
+	render.enable_state(render.STATE_BLEND)
+	render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
+	render.draw(self.predicates.bg)
+end
+
+function Render:render_battle_top()
+	render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y, CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
+
+	render.set_view(CAMERAS.battle_camera:get_view())
+	render.set_projection(CAMERAS.battle_camera:get_proj())
+
+	render.set_depth_mask(false)
+	render.disable_state(render.STATE_DEPTH_TEST)
+	render.disable_state(render.STATE_STENCIL_TEST)
+	render.disable_state(render.STATE_CULL_FACE)
+	render.enable_state(render.STATE_BLEND)
+	render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
+
+	render.draw(self.predicates.battle_top)
+end
+
+--endregion
+
+function Render:render_clear()
+	render.set_depth_mask(true)
+	render.set_stencil_mask(0xff)
+	render.clear(self.clear)
+end
+
+function Render:update(dt)
+	self:render_clear()
+	render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y, CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
+	self:render_bg()
+--	self:render_gui_battle()
+	self:render_sprites()
+--	self:render_sprites_3d()
+--	self:render_battle_top()
+--	self:render_gui_map()
+	self:render_gui()
+	--
+
+end
+
+function Render:on_message(message_id, message)
+	self.msg_receiver:on_message(self, message_id, message)
+end
+
+COMMON.N28S.register(Render)

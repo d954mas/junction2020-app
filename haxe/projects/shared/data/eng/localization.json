@@ -1,0 +1,33 @@
+{
+	"client": {
+		"yes": "yes",
+		"no": "no",
+		"buttons_buy_text": "BUY",
+		"buttons_buy": "<b>BUY FOR<b> :count <img=gui_ui:icon_text_gold/>",
+		"buttons_play_again": "PLAY AGAIN",
+		"buttons_ok": "OK",
+		"buttons_cancel": "CANCEL",
+		"buttons_continue": "CONTINUE",
+		"buttons_exit": "EXIT",
+		"buttons_play": "PLAY",
+		"buttons_play_start": "START",
+		"buttons_report": "Send report",
+		"btn_on": "вкл",
+		"btn_off": "выкл",
+		"server_was_update": "The server has been updated.\nPlease reload the application to play further."
+	},
+	"conv": {
+		"fallback": "I do not understand you.",
+		"play_multiple_devices": "You cannot play from different devices at the same time. The application will be closed",
+		"server_was_update": "The server has been updated.\nPlease reload the application to play further.",
+		"welcome": "Welcome, Guardian. The game is loading, please wait a second.",
+		"game_exit": "Goodbye, Guardian",
+		"iap_complete": "Success purchase",
+		"iap_failed": "Failed to purchase",
+		"error_server_sync": "Failed to syncronise with server. Goodbye Guardian",
+		"shop_cant_get_prices": "Can't get prices. Try again later"
+	},
+	"tutorial": {
+		"hello_world": "hello_world"
+	}
+}

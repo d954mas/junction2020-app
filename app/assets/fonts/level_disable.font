@@ -1,0 +1,17 @@
+font: "/assets/fonts/bitmap/level_disabled.fnt"
+material: "/assets/materials/font-fnt_gui_go.material"
+size: 32
+antialias: 1
+alpha: 1.0
+outline_alpha: 1.0
+outline_width: 2.0
+shadow_alpha: 0.33
+shadow_blur: 1
+shadow_x: -3.0
+shadow_y: -3.0
+extra_characters: "1234567890"
+output_format: TYPE_BITMAP
+all_chars: false
+cache_width: 0
+cache_height: 0
+render_mode: MODE_SINGLE_LAYER

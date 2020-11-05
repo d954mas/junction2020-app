@@ -1,0 +1,84 @@
+local COMMON = require "libs.common"
+local GUI_DIRTY = require "gooey.themes.dirtylarry.dirtylarry"
+local BaseGui = require "libs_project.scripts.base_gui_script"
+local SELECTION = require "libs_project.selection"
+local SM = require "libs.sm.sm"
+local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
+
+local Script = COMMON.CLASS("GuiScript", BaseGui)
+
+function Script:bind_vh()
+    self.vh = {
+        root = {
+            root = gui.get_node("root"),
+        },
+        btn_ok = {
+            root = gui.get_node("btn_ok/bg"),
+            root_name = "btn_ok"
+        },
+        lbl_title = { root = gui.get_node("lbl_title") },
+        lbl_error = { root = gui.get_node("lbl_error") },
+        btn_report = {
+            root = gui.get_node("btn_report/bg"),
+            root_name = "btn_report"
+        }
+    }
+end
+
+function Script:init()
+    BaseGui.init(self)
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.ERROR_GUI, self)
+    self:bind_vh()
+    gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.DEBUG)
+    gui.set_enabled(self.vh.root.root, false)
+end
+
+function Script:final()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.ERROR_GUI)
+end
+
+function Script:on_input(action_id, action)
+    if gui.is_enabled(self.vh.root.root) then
+        GUI_DIRTY.button(self.vh.btn_ok.root_name, action_id, action, function(button)
+            self:hide_scene()
+        end)
+        GUI_DIRTY.button(self.vh.btn_report.root_name, action_id, action, function(button)
+            local ctx = COMMON.CONTEXT:set_context_top_info_bubble()
+            ctx.data:show_bubble_report_sent()
+            ctx:remove()
+            self:hide_scene()
+        end
+        )
+    end
+end
+
+function Script:hide_scene()
+    gui.set_enabled(self.vh.root.root, false)
+    COMMON.input_release()
+    SELECTION.SELECTION:set_active_scene(SELECTION.SCENES.ErrorView)
+    local selection = SELECTION.SCENES[SM:scene_get_top()._name]
+    if (selection) then
+        SELECTION.SELECTION:set_active_scene(selection)
+    end
+end
+
+function Script:on_message(message_id, message)
+    if message_id == COMMON.HASHES.MSG_GUI_ERROR_SHOW then
+        COMMON.input_acquire()
+        gui.set_enabled(self.vh.root.root, true)
+        --todo show error if it a developer
+        local error_text = COMMON.LUME.serialize(global_error_data)
+        print(error_text)
+        if (HAXE_WRAPPER.user_is_dev()) then
+            gui.set_text(self.vh.lbl_error.root, COMMON.LUME.serialize(global_error_data))
+        else
+            gui.set_text(self.vh.lbl_error.root, HAXE_WRAPPER.get_i18n_text("client/modals_error"))
+        end
+        gui.set_text(self.vh.btn_report.root, HAXE_WRAPPER.get_i18n_text("client/buttons_report"))
+        SELECTION.SELECTION:set_active_scene(SELECTION.SCENES.ErrorView)
+        gui.set_text(self.vh.lbl_title.root, HAXE_WRAPPER.get_i18n_text("client/modals_error_title"))
+     end
+end
+
+
+COMMON.N28S.register(Script)

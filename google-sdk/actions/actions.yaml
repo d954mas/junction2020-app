@@ -1,0 +1,6 @@
+custom:
+  actions.intent.MAIN:
+    engagement:
+      assistantLink:
+        title: actions.intent.MAIN
+  actions.intent.PLAY_GAME: {}

@@ -1,0 +1,33 @@
+{
+	"client": {
+		"yes": "да",
+		"no": "нет",
+		"buttons_buy_text": "КУПИТЬ",
+		"buttons_buy": "<b>КУПИТЬ ЗА<b> :count <img=gui_ui:icon_text_gold/>",
+		"buttons_play_again": "ИГРАТЬ СНОВА",
+		"buttons_ok": "OK",
+		"buttons_cancel": "ОТМЕНА",
+		"buttons_continue": "ПРОДОЛЖИТЬ",
+		"buttons_exit": "ВЫЙТИ",
+		"buttons_play": "ИГРАТЬ",
+		"buttons_play_start": "В БОЙ",
+		"buttons_report": "Отправить отчет",
+		"btn_on": "вкл",
+		"btn_off": "выкл",
+		"server_was_update": "Сервер был обновлен.\nПожалуйста, перезайди в приложение, чтобы играть дальше."
+	},
+	"conv": {
+		"fallback": "Не понимаю тебя.",
+		"play_multiple_devices": "Ты не можешь играть с разных устройств одновременно. Приложение будет закрыто.",
+		"server_was_update": "Сервер был обновлен.\nПожалуйста, перезайди в приложение, чтобы играть дальше.",
+		"welcome": "Добро пожаловать, Хранитель.",
+		"game_exit": "До новым встреч, Хранитель!",
+		"iap_complete": "Успешная покупка",
+		"iap_failed": "Неудалось купить",
+		"error_server_sync": "Не удалось синхронизироваться. Возвращайся, Хранитель!",
+		"shop_cant_get_prices": "Не удалось получить цены. Попробуйте позже"
+	},
+	"tutorial": {
+		"hello_world": "hello_world"
+	}
+}

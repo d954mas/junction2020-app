@@ -1,0 +1,8 @@
+handlers:
+- name: doAny
+- name: CompletePurchase
+- name: DigitalPurchaseCheckError
+- name: DigitalPurchaseCheckOk
+httpsEndpoint:
+  baseUrl: https://junction2020-speech-game.herokuapp.com/google_actionsv3
+  endpointApiVersion: 2

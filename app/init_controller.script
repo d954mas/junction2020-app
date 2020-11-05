@@ -1,0 +1,115 @@
+local COMMON = require "libs.common"
+local SM = require "libs.sm.sm"
+local INTENTS = require "libs_project.intents"
+
+local SPEECH = require "libs_project.speech" --require to init it
+local DEBUG_INFO = require "debug.debug_info"
+
+local WORLD = require "models.world"
+local JSON = require "libs_project.json"
+local CHECKS = require "libs.checks"
+local RUN_TEST = false
+local CAMERAS = require "libs_project.cameras"
+local JSON = require "libs_project.json" --not remove it init cjson params
+
+COMMON.empty_ne("defos")
+
+---@class ScriptMain
+local Script = COMMON.new_n28s()
+
+local scenes = {
+    require "scenes.main.main_scene"
+}
+
+function Script:scenes_register()
+    local reg_scenes = {}
+    for i, v in ipairs(scenes) do
+        reg_scenes[i] = v()
+    end --create instances
+    SM:register(reg_scenes)
+end
+
+function Script:input_init()
+    self.show_profiler = false
+    self.input = COMMON.INPUT()
+    self.input.acquire()
+end
+
+function Script:init()
+    CAMERAS:init()
+    self.thread = COMMON.ThreadManager()
+    self.subscription = COMMON.RX.SubscriptionsStorage()
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN, self)
+    sys.set_error_handler(function(source, message, traceback)
+        --close all contexts on error. Or engine can be broken
+        COMMON.CONTEXT:clear()
+        --do not send same message
+        self.exception_prev_time = self.exception_prev_time or 0
+        if (self.exception_prev == message and (os.time() - self.exception_prev_time) < 60 * 1) then
+
+        else
+            self.exception_prev = message
+            self.exception_prev_time = os.time()
+        end
+
+
+    end)
+
+    self:scenes_register()
+    self:input_init()
+    SPEECH:init()
+    if not RUN_TEST then
+        COMMON.APPLICATION.THREAD:add(function()
+            coroutine.yield()
+            coroutine.yield()
+           -- COMMON.coroutine_wait(0.2)
+            while not SPEECH.shared do
+                coroutine.yield()
+            end
+            interactive_canvas.send_text_query(INTENTS.INTENTS.WEBAPP_LOAD_DONE)
+            self.thread:add(function()
+                while (true) do
+                    SPEECH.shared:update();
+                    COMMON.COROUTINES.coroutine_wait(0.25)
+                end
+            end)
+        end)
+    else
+        self.test_runner = require("tests.tests") -- run tests
+        self.test_runner.run()
+    end
+
+    self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):subscribe(
+        function()
+      
+        end)
+    )
+
+
+end
+
+function Script:update(dt)
+    dt = dt * COMMON.GLOBAL.speed_game
+    CAMERAS:update(dt)
+    self.thread:update(dt)
+    SM:update(dt)
+    WORLD:update(dt)
+    SPEECH:update(dt)
+end
+
+function Script:final()
+    COMMON.INPUT.clear()
+    self.input.release()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.MAIN)
+end
+
+function Script:on_message()
+
+end
+
+function Script:on_input(action_id, action)
+    COMMON.INPUT.handle_pressed_keys(action_id, action)
+    return self.input:on_input(self, action_id, action)
+end
+
+COMMON.N28S.register(Script)

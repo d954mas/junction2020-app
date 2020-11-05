@@ -1,0 +1,14 @@
+{
+	"tutorial.yes": {
+		"order": 100,
+		"text": "(?!x)x"
+	},
+	"tutorial.no": {
+		"order": 100,
+		"text": "(?!x)x"
+	},
+	"debug.toggle": {
+		"order": 100,
+		"text": "((включить|покажи)\\s*)+(дебаг)"
+	}
+}

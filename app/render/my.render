@@ -1,0 +1,5 @@
+script: "/render/my.render_script"
+materials {
+  name: "blur"
+  material: "/assets/materials/blur/blur_simple.material"
+}

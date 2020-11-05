@@ -1,0 +1,21 @@
+conditionalEvents:
+- condition: scene.slots.status == "FINAL" && session.params.DigitalPurchaseCheck.resultType
+    == "CAN_PURCHASE"
+  handler:
+    staticPromptName: static_prompt_1
+    webhookHandler: DigitalPurchaseCheckOk
+  transitionToScene: Main
+- condition: scene.slots.status == "FINAL"
+  handler:
+    staticPromptName: static_prompt_4
+    webhookHandler: DigitalPurchaseCheckError
+  transitionToScene: Main
+slots:
+- commitBehavior:
+    writeSessionParam: DigitalPurchaseCheck
+  config:
+    '@type': type.googleapis.com/google.actions.transactions.v3.DigitalPurchaseCheckSpec
+  name: DigitalPurchaseCheck
+  required: true
+  type:
+    name: actions.type.DigitalPurchaseCheckResult

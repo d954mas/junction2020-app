@@ -1,0 +1,5 @@
+intentEvents:
+- handler:
+    staticPromptName: static_prompt_3
+    webhookHandler: doAny
+  intent: user_utterance

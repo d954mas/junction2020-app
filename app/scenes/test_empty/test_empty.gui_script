@@ -1,0 +1,39 @@
+local COMMON = require "libs.common"
+local SM = require "libs.sm.sm"
+
+local GUI = require("libs_project.gui.gui")
+
+local Script = COMMON.new_n28s()
+
+function Script:_bind_vh()
+	self.vh = {
+		root = { root = gui.get_node("root") },
+	}
+
+	self.views = {
+		btn_back = GUI.ButtonScale("btn_back"),
+	}
+
+end
+
+function Script:_init_gui()
+	self.views.btn_back:set_input_listener(function()
+		SM:back()
+	end)
+end
+
+function Script:init()
+	COMMON.input_acquire()
+	self:_bind_vh()
+	self:_init_gui()
+end
+
+function Script:final()
+	COMMON.input_release()
+end
+
+function Script:on_input(action_id, action)
+	if (self.views.btn_back:on_input(action_id, action)) then return end
+end
+
+COMMON.N28S.register(Script)

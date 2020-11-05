@@ -1,0 +1,24 @@
+{
+  "hosting": {
+    "public": "junctiongame",
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public must-revalidate max-age=60"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          },
+          {
+            "key": "Access-Control-Expose-Headers",
+            "value": "ETag"
+          }
+        ]
+      }
+    ]
+  }
+}

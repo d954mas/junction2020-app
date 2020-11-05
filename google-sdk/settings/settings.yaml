@@ -1,0 +1,21 @@
+category: GAMES_AND_TRIVIA
+defaultLocale: en
+localizedSettings:
+  developerEmail: d954mas@gmail.com
+  developerName: d954mas and team
+  displayName: Junk Game
+  fullDescription: Junction 2020 hackaton
+  privacyPolicyUrl: https://docs.google.com/document/d/1RNUlziAauPME_iDl8w9nu5P5D_TZECEFsCCKmAbDcNw/edit?usp=sharing
+  pronunciation: Junk Game
+  sampleInvocations:
+  - Talk to Junk Game
+  shortDescription: Junction 2020 hackaton
+  smallLogoImage: https://lh3.googleusercontent.com/junkYpCyDKJXKAEEM-n-MbnpnnTZnh9bX9HdbLub9m7d397d_RMAKeHQPoerdHbsZJZ2dFpNAdGn
+  termsOfServiceUrl: https://docs.google.com/document/d/1QDA7cZBnKXiSgrhcSoqEEAuxw2Io82vl5HwUJYqub0s/edit?usp=sharing
+  voice: female_1
+projectId: junction2020-prod
+surfaceRequirements:
+  minimumRequirements:
+  - capability: AUDIO_OUTPUT
+  - capability: SCREEN_OUTPUT
+usesInteractiveCanvas: true

@@ -1,0 +1,4 @@
+local COMMON = require("libs.common")
+local HandlePhysicsScript = require "go_scripts.base.handle_physycs.handle_physics"
+
+COMMON.N28S.register(HandlePhysicsScript)

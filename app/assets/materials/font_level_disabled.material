@@ -1,0 +1,35 @@
+name: "font"
+tags: "text_in_go"
+vertex_program: "/builtins/fonts/font-df.vp"
+fragment_program: "/assets/materials/font_gradient.fp"
+vertex_space: VERTEX_SPACE_WORLD
+vertex_constants {
+  name: "view_proj"
+  type: CONSTANT_TYPE_VIEWPROJ
+  value {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+}
+fragment_constants {
+  name: "color1"
+  type: CONSTANT_TYPE_USER
+  value {
+    x: 0.82
+    y: 0.82
+    z: 0.82
+    w: 0.0
+  }
+}
+fragment_constants {
+  name: "color2"
+  type: CONSTANT_TYPE_USER
+  value {
+    x: 0.98
+    y: 0.98
+    z: 0.98
+    w: 0.0
+  }
+}

@@ -1,0 +1,120 @@
+[project]
+title = junction game
+version = 0.1.0
+dependencies = https://github.com/AGulev/jstodef/archive/1.1.0.zip,https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip
+custom_resources = 
+bundle_exclude_resources = 
+bundle_resources = assets/bundle
+
+[bootstrap]
+main_collection = /collections/loader/loader.collectionc
+render = /render/my.renderc
+
+[input]
+game_binding = /game.input_bindingc
+use_accelerometer = 0
+
+[display]
+width = 1280
+height = 680
+high_dpi = 0
+fullscreen = 0
+update_frequency = 0
+display_profiles = /builtins/render/default.display_profilesc
+vsync = 0
+
+[physics]
+scale = 1.0
+type = 2D
+debug = 0
+debug_alpha = 0.5
+gravity_z = 0.0
+debug_scale = 1.0
+max_collisions = 512
+max_contacts = 512
+
+[script]
+shared_state = 1
+
+[library]
+include_dirs = 
+
+[native_extension]
+app_manifest = /app_manifest_debug.appmanifest
+
+[android]
+gcm_sender_id = 
+push_field_text = 
+manifest = /platform/android/AndroidManifest.xml
+package = com.justai.monstrarium
+
+[graphics]
+texture_profiles = /render/fast.texture_profiles
+default_texture_min_filter = linear
+default_texture_mag_filter = linear
+verify_graphics_calls = 0
+
+[sound]
+max_sound_buffers = 8
+max_component_count = 64
+max_sound_data = 64
+max_sound_sources = 8
+max_sound_instances = 8
+
+[sprite]
+max_count = 256
+
+[resource]
+max_resources = 1024
+
+[collection]
+max_instances = 2048
+
+[factory]
+max_count = 16
+
+[spine]
+max_count = 8
+
+[profiler]
+track_cpu = 1
+
+[windows]
+iap_provider = 
+
+[html5]
+archive_location_prefix = archive
+htmlfile = /platform/web/engine_template_sber.html
+show_fullscreen_button = 0
+show_made_with_defold = 0
+scale_mode = stretch
+cssfile = /platform/web/light_theme.css
+heap_size = 128
+
+[model]
+max_count = 8
+
+[particle_fx]
+max_particle_count = 1024
+max_count = 4
+
+[gui]
+max_count = 32
+
+[label]
+max_count = 8
+
+[collectionfactory]
+max_count = 16
+
+[tilemap]
+max_count = 0
+
+[googleanalytics]
+dispatch_period = 30
+queue_save_period = 60000000
+verbose = 0
+
+[collection_proxy]
+max_count = 32
+
