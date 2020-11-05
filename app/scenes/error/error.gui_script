@@ -55,11 +55,6 @@ end
 function Script:hide_scene()
     gui.set_enabled(self.vh.root.root, false)
     COMMON.input_release()
-    SELECTION.SELECTION:set_active_scene(SELECTION.SCENES.ErrorView)
-    local selection = SELECTION.SCENES[SM:scene_get_top()._name]
-    if (selection) then
-        SELECTION.SELECTION:set_active_scene(selection)
-    end
 end
 
 function Script:on_message(message_id, message)
@@ -75,7 +70,6 @@ function Script:on_message(message_id, message)
             gui.set_text(self.vh.lbl_error.root, HAXE_WRAPPER.get_i18n_text("client/modals_error"))
         end
         gui.set_text(self.vh.btn_report.root, HAXE_WRAPPER.get_i18n_text("client/buttons_report"))
-        SELECTION.SELECTION:set_active_scene(SELECTION.SCENES.ErrorView)
         gui.set_text(self.vh.lbl_title.root, HAXE_WRAPPER.get_i18n_text("client/modals_error_title"))
      end
 end

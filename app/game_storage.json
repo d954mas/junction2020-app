@@ -1,0 +1,53 @@
+{
+     "timers": {
+          "serverLastTime": 1604618236655.4,
+          "time": 1604618236655.4,
+          "clientDeltaTime": 0,
+          "timerDelta": 0
+     },
+     "version": {
+          "server": "dev",
+          "time": "03\/26\/20 17:18:38",
+          "version": 421
+     },
+     "utils": {
+          "auto_listening": true
+     },
+     "user": {
+          "verification": "",
+          "locale": "en",
+          "name": "name",
+          "permisions":           {}
+     },
+     "timerDelta": 0,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 1,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 25,
+          "gameBackendVersion": "",
+          "gameConfigVersion": "",
+          "userLevel": 1,
+          "device": "sberbox",
+          "platform": "sber",
+          "gameSharedVersion": ""
+     },
+     "tutorials":      {},
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "4148dd93-0dee-4f1b-b3a3-7203938e7f9a",
+          "cheatsEnabled": true,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdCurrent": "1111",
+          "isDev": true,
+          "firstLaunchTimestamp": 1604618196,
+          "conversationIdAtStart": "1111"
+     }
+}

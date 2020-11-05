@@ -32,22 +32,28 @@ function FakeNativeApi:initialize(conv, send_response_f)
     self.send_response_f = assert(send_response_f)
     self.sheduler = COMMON.RX.CooperativeScheduler.create()
 end
+
+local function saveToFile(storage)
+    local file = io.open("game_storage.json", "w")
+    file:write(storage)
+    file:close()
+end
 function FakeNativeApi:saveStorage(storage)
     self.conv.user.storage = JSON.decode(storage)
     self.conv.user.storage.user = nil
-    self.conv.jsons.storage = storage
-    sys.save("game_storage",{storage})
+    self.conv.jsons.storage = JSON.encode(JSON.decode(storage),true)
+    saveToFile(self.conv.jsons.storage)
 end
 function FakeNativeApi:contextSet(context, lifespan, parameters)
     self.conv:set_context(context, lifespan, parameters)
 end
 
 function FakeNativeApi:flushDone()
-    sys.save("game_storage",{ self.conv.jsons.storage})
+    saveToFile(self.conv.jsons.storage)
 end
 
 function FakeNativeApi:convExit()
-    sys.save("game_storage",{ self.conv.jsons.storage})
+    saveToFile(self.conv.jsons.storage)
     sys.reboot()
 end
 
