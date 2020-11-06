@@ -1,17 +1,13 @@
 package shared.project.model.units;
-import shared.base.utils.MathUtils;
-import shared.project.configs.UnitConfig;
+import shared.project.enums.UnitType;
 import shared.project.storage.Storage.LevelRoadPart;
-import shared.project.enums.AttackType;
 class BattleUnitModel extends BasicUnitModel {
-    var attackLevel:Int;
-    var attackScale:Array<Int>;
-    //var defenseLevel:Int;
-    //var attackType:AttackType;
-    //var incomingDamageMultipliers:Map<AttackType, Float>;
+    var damage:Int;
+    var attackRange:Int;
+    var unitType:UnitType;
 
     public function canAttack(enemy:BasicUnitModel):Bool {
-        return false;
+        return calculateDistance(enemy) <= attackRange;
     }
 
     public function attack(enemy:BasicUnitModel) {
@@ -20,22 +16,15 @@ class BattleUnitModel extends BasicUnitModel {
         }
     }
 
-    //source is specified for possible effects implementations - e.g. partial damage reflection
-    public function takeDamage(amount:Int, source:BattleUnitModel) {
-        hp = MathUtils.clamp((hp - amount), 0, hp);
-    }
-
     private function calcDamage(enemy:BasicUnitModel):Int {
-        var baseDmg = attackScale[attackLevel - 1];
-        //var enemyDamageReduction = UnitConfig.defenseByLevel[enemy.defenseLevel];
-        //var damageOutput = baseDmg * enemy.incomingDamageMultipliers[attackType];
+        var baseDmg = damage;
         return baseDmg;
     }
 
-    public function new(hpLevel:Int, roadPart:LevelRoadPart, attackLevel:Int, defenseLevel:Int) {
-        super(hpLevel, roadPart);
-        attackScale = UnitConfig.attackByLevel;
-        this.attackLevel = attackLevel;
-        //this.defenseLevel = defenseLevel;
+    public function new(hp:Int, damage:Int, attackRange:Int, roadPart:LevelRoadPart, unitType:UnitType) {
+        super(hp, roadPart);
+        this.unitType = unitType;
+        this.damage = damage;
+        this.attackRange = attackRange;
     }
 }
