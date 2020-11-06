@@ -160,7 +160,7 @@ typedef ServerStruct = {
 
 //endregion
 class Storage {
-    private static inline var VERSION:Int = 1;
+    private static inline var VERSION:Int = 2;
 
     public static function initNewStorage(data:StorageStruct, force = true) {
         if (data.stat == null || force) {
@@ -228,6 +228,7 @@ class Storage {
                 time:0,
                 timerDelta:0,
             }
+            data.level = null;
             data.serverStruct = {};
             data.utils = {auto_listening:false};
             data.tutorials = {
@@ -241,7 +242,7 @@ class Storage {
             return;
         }
         //reset all data
-        if (data.stat.version < 1) {
+        if (data.stat.version < 2) {
             initNewStorage(data, true);
         }
 
