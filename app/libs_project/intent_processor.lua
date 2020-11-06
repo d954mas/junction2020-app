@@ -118,6 +118,8 @@ function Processor:process_events(events, data)
             self.world.tutorials:process_tutorial_part_changed(event.data)
         elseif event.name == "LEVEL_NEW" then
             self.world:level_new()
+        elseif event.name == "LEVEL_MOVE_TO_NEXT" then
+            self.world.level_model:move_to_next()
         end
     end
 end

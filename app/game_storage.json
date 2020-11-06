@@ -1,8 +1,8 @@
 {
      "timers": {
           "clientDeltaTime": 0,
-          "time": 1604683843240.3,
-          "serverLastTime": 1604683843240.3,
+          "time": 1604684626585.9,
+          "serverLastTime": 1604684626585.9,
           "timerDelta": 0
      },
      "version": {
@@ -106,7 +106,7 @@
           "version": 1,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 155,
+          "intentIdx": 161,
           "gameBackendVersion": "",
           "gameConfigVersion": "",
           "userLevel": 1,

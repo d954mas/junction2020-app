@@ -49,6 +49,26 @@ function Level:storage_changed()
         road:on_storage_changed()
     end
 end
+
+function Level:move_to_next()
+    self.world.thread_sequence:add_action(function ()
+        local next_castle_id = #self.views.castles
+        table.insert(self.views.castles, CastleView(next_castle_id))
+        table.insert(self.views.roads, RoadView(next_castle_id-1))
+        local max_time = 1
+        local time = 1
+        local current_y = CAMERAS.battle_camera.wpos.y
+        local current_x = CAMERAS.battle_camera.wpos.x
+        local new_x = self.views.castles[#self.views.castles-1].castle_pos.x
+        while(time>0)do
+            local x = COMMON.LUME.lerp(current_x,new_x,1-time/max_time)
+            CAMERAS.battle_camera:set_position(vmath.vector3(x, current_y, 0))
+            local dt = coroutine.yield()
+            time = time - dt
+        end
+        CAMERAS.battle_camera:set_position(vmath.vector3(new_x, current_y, 0))
+    end)
+end
 --endregion
 
 

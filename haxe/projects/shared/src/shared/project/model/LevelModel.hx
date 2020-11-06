@@ -99,6 +99,8 @@ class LevelModel {
         roadPlayerToEnemy.push(createRoadPart(startX + 5, 0, RoadType.BASE));
 
         level.roads.push(roadPlayerToEnemy);
+
+        EventHelper.levelMoveToNext(world);
     }
 
 

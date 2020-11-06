@@ -5073,6 +5073,9 @@ __shared_base_event_EventHelper.__name__ = true
 __shared_base_event_EventHelper.levelNew = function(world) 
   world:eventEmit("LEVEL_NEW");
 end
+__shared_base_event_EventHelper.levelMoveToNext = function(world) 
+  world:eventEmit("LEVEL_MOVE_TO_NEXT");
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -5879,10 +5882,13 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     if (data.iapKey == nil) then 
       _G.error("no iap key",0);
     end;
-    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=115,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=119,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.fallback" then 
     self:ask(self.i18n:tr("conv/fallback"));
+    if (self.world:storageGet().level ~= nil) then 
+      self.world.levelModel:levelNextCastle();
+    end;
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.keep_working" then 
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
@@ -5982,6 +5988,7 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(startX + 4, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 5, 0, "BASE"));
   level.roads:push(roadPlayerToEnemy);
+  __shared_base_event_EventHelper.levelMoveToNext(self.world);
 end
 __shared_project_model_LevelModel.prototype.castlesGetByIdx = function(self,idx) 
   local level = self.world:storageGet().level;
