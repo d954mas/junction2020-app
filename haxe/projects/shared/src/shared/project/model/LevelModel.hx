@@ -81,6 +81,15 @@ class LevelModel {
                 }
             }
         }
+        removeDeadUnits();
+    }
+
+    @:nullSafety(Off)
+    private function removeDeadUnits() {
+        var dead = Lambda.filter(ds.level.units, function (u) {return u.hp == 0;});
+        for (unit in dead) {
+            ds.level.units.remove(unit);
+        }
     }
 
     private function unitNewPosition(unit:IBattleUnit) {
