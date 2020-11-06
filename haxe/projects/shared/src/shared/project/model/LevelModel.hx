@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.project.model.units.BattleUnitModel;
 import Array;
 import shared.project.enums.GameEnums.RoadType;
 import shared.project.storage.Storage;
@@ -12,34 +13,51 @@ class LevelModel {
     private var world:World;
     private var ds:StorageStruct;
     private var playerModel:PlayerModel;
+    private var battleUnitModels:List<BattleUnitModel>;
 
     public function new(world:World) {
         this.world = world;
         this.ds = this.world.storageGet();
         this.playerModel = new PlayerModel(world);
+        this.battleUnitModels = new List<BattleUnitModel>();
         modelRestore();
     }
 
-    public function modelRestore():Void {
+    public function addUnit(unit:BattleUnitModel) {
 
+    }
+
+    public function modelRestore():Void {
+        if (ds.level != null) {
+            for (unit in ds.level.units) {
+                battleUnitModels.add(new BattleUnitModel(unit));
+            }
+        }
     }
 
     private function createPlayer():LevelPlayerStruct {
         return {
+            id: 0,
             mana:0,
             money:20,
         }
     }
 
     private function createEnemy():LevelEnemyStruct {
-        return {}
+        return {
+            id: 1,
+        }
     }
 
     private function createRoadPart(x:Int, y:Int, type:RoadType):LevelRoadPart {
-        return {x:x, y:y, type:type, idx:x * 10 + y};
+        return {x:x, y:y, type:type, idx:x * 1000 + y};
     }
 
-    private function levelNextTurnBattles() {}
+    private function levelNextTurnBattles() {
+        for (attacker in battleUnitModels) {
+            var canAttack = Lambda.filter(battleUnitModels, function(v) {return attacker.canAttack(v);});
+        }
+    }
 
     private function levelNextTurnCaravans() {}
 
@@ -79,7 +97,8 @@ class LevelModel {
             player:createPlayer(),
             enemy:createEnemy(),
             castles:new Array<CastleStruct>(),
-            roads:new Array<Array<LevelRoadPart>>()
+            roads:new Array<Array<LevelRoadPart>>(),
+            units:new Array<BattleUnitStruct>()
         }
         level.castles.push({idx:level.castles.length}); //resources_castle
         level.castles.push({idx:level.castles.length});//player_castle
