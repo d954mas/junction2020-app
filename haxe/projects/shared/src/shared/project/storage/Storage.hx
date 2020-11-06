@@ -1,5 +1,7 @@
 package shared.project.storage;
 
+import shared.project.enums.UnitType;
+import shared.project.model.units.BasicUnitModel;
 import shared.project.enums.GameEnums.RoadType;
 import shared.project.storage.Storage.LevelEnemyStruct;
 import haxe.DynamicAccess;
@@ -84,13 +86,18 @@ typedef CastleStruct = {
     var idx:Int;
 }
 
+typedef LevelPlayerOrAiStruct = {
+    var id:Int;
+}
+
 typedef LevelPlayerStruct = {
+    > LevelPlayerOrAiStruct,
     var money:Int;
     var mana:Int;
 }
 
 typedef LevelEnemyStruct = {
-
+    > LevelPlayerOrAiStruct
 }
 
 typedef LevelRoadPart = {
@@ -106,6 +113,7 @@ typedef LevelStruct = {
     enemy:LevelEnemyStruct,
     castles:Array<CastleStruct>,
     roads:Array<Array<LevelRoadPart>>,
+    units:Array<BattleUnitStruct>
 }
 
 typedef StorageStruct = {
@@ -126,6 +134,21 @@ typedef StorageStruct = {
 typedef ClientStruct = {
     var timerDeltaClient:Float;
     var time:Float;
+}
+
+typedef BasicUnitStruct = {
+    var roadPart:LevelRoadPart;
+}
+
+typedef BattleUnitStruct = {
+    >BasicUnitStruct,
+    var hpLvl:Int;
+    var hp:Int;
+    var ownerId:Int;
+    var type:UnitType;
+    var attackLvl:Int;
+    var attackRange:Int;
+    var reward:Int;
 }
 
 //region server struct
