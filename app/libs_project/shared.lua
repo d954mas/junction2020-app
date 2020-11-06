@@ -5934,30 +5934,34 @@ end
 __shared_project_model_LevelModel.prototype.createRoadPart = function(self,x,y,type) 
   do return _hx_o({__fields__={x=true,y=true,type=true,idx=true},x=x,y=y,type=type,idx=(x * 10) + y}) end
 end
-__shared_project_model_LevelModel.prototype.createPrevLevelForFirstGame = function(self) 
-  local level = _hx_o({__fields__={player=true,enemy=true,roadToEnemy=true},player=self:createPlayer(),enemy=self:createEnemy(),roadToEnemy=Array.new()});
-  level.roadToEnemy:push(self:createRoadPart(0, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(1, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(2, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(3, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(4, 0, "BASE"));
+__shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
+  local level = _hx_o({__fields__={player=true,enemy=true,castles=true,roads=true},player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new()});
+  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
+  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
+  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
+  local roadResToPlayer = Array.new();
+  roadResToPlayer:push(self:createRoadPart(0, 0, "BASE"));
+  roadResToPlayer:push(self:createRoadPart(1, 0, "BASE"));
+  roadResToPlayer:push(self:createRoadPart(2, 0, "BASE"));
+  roadResToPlayer:push(self:createRoadPart(3, 0, "BASE"));
+  roadResToPlayer:push(self:createRoadPart(4, 0, "BASE"));
+  local roadPlayerToEnemy = Array.new();
+  roadPlayerToEnemy:push(self:createRoadPart(5, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(6, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(7, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(8, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(9, 0, "BASE"));
+  level.roads:push(roadResToPlayer);
+  level.roads:push(roadPlayerToEnemy);
   do return level end
 end
 __shared_project_model_LevelModel.prototype.createLevel = function(self) 
-  local prevLevel = self.world:storageGet().level;
-  if (prevLevel == nil) then 
-    prevLevel = self:createPrevLevelForFirstGame();
+  if (self.world:storageGet().level == nil) then 
+    self.world:storageGet().level = self:levelFirstInitial();
+    __shared_base_event_EventHelper.levelNew(self.world);
+  else
+    _G.error("level already created",0);
   end;
-  local level = _hx_o({__fields__={player=true,enemy=true,roadToEnemy=true},player=self:createPlayer(),enemy=self:createEnemy(),roadToEnemy=Array.new()});
-  local startX = prevLevel.roadToEnemy[prevLevel.roadToEnemy.length - 1].x;
-  level.roadToEnemy:push(self:createRoadPart(startX + 1, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(startX + 2, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(startX + 3, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(startX + 4, 0, "BASE"));
-  level.roadToEnemy:push(self:createRoadPart(startX + 5, 0, "BASE"));
-  self.world:storageGet().levelPrev = prevLevel;
-  self.world:storageGet().level = level;
-  __shared_base_event_EventHelper.levelNew(self.world);
 end
 
 __shared_project_model_LevelModel.prototype.__class__ =  __shared_project_model_LevelModel

@@ -80,9 +80,14 @@ typedef UtilsStruct = {
     var auto_listening:Bool;
 }
 
+typedef CastleStruct = {
+    var idx:Int;
+}
+
 typedef LevelPlayerStruct = {
 
 }
+
 typedef LevelEnemyStruct = {
 
 }
@@ -97,7 +102,8 @@ typedef LevelRoadPart = {
 typedef LevelStruct = {
     player:LevelPlayerStruct,
     enemy:LevelEnemyStruct,
-    roadToEnemy:Array<LevelRoadPart>,
+    castles:Array<CastleStruct>,
+    roads:Array<Array<LevelRoadPart>>,
 }
 
 typedef StorageStruct = {

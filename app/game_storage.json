@@ -1,8 +1,8 @@
 {
      "timers": {
           "clientDeltaTime": 0,
-          "time": 1604676459847.7,
-          "serverLastTime": 1604676459847.7,
+          "time": 1604678714287.2,
+          "serverLastTime": 1604678714287.2,
           "timerDelta": 0
      },
      "version": {
@@ -19,44 +19,101 @@
           "locale": "en",
           "permisions":           {}
      },
-     "tutorials":      {},
      "level": {
-          "roadToEnemy": [
-               {
-                    "type": "BASE",
-                    "x": 5,
-                    "idx": 50,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 6,
-                    "idx": 60,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 7,
-                    "idx": 70,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 8,
-                    "idx": 80,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 9,
-                    "idx": 90,
-                    "y": 0
-               }
+          "roads": [
+               [
+                    {
+                         "type": "BASE",
+                         "x": 0,
+                         "idx": 0,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 1,
+                         "idx": 10,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 2,
+                         "idx": 20,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 3,
+                         "idx": 30,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 4,
+                         "idx": 40,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "BASE",
+                         "x": 5,
+                         "idx": 50,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 6,
+                         "idx": 60,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 7,
+                         "idx": 70,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 8,
+                         "idx": 80,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 9,
+                         "idx": 90,
+                         "y": 0
+                    }
+               ]
           ],
           "enemy":           {},
+          "castles": [
+               {
+                    "idx": 0
+               },
+               {
+                    "idx": 1
+               },
+               {
+                    "idx": 2
+               }
+          ],
           "player":           {}
      },
      "timerDelta": 0,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 1,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 51,
+          "gameBackendVersion": "",
+          "gameConfigVersion": "",
+          "userLevel": 1,
+          "device": "sberbox",
+          "platform": "sber",
+          "gameSharedVersion": ""
+     },
      "profile": {
           "currentVersion": 421,
           "tag": "",
@@ -68,58 +125,10 @@
           "firstLaunchTimestamp": 1604618196,
           "conversationIdAtStart": "1111"
      },
-     "stat": {
-          "startGameCounter": 0,
-          "version": 1,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 37,
-          "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
-          "device": "sberbox",
-          "platform": "sber",
-          "gameSharedVersion": ""
-     },
      "iap": {
           "current_iap": ""
      },
      "time": 1586967396797,
      "serverLastTime": 1586967396797,
-     "levelPrev": {
-          "roadToEnemy": [
-               {
-                    "type": "BASE",
-                    "x": 0,
-                    "idx": 0,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 1,
-                    "idx": 10,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 2,
-                    "idx": 20,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 3,
-                    "idx": 30,
-                    "y": 0
-               },
-               {
-                    "type": "BASE",
-                    "x": 4,
-                    "idx": 40,
-                    "y": 0
-               }
-          ],
-          "enemy":           {},
-          "player":           {}
-     }
+     "tutorials":      {}
 }
