@@ -96,6 +96,9 @@ __haxe_io_Bytes = _hx_e()
 __haxe_crypto_Base64 = _hx_e()
 __haxe_crypto_BaseCode = _hx_e()
 __haxe_ds_IntMap = _hx_e()
+__haxe_ds_List = _hx_e()
+__haxe_ds__List_ListNode = _hx_e()
+__haxe_ds__List_ListIterator = _hx_e()
 __haxe_ds_StringMap = _hx_e()
 __haxe_format_JsonParser = _hx_e()
 __haxe_format_JsonPrinter = _hx_e()
@@ -157,8 +160,10 @@ __shared_project_intent_processors_IntentModalProcessor = _hx_e()
 __shared_project_intent_processors_IntentProcessor = _hx_e()
 __shared_project_intent_processors_IntentTutorialProcessor = _hx_e()
 __shared_project_model_LevelModel = _hx_e()
+__shared_project_model_PlayerModel = _hx_e()
 __shared_project_model_Restrictions = _hx_e()
 __shared_project_model_World = _hx_e()
+__shared_project_model_units_BattleUnitModel = _hx_e()
 __shared_project_storage_Storage = _hx_e()
 __shared_project_timers_Timers = _hx_e()
 __shared_project_tutorial_TutorialsModel = _hx_e()
@@ -731,6 +736,17 @@ Lambda.has = function(it,elt)
     end;
   end;
   do return false end;
+end
+Lambda.filter = function(it,f) 
+  local _g = _hx_tab_array({}, 0);
+  local x = it:iterator();
+  while (x:hasNext()) do 
+    local x1 = x:next();
+    if (f(x1)) then 
+      _g:push(x1);
+    end;
+  end;
+  do return _g end;
 end
 
 Math.new = {}
@@ -2196,6 +2212,74 @@ __haxe_ds_IntMap.prototype.iterator = function(self)
 end
 
 __haxe_ds_IntMap.prototype.__class__ =  __haxe_ds_IntMap
+
+__haxe_ds_List.new = function() 
+  local self = _hx_new(__haxe_ds_List.prototype)
+  __haxe_ds_List.super(self)
+  return self
+end
+__haxe_ds_List.super = function(self) 
+  self.length = 0;
+end
+__haxe_ds_List.__name__ = true
+__haxe_ds_List.prototype = _hx_a();
+__haxe_ds_List.prototype.h= nil;
+__haxe_ds_List.prototype.q= nil;
+__haxe_ds_List.prototype.length= nil;
+__haxe_ds_List.prototype.add = function(self,item) 
+  local next = nil;
+  local x = __haxe_ds__List_ListNode.new(item, next);
+  if (self.h == nil) then 
+    self.h = x;
+  else
+    self.q.next = x;
+  end;
+  self.q = x;
+  self.length = self.length + 1;
+end
+__haxe_ds_List.prototype.iterator = function(self) 
+  do return __haxe_ds__List_ListIterator.new(self.h) end
+end
+
+__haxe_ds_List.prototype.__class__ =  __haxe_ds_List
+
+__haxe_ds__List_ListNode.new = function(item,next) 
+  local self = _hx_new(__haxe_ds__List_ListNode.prototype)
+  __haxe_ds__List_ListNode.super(self,item,next)
+  return self
+end
+__haxe_ds__List_ListNode.super = function(self,item,next) 
+  self.item = item;
+  self.next = next;
+end
+__haxe_ds__List_ListNode.__name__ = true
+__haxe_ds__List_ListNode.prototype = _hx_a();
+__haxe_ds__List_ListNode.prototype.item= nil;
+__haxe_ds__List_ListNode.prototype.next= nil;
+
+__haxe_ds__List_ListNode.prototype.__class__ =  __haxe_ds__List_ListNode
+
+__haxe_ds__List_ListIterator.new = function(head) 
+  local self = _hx_new(__haxe_ds__List_ListIterator.prototype)
+  __haxe_ds__List_ListIterator.super(self,head)
+  return self
+end
+__haxe_ds__List_ListIterator.super = function(self,head) 
+  self.head = head;
+end
+__haxe_ds__List_ListIterator.__name__ = true
+__haxe_ds__List_ListIterator.prototype = _hx_a();
+__haxe_ds__List_ListIterator.prototype.head= nil;
+__haxe_ds__List_ListIterator.prototype.hasNext = function(self) 
+  do return self.head ~= nil end
+end
+__haxe_ds__List_ListIterator.prototype.next = function(self) 
+  local val = self.head.item;
+  self.head = self.head.next;
+  do return val end
+end
+
+__haxe_ds__List_ListIterator.prototype.__class__ =  __haxe_ds__List_ListIterator
 
 __haxe_ds_StringMap.new = function() 
   local self = _hx_new(__haxe_ds_StringMap.prototype)
@@ -5076,6 +5160,15 @@ end
 __shared_base_event_EventHelper.levelMoveToNext = function(world) 
   world:eventEmit("LEVEL_MOVE_TO_NEXT");
 end
+__shared_base_event_EventHelper.levelNextTurn = function(world) 
+  world:eventEmit("LEVEL_NEXT_TURN");
+end
+__shared_base_event_EventHelper.levelMoneyChange = function(world,count,tag) 
+  world:eventEmit("LEVEL_MONEY_CHANGE", _hx_o({__fields__={count=true,tag=true},count=count,tag=tag}));
+end
+__shared_base_event_EventHelper.levelManaChange = function(world,count,tag) 
+  world:eventEmit("LEVEL_MANA_CHANGE", _hx_o({__fields__={count=true,tag=true},count=count,tag=tag}));
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -5882,13 +5975,10 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     if (data.iapKey == nil) then 
       _G.error("no iap key",0);
     end;
-    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=119,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=115,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.fallback" then 
     self:ask(self.i18n:tr("conv/fallback"));
-    if (self.world:storageGet().level ~= nil) then 
-      self.world.levelModel:levelNextCastle();
-    end;
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.keep_working" then 
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
@@ -5926,25 +6016,84 @@ end
 __shared_project_model_LevelModel.super = function(self,world) 
   self.world = world;
   self.ds = self.world:storageGet();
+  self.playerModel = __shared_project_model_PlayerModel.new(world);
+  self.battleUnitModels = __haxe_ds_List.new();
+  self:modelRestore();
 end
 _hx_exports["shared"]["project"]["model"]["LevelModel"] = __shared_project_model_LevelModel
 __shared_project_model_LevelModel.__name__ = true
 __shared_project_model_LevelModel.prototype = _hx_a();
 __shared_project_model_LevelModel.prototype.world= nil;
 __shared_project_model_LevelModel.prototype.ds= nil;
+__shared_project_model_LevelModel.prototype.playerModel= nil;
+__shared_project_model_LevelModel.prototype.battleUnitModels= nil;
+__shared_project_model_LevelModel.prototype.addUnit = function(self,unit) 
+end
 __shared_project_model_LevelModel.prototype.modelRestore = function(self) 
+  if (self.ds.level ~= nil) then 
+    local o = self.ds.level.units;
+    if ((function() 
+      local _hx_1
+      if ((_G.type(o) == "string") and ((String.prototype.length ~= nil) or true)) then 
+      _hx_1 = true; elseif (o.__fields__ ~= nil) then 
+      _hx_1 = o.__fields__.length ~= nil; else 
+      _hx_1 = o.length ~= nil; end
+      return _hx_1
+    end )()) then 
+      local _g = 0;
+      local _g1 = self.ds.level.units;
+      while (_g < _g1.length) do 
+        local unit = _g1[_g];
+        _g = _g + 1;
+        self.battleUnitModels:add(__shared_project_model_units_BattleUnitModel.new(unit));
+      end;
+    end;
+  end;
 end
 __shared_project_model_LevelModel.prototype.createPlayer = function(self) 
-  do return _hx_e() end
+  do return _hx_o({__fields__={id=true,mana=true,money=true},id=0,mana=0,money=20}) end
 end
 __shared_project_model_LevelModel.prototype.createEnemy = function(self) 
-  do return _hx_e() end
+  do return _hx_o({__fields__={id=true},id=1}) end
 end
 __shared_project_model_LevelModel.prototype.createRoadPart = function(self,x,y,type) 
-  do return _hx_o({__fields__={x=true,y=true,type=true,idx=true},x=x,y=y,type=type,idx=(x * 10) + y}) end
+  do return _hx_o({__fields__={x=true,y=true,type=true,idx=true},x=x,y=y,type=type,idx=(x * 1000) + y}) end
+end
+__shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self) 
+  local _g_head = self.battleUnitModels.h;
+  while (_g_head ~= nil) do 
+    local val = _g_head.item;
+    _g_head = _g_head.next;
+    Lambda.filter(self.battleUnitModels, (function(attacker) 
+      do return function(v) 
+        do return attacker[0]:canAttack(v) end;
+      end end;
+    end)(_hx_tab_array({[0]=val}, 1)));
+  end;
+end
+__shared_project_model_LevelModel.prototype.levelNextTurnCaravans = function(self) 
+end
+__shared_project_model_LevelModel.prototype.levelNextTurnRegenMoney = function(self) 
+  self.playerModel:moneyChange(0, "startTurnRegen");
+end
+__shared_project_model_LevelModel.prototype.levelNextTurnRegenMana = function(self) 
+  self.playerModel:manaChange(5, "startTurnRegen");
+end
+__shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(self) 
+end
+__shared_project_model_LevelModel.prototype.levelNextTurn = function(self) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level in levelNextTurn",0);
+  end;
+  __shared_base_event_EventHelper.levelNextTurn(self.world);
+  level.turn = level.turn + 1;
+  self:levelNextTurnBattles();
+  self:levelNextTurnRegenMoney();
+  self:levelNextTurnRegenMana();
 end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
-  local level = _hx_o({__fields__={player=true,enemy=true,castles=true,roads=true},player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new()});
+  local level = _hx_o({__fields__={turn=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
@@ -6006,6 +6155,61 @@ __shared_project_model_LevelModel.prototype.roadsGetByIdx = function(self,idx)
 end
 
 __shared_project_model_LevelModel.prototype.__class__ =  __shared_project_model_LevelModel
+
+__shared_project_model_PlayerModel.new = function(world) 
+  local self = _hx_new(__shared_project_model_PlayerModel.prototype)
+  __shared_project_model_PlayerModel.super(self,world)
+  return self
+end
+__shared_project_model_PlayerModel.super = function(self,world) 
+  self.world = world;
+  self.ds = self.world:storageGet();
+end
+_hx_exports["shared"]["project"]["model"]["PlayerModel"] = __shared_project_model_PlayerModel
+__shared_project_model_PlayerModel.__name__ = true
+__shared_project_model_PlayerModel.prototype = _hx_a();
+__shared_project_model_PlayerModel.prototype.world= nil;
+__shared_project_model_PlayerModel.prototype.ds= nil;
+__shared_project_model_PlayerModel.prototype.modelRestore = function(self) 
+end
+__shared_project_model_PlayerModel.prototype.moneyChange = function(self,value,tag) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:moneyChange",0);
+  end;
+  if (value == 0) then 
+    do return end;
+  end;
+  if ((level.player.money + value) < 0) then 
+    _G.error("not enought money",0);
+  end;
+  local level1 = level.player;
+  level1.money = level1.money + value;
+  __shared_base_event_EventHelper.levelMoneyChange(self.world, value, tag);
+end
+__shared_project_model_PlayerModel.prototype.manaChange = function(self,value,tag) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:manaChange",0);
+  end;
+  if (value == 0) then 
+    do return end;
+  end;
+  if ((level.player.mana + value) < 0) then 
+    _G.error("not enought mana",0);
+  end;
+  if ((level.player.mana + value) > __shared_project_configs_GameConfig.MAX_MANA) then 
+    value = __shared_project_configs_GameConfig.MAX_MANA - level.player.mana;
+  end;
+  if (value == 0) then 
+    do return end;
+  end;
+  local level1 = level.player;
+  level1.mana = level1.mana + value;
+  __shared_base_event_EventHelper.levelManaChange(self.world, value, tag);
+end
+
+__shared_project_model_PlayerModel.prototype.__class__ =  __shared_project_model_PlayerModel
 
 __shared_project_model_Restrictions.new = {}
 _hx_exports["shared"]["project"]["model"]["Restrictions"] = __shared_project_model_Restrictions
@@ -6259,6 +6463,30 @@ __shared_project_model_World.prototype.__class__ =  __shared_project_model_World
 __shared_project_model_World.__super__ = __shared_base_model_WorldBaseModel
 setmetatable(__shared_project_model_World.prototype,{__index=__shared_base_model_WorldBaseModel.prototype})
 
+__shared_project_model_units_BattleUnitModel.new = function(struct) 
+  local self = _hx_new(__shared_project_model_units_BattleUnitModel.prototype)
+  __shared_project_model_units_BattleUnitModel.super(self,struct)
+  return self
+end
+__shared_project_model_units_BattleUnitModel.super = function(self,struct) 
+  self.struct = struct;
+end
+__shared_project_model_units_BattleUnitModel.__name__ = true
+__shared_project_model_units_BattleUnitModel.prototype = _hx_a();
+__shared_project_model_units_BattleUnitModel.prototype.struct= nil;
+__shared_project_model_units_BattleUnitModel.prototype.canAttack = function(self,enemy) 
+  if (self:calculateDistance(enemy) <= self.struct.attackRange) then 
+    do return self.struct.ownerId ~= enemy.struct.ownerId end;
+  else
+    do return false end;
+  end;
+end
+__shared_project_model_units_BattleUnitModel.prototype.calculateDistance = function(self,other) 
+  do return _G.math.floor(_G.math.abs(self.struct.roadPart.x - other.struct.roadPart.x) + 0.5) + _G.math.floor(_G.math.abs(self.struct.roadPart.y - self.struct.roadPart.y) + 0.5) end
+end
+
+__shared_project_model_units_BattleUnitModel.prototype.__class__ =  __shared_project_model_units_BattleUnitModel
+
 __shared_project_storage_Storage.new = {}
 __shared_project_storage_Storage.__name__ = true
 __shared_project_storage_Storage.initNewStorage = function(data,force) 
@@ -6266,7 +6494,7 @@ __shared_project_storage_Storage.initNewStorage = function(data,force)
     force = true;
   end;
   if ((data.stat == nil) or force) then 
-    data.stat = _hx_o({__fields__={version=true,startGameCounter=true,intentIdx=true,platform=true,device=true,dayAfterInstall=true,gameConfigVersion=true,gameLocaleVersion=true,gameSharedVersion=true,gameBackendVersion=true,userLevel=true},version=1,startGameCounter=0,intentIdx=0,platform="sber",device="sberbox",dayAfterInstall=0,gameConfigVersion="",gameLocaleVersion="",gameSharedVersion="",gameBackendVersion="",userLevel=1});
+    data.stat = _hx_o({__fields__={version=true,startGameCounter=true,intentIdx=true,platform=true,device=true,dayAfterInstall=true,gameConfigVersion=true,gameLocaleVersion=true,gameSharedVersion=true,gameBackendVersion=true,userLevel=true},version=2,startGameCounter=0,intentIdx=0,platform="sber",device="sberbox",dayAfterInstall=0,gameConfigVersion="",gameLocaleVersion="",gameSharedVersion="",gameBackendVersion="",userLevel=1});
     data.iap = _hx_o({__fields__={current_iap=true,skuGoogle=true},current_iap="",skuGoogle=nil});
     local uuid = Uuid.v4();
     if ((data.profile ~= nil) and (data.profile.uuid ~= nil)) then 
@@ -6300,6 +6528,7 @@ __shared_project_storage_Storage.initNewStorage = function(data,force)
     end;
     data.profile = _hx_o({__fields__={cheatsEnabled=true,uuid=true,tag=true,isDev=true,conversationIdAtStart=true,conversationIdCurrent=true,currentVersion=true,dtdId=true,firstLaunchTimestamp=true},cheatsEnabled=false,uuid=uuid,tag=tag,isDev=isDev,conversationIdAtStart=idAtStart,conversationIdCurrent=idCurrent,currentVersion="",dtdId=Uuid.v4(),firstLaunchTimestamp=firstLaunchTimestamp});
     data.timers = _hx_o({__fields__={clientDeltaTime=true,serverLastTime=true,time=true,timerDelta=true},clientDeltaTime=0,serverLastTime=0,time=0,timerDelta=0});
+    data.level = nil;
     data.serverStruct = _hx_e();
     data.utils = _hx_o({__fields__={auto_listening=true},auto_listening=false});
     data.tutorials = _hx_e();
@@ -6310,10 +6539,10 @@ __shared_project_storage_Storage.migrations = function(data)
     __shared_project_storage_Storage.initNewStorage(data);
     do return end;
   end;
-  if (data.stat.version < 1) then 
+  if (data.stat.version < 2) then 
     __shared_project_storage_Storage.initNewStorage(data, true);
   end;
-  data.stat.version = 1;
+  data.stat.version = 2;
 end
 __shared_project_storage_Storage.restore = function(data) 
   local result = __haxe_Json.parse(data);
@@ -6790,6 +7019,8 @@ local _hx_static_init = function()
   __shared_project_configs_GameConfig.INITIAL_VALUES = _hx_e();
   
   __shared_project_configs_GameConfig.PLATFORM = "google";
+  
+  __shared_project_configs_GameConfig.MAX_MANA = 100;
   
   __shared_project_enums_Intents.intentContexts = __haxe_ds_StringMap.new();
   

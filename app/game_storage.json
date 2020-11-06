@@ -1,9 +1,9 @@
 {
      "timers": {
-          "serverLastTime": 1604697603742.8,
-          "time": 1604697603742.8,
-          "clientDeltaTime": 0,
-          "timerDelta": 0
+          "timerDelta": 0,
+          "time": 1604702409570.1,
+          "serverLastTime": 1604702409570.1,
+          "clientDeltaTime": 0
      },
      "version": {
           "server": "dev",
@@ -19,21 +19,6 @@
           "locale": "en",
           "permisions":           {}
      },
-     "tutorials":      {},
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 1,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 215,
-          "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
-          "device": "sberbox",
-          "platform": "sber",
-          "gameSharedVersion": ""
-     },
      "level": {
           "roads": [
                [
@@ -46,25 +31,25 @@
                     {
                          "type": "BASE",
                          "x": 1,
-                         "idx": 10,
+                         "idx": 1000,
                          "y": 0
                     },
                     {
                          "type": "BASE",
                          "x": 2,
-                         "idx": 20,
+                         "idx": 2000,
                          "y": 0
                     },
                     {
                          "type": "BASE",
                          "x": 3,
-                         "idx": 30,
+                         "idx": 3000,
                          "y": 0
                     },
                     {
                          "type": "BASE",
                          "x": 4,
-                         "idx": 40,
+                         "idx": 4000,
                          "y": 0
                     }
                ],
@@ -72,36 +57,40 @@
                     {
                          "type": "BASE",
                          "x": 5,
-                         "idx": 50,
+                         "idx": 5000,
                          "y": 0
                     },
                     {
                          "type": "BASE",
                          "x": 6,
-                         "idx": 60,
+                         "idx": 6000,
                          "y": 0
                     },
                     {
                          "type": "BASE",
                          "x": 7,
-                         "idx": 70,
+                         "idx": 7000,
                          "y": 0
                     },
                     {
                          "type": "BASE",
                          "x": 8,
-                         "idx": 80,
+                         "idx": 8000,
                          "y": 0
                     },
                     {
                          "type": "BASE",
                          "x": 9,
-                         "idx": 90,
+                         "idx": 9000,
                          "y": 0
                     }
                ]
           ],
-          "enemy":           {},
+          "units":           [],
+          "enemy": {
+               "id": 1
+          },
+          "turn": 0,
           "castles": [
                {
                     "idx": 0
@@ -113,8 +102,27 @@
                     "idx": 2
                }
           ],
-          "player":           {}
+          "player": {
+               "mana": 0,
+               "money": 20,
+               "id": 0
+          }
      },
+     "timerDelta": 0,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 2,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 26,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "sberbox",
+          "userLevel": 1,
+          "platform": "sber",
+          "gameConfigVersion": ""
+     },
+     "tutorials":      {},
      "iap": {
           "current_iap": ""
      },
@@ -123,12 +131,12 @@
      "profile": {
           "currentVersion": 421,
           "tag": "",
-          "dtdId": "4148dd93-0dee-4f1b-b3a3-7203938e7f9a",
-          "cheatsEnabled": true,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
           "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": false,
+          "conversationIdCurrent": "1111"
      }
 }

@@ -1,6 +1,7 @@
 local COMMON = require "libs.common"
 local ACTIONS = require "libs.actions.actions"
 
+---@class Ticklabel
 local Lbl = COMMON.CLASS("Ticklabel")
 
 function Lbl:initialize(lbl)

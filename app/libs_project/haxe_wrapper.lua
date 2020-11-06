@@ -92,6 +92,12 @@ function M.level_roads_get_array()
 	return M.get_world().storage.level.roads
 end
 
+function M.resources_get_money()
+	return M.get_world().storage.level.player.money
+end
+function M.resources_get_mana()
+	return M.get_world().storage.level.player.mana
+end
 return M
 
 

@@ -1,0 +1,56 @@
+local COMMON = require "libs.common"
+local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
+local ManaPanel = require "models.view.resources.mana_panel"
+local MoneyPanel = require "models.view.resources.money_panel"
+local WORLD = require "libs_project.words"
+
+local Script = COMMON.new_n28s()
+
+function Script:bind_vh()
+	self.vh = {
+		root = { root = gui.get_node("root") },
+	}
+	self.views = {
+		mana_panel = ManaPanel("mana_panel",WORLD),
+		money_panel = MoneyPanel("money_panel",WORLD),
+	}
+	self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana(),true)
+	self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money(),true)
+end
+
+function Script:init()
+	COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+	COMMON.input_acquire()
+	self:bind_vh()
+	self:init_gui()
+end
+
+function Script:init_gui()
+	self.scheduler = COMMON.RX.CooperativeScheduler.create()
+	self.subscriptions = COMMON.RX.SubscriptionsStorage()
+	self.subscriptions:add( COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):go(self.scheduler):subscribe(function()
+		self:storage_changed()
+	end))
+end
+
+function Script:storage_changed()
+	self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
+	self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
+end
+
+function Script:final()
+	COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+	COMMON.input_release()
+	self.subscriptions:unsubscribe()
+end
+
+function Script:update(dt)
+	self.scheduler:update(dt)
+	self.views.mana_panel:update(dt)
+	self.views.money_panel:update(dt)
+end
+
+function Script:on_input(action_id, action)
+end
+
+COMMON.N28S.register(Script)

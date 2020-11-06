@@ -9,6 +9,7 @@ Manager.NAMES = {
 	DEBUG_GUI = "DEBUG_GUI",
 	ERROR_GUI = "ERROR_GUI",
 	MAIN_SCENE = "MAIN_SCENE",
+	MAIN_SCENE_GUI = "MAIN_SCENE_GUI",
 }
 
 ---@class ContextStackWrapperMain:ContextStackWrapper
