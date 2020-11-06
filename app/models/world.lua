@@ -49,4 +49,26 @@ function World:speech_process_intent(msg)
 	self.intent_processor:process(msg)
 end
 
+function World:castle_idx_to_position(idx)
+	local pos_x = COMMON.CONSTANTS.CONFIG.CASTLE_PAD_BORDER + COMMON.CONSTANTS.CONFIG.CASTLE_SIZE/2
+	pos_x = pos_x + (1280-COMMON.CONSTANTS.CONFIG.CASTLE_PAD_BORDER*2-COMMON.CONSTANTS.CONFIG.CASTLE_SIZE)/2*idx
+	return vmath.vector3(pos_x,270,-0.8)
+end
+
+function World:road_idx_to_position(road_idx,road_part_idx)
+	local y = 270
+	local castle_pos = self:castle_idx_to_position(road_idx).x
+	local castle_pos_next = self:castle_idx_to_position(road_idx+1).x
+	local dmove = castle_pos_next-castle_pos-COMMON.CONSTANTS.CONFIG.CASTLE_SIZE-COMMON.CONSTANTS.CONFIG.ROAD_CASTLES_PAD*2
+	local roads_per_move = 5
+
+	local cell_size = dmove/roads_per_move
+	pprint(cell_size)
+
+	local road_pos = castle_pos + COMMON.CONSTANTS.CONFIG.ROAD_CASTLES_PAD + COMMON.CONSTANTS.CONFIG.CASTLE_SIZE/2
+	road_pos = road_pos + cell_size*road_part_idx + COMMON.CONSTANTS.CONFIG.ROAD_SIZE/2
+	return vmath.vector3(road_pos,y,-0.9)
+
+end
+
 return World()

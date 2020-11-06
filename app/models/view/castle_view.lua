@@ -10,7 +10,9 @@ local FACTORY_CASTLE_PART = {
 ---@class CastleView
 local View = COMMON.class("CastleView")
 
-function View:initialize(idx)
+---@param world World
+function View:initialize(idx,world)
+    self.world = world
     self.castleIdx = idx
     self:bind_vh()
     self:on_storage_changed()
@@ -26,10 +28,8 @@ end
 
 function View:bind_vh()
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-    local pos_x = COMMON.CONSTANTS.CONFIG.CASTLE_DMOVE + (640-COMMON.CONSTANTS.CONFIG.CASTLE_DMOVE)*self.castleIdx
-    self.castle_pos = vmath.vector3(pos_x,270,-0.9)
+    self.castle_pos = self.world:castle_idx_to_position(self.castleIdx)
     local parts = collectionfactory.create(FACTORY_URL,self.castle_pos)
-    pprint(parts)
     self.vh = {
         root = parts[FACTORY_CASTLE_PART.ROOT],
         castle = parts[FACTORY_CASTLE_PART.CASTLE],

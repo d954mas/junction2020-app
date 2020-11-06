@@ -22,14 +22,14 @@ function Level:initialize(world)
     --iterate all and create all views
     local castles = HAXE_WRAPPER.level_castles_get_array()
     for i = 0, castles.length - 1 do
-        table.insert(self.views.castles, CastleView(i))
+        table.insert(self.views.castles, CastleView(i,self.world))
     end
     local roads = HAXE_WRAPPER.level_roads_get_array()
     for i = 0, roads.length - 1 do
-        table.insert(self.views.roads, RoadView(i))
+        table.insert(self.views.roads, RoadView(i,self.world))
     end
 
-    CAMERAS.battle_camera:set_position(vmath.vector3(self.views.castles[#self.views.castles-1].castle_pos.x, 340, 0))
+    CAMERAS.battle_camera:set_position(vmath.vector3(640 or self.views.castles[#self.views.castles-1].castle_pos.x, 340, 0))
 end
 
 function Level:update(dt)
@@ -53,7 +53,7 @@ end
 function Level:move_to_next()
     self.world.thread_sequence:add_action(function ()
         local next_castle_id = #self.views.castles
-        table.insert(self.views.castles, CastleView(next_castle_id))
+        table.insert(self.views.castles, CastleView(next_castle_id,self.world))
         table.insert(self.views.roads, RoadView(next_castle_id-1))
         local max_time = 1
         local time = 1
