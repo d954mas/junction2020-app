@@ -28,9 +28,12 @@ class LevelModel {
     }
 
     public function modelRestore():Void {
-        if (ds.level != null) {
-            for (unit in ds.level.units) {
-                battleUnitModels.add(new BattleUnitModel(unit));
+        if (ds.level != null ) {
+            //lua плохо реагирует на пустой массив
+            if (Reflect.hasField(ds.level.units, "length")) {
+                for (unit in ds.level.units) {
+                    battleUnitModels.add(new BattleUnitModel(unit));
+                }
             }
         }
     }
