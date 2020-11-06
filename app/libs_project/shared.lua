@@ -5921,10 +5921,13 @@ __shared_project_model_LevelModel.super = function(self,world)
   self.world = world;
   self.ds = self.world:storageGet();
 end
+_hx_exports["shared"]["project"]["model"]["LevelModel"] = __shared_project_model_LevelModel
 __shared_project_model_LevelModel.__name__ = true
 __shared_project_model_LevelModel.prototype = _hx_a();
 __shared_project_model_LevelModel.prototype.world= nil;
 __shared_project_model_LevelModel.prototype.ds= nil;
+__shared_project_model_LevelModel.prototype.modelRestore = function(self) 
+end
 __shared_project_model_LevelModel.prototype.createPlayer = function(self) 
   do return _hx_e() end
 end
@@ -5962,6 +5965,37 @@ __shared_project_model_LevelModel.prototype.createLevel = function(self)
   else
     _G.error("level already created",0);
   end;
+end
+__shared_project_model_LevelModel.prototype.levelNextCastle = function(self) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("can't move to next castle level storage is null",0);
+  end;
+  level.enemy = self:createEnemy();
+  local lastRoad = level.roads[level.roads.length - 1];
+  local startX = lastRoad[lastRoad.length - 1].x;
+  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
+  local roadPlayerToEnemy = Array.new();
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 1, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 2, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 3, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 4, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 5, 0, "BASE"));
+  level.roads:push(roadPlayerToEnemy);
+end
+__shared_project_model_LevelModel.prototype.castlesGetByIdx = function(self,idx) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model castlesGetByIdx",0);
+  end;
+  do return level.castles[idx] end
+end
+__shared_project_model_LevelModel.prototype.roadsGetByIdx = function(self,idx) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model roadsGetByIdx",0);
+  end;
+  do return level.roads[idx] end
 end
 
 __shared_project_model_LevelModel.prototype.__class__ =  __shared_project_model_LevelModel
@@ -6012,7 +6046,6 @@ __shared_project_model_World.prototype.restore = function(self)
 end
 __shared_project_model_World.prototype.onGameLoaded = function(self) 
   self.storage.level = nil;
-  self.storage.levelPrev = nil;
   if (self.storage.level == nil) then 
     self.levelModel:createLevel();
   end;
@@ -6079,7 +6112,7 @@ __shared_project_model_World.prototype.canProcessIntent = function(self,name,dat
   end;
   local list = __shared_project_enums_Intents.intentContexts:get(name);
   if (list == nil) then 
-    __haxe_Log.trace(Std.string("unknown intent ") .. Std.string(name), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/World.hx",lineNumber=122,className="shared.project.model.World",methodName="canProcessIntent"}));
+    __haxe_Log.trace(Std.string("unknown intent ") .. Std.string(name), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/World.hx",lineNumber=121,className="shared.project.model.World",methodName="canProcessIntent"}));
     if (throwExeption) then 
       _G.error(Std.string("unknown intent ") .. Std.string(name),0);
     end;

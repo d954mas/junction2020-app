@@ -57,7 +57,6 @@ class World extends WorldBaseModel<StorageStruct> {
     public function onGameLoaded() {
         //todo add save load data when reopen game
         storage.level = null;
-        storage.levelPrev = null;
         if (storage.level == null) {
             levelModel.createLevel();
         }

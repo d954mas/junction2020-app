@@ -119,7 +119,6 @@ typedef StorageStruct = {
     var tutorials:DynamicAccess<TutorialTypedef>;
     var utils:UtilsStruct;
     @:optional var level:LevelStruct;
-    @:optional var levelPrev:LevelStruct;// prev level.Need to show right visual
 }
 
 typedef ClientStruct = {
