@@ -1,4 +1,4 @@
-package shared.project.model;
+package shared.project.model.units;
 import shared.project.configs.UnitConfig;
 import shared.project.storage.Storage.LevelRoadPart;
 class BasicUnitModel {
@@ -9,5 +9,10 @@ class BasicUnitModel {
         hpMax = UnitConfig.hpByLevel[hpLevel];
         hp = hpMax;
         currentRoadPart = roadPart;
+    }
+
+    function calcDistance(other:BasicUnitModel):Int {
+        return Math.round(Math.abs(this.currentRoadPart.x - other.currentRoadPart.x)) +
+        Math.round(Math.abs(this.currentRoadPart.y - other.currentRoadPart.y));
     }
 }
