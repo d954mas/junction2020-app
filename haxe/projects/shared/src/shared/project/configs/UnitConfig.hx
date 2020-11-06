@@ -15,4 +15,11 @@ class UnitConfig {
         4 => 8,
         5 => 12
     ];
+
+    public static var hpByLevel:Map<Int, Int> = [
+        1 => 20,
+    2 => 30,
+    3 => 40,
+    4 => 80
+    ];
 }
