@@ -17,6 +17,7 @@ class IntentProcessor {
     private var processerCheats:IntentCheatsProcessor;
     private var processerModal:IntentModalProcessor;
     private var processerTutorial:IntentTutorialProcessor;
+    private var processerLevel:IntentLevelProcessor;
     public var speechBuilder:SpeechBuilder;
 
     public function new(world:World, shared:Shared, i18n:I18n) {
@@ -27,10 +28,12 @@ class IntentProcessor {
         this.processerCheats = new IntentCheatsProcessor(this.world, this.shared, this.i18n);
         this.processerModal = new IntentModalProcessor(this.world, this.shared, this.i18n);
         this.processerTutorial = new IntentTutorialProcessor(this.world, this.shared, this.i18n);
+        this.processerLevel = new IntentLevelProcessor(this.world, this.shared, this.i18n);
 
         this.processerCheats.setBaseProcessor(this);
         this.processerModal.setBaseProcessor(this);
         this.processerTutorial.setBaseProcessor(this);
+        this.processerLevel.setBaseProcessor(this);
     }
 
     public function ask(text) {
@@ -93,6 +96,9 @@ class IntentProcessor {
         if (result != null) {return result;}
 
         result = processerTutorial.processIntent(intent, data);
+        if (result != null) {return result;}
+
+        result = processerLevel.processIntent(intent, data);
         if (result != null) {return result;}
 
         var storage = world.storageGet();

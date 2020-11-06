@@ -1,9 +1,9 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1604703522229.4,
+          "time": 1604704922451.7,
           "clientDeltaTime": 0,
-          "serverLastTime": 1604703522229.4
+          "serverLastTime": 1604704922451.7
      },
      "version": {
           "server": "dev",
@@ -19,6 +19,37 @@
           "locale": "en",
           "permisions":           {}
      },
+     "tutorials":      {},
+     "timerDelta": 0,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 2,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 62,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "sberbox",
+          "userLevel": 1,
+          "platform": "sber",
+          "gameConfigVersion": ""
+     },
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": true,
+          "conversationIdCurrent": "1111"
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
      "level": {
           "roads": [
                [
@@ -103,40 +134,9 @@
                }
           ],
           "player": {
-               "mana": 100,
-               "money": 220,
+               "mana": 0,
+               "money": 20,
                "id": 0
           }
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 2,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 42,
-          "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
-          "userLevel": 1,
-          "platform": "sber",
-          "gameConfigVersion": ""
-     },
-     "tutorials":      {},
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": true,
-          "conversationIdCurrent": "1111"
      }
 }

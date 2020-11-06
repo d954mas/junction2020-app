@@ -25,6 +25,8 @@ enum abstract Intent(String) {
     var TUTORIAL_YES = "tutorial.yes";
     var TUTORIAL_NO = "tutorial.no";
 
+
+    var LEVEL_SPAWN_UNIT = "level.spawn.unit";
 }
 
 typedef ModalCloseIntent = {
@@ -50,6 +52,8 @@ var intent:Intent;
         intentContexts[Intent.WEBAPP_LOAD_DONE] = [];
         intentContexts[Intent.IAP_BUY] = [];
 
+        intentContexts[Intent.LEVEL_SPAWN_UNIT] = [];
+
         intentContexts[Intent.DEBUG_TOGGLE] = [ContextName.DEV];
         intentContexts[Intent.CHEATS_ENABLE] = [ContextName.DEV];
         intentContexts[Intent.CHEATS_DISABLE] = [ContextName.DEV];
@@ -65,6 +69,7 @@ var intent:Intent;
 
 
         ignoreTutorialCheck.set(Intent.MAIN_WELCOME, true);
+        ignoreTutorialCheck.set(Intent.LEVEL_SPAWN_UNIT, true);
         ignoreTutorialCheck.set(Intent.DEBUG_TOGGLE, true);
 
         ignoreTutorialCheck.set(Intent.CHEATS_DISABLE, true);

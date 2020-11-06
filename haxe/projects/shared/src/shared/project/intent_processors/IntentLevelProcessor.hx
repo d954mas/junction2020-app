@@ -1,4 +1,6 @@
 package shared.project.intent_processors;
+import shared.project.configs.UnitConfig;
+import shared.project.enums.UnitType;
 import shared.base.enums.ContextName;
 import shared.base.output.ModelOutputResultCode;
 import shared.project.enums.Intent;
@@ -9,18 +11,13 @@ class IntentLevelProcessor extends IntentSubProcessor {
     public override function processIntent(intent:Intent, ?data:Dynamic):Null<OutputResponce> {
         var storage = world.storageGet();
         switch(intent){
-            case Intent.DEBUG_TOGGLE:
-            //TODO: check if user is allowed to turn on debug
-                Assert.assert(world.isDev(), "cheats only work in dev mode");
-                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
-            case Intent.CHEATS_ENABLE:
-                var modelResult = this.world.outputCheatsEnable();
-                ask(i18n.tr("conv/cheats_enabled"));
-                return baseProcessor.getResult(modelResult);
-            case Intent.CHEATS_DISABLE:
-                var modelResult = this.world.outputCheatsDisable();
-                ask(i18n.tr("conv/cheats_disabled"));
-                return baseProcessor.getResult(modelResult);
+            case Intent.LEVEL_SPAWN_UNIT:
+                if(data == null){throw "LEVEL_SPAWN_UNIT no data";}
+                if(data.unit == null){throw "LEVEL_SPAWN_UNIT no unit";}
+                var unitType = UnitConfig.unitTypeGetById(data.unit);
+                if(unitType == null){throw "LEVEL_SPAWN_UNIT unknown unit";}
+                world.levelModel.playerModel.unitsSpawnUnit(unitType);
+                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             default: return null;
         }
         throw "no return for intent:" + intent;

@@ -153,9 +153,11 @@ __shared_project_analytics_events_predefined_GameSessionEvent = _hx_e()
 __shared_project_analytics_events_predefined_PlayerInfoEvent = _hx_e()
 __shared_project_analytics_events_predefined_TutorialEvent = _hx_e()
 __shared_project_configs_GameConfig = _hx_e()
+__shared_project_configs_UnitConfig = _hx_e()
 __shared_project_enums_Intents = _hx_e()
 __shared_project_intent_processors_IntentSubProcessor = _hx_e()
 __shared_project_intent_processors_IntentCheatsProcessor = _hx_e()
+__shared_project_intent_processors_IntentLevelProcessor = _hx_e()
 __shared_project_intent_processors_IntentModalProcessor = _hx_e()
 __shared_project_intent_processors_IntentProcessor = _hx_e()
 __shared_project_intent_processors_IntentTutorialProcessor = _hx_e()
@@ -5781,6 +5783,19 @@ __shared_project_configs_GameConfig.new = {}
 _hx_exports["shared"]["project"]["configs"]["GameConfig"] = __shared_project_configs_GameConfig
 __shared_project_configs_GameConfig.__name__ = true
 
+__shared_project_configs_UnitConfig.new = {}
+__shared_project_configs_UnitConfig.__name__ = true
+__shared_project_configs_UnitConfig.unitTypeGetById = function(id) 
+  if (id == "ARCHER") then 
+    do return "ARCHER" end;
+  else
+    if (id == "KNIGHT") then 
+      do return "KNIGHT" end;
+    end;
+  end;
+  do return nil end;
+end
+
 __shared_project_enums_Intents.new = {}
 _hx_exports["shared"]["project"]["enums"]["Intents"] = __shared_project_enums_Intents
 __shared_project_enums_Intents.__name__ = true
@@ -5792,6 +5807,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("main.keep_working", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("webapp.load_done", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("actions.iap.buy", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("level.spawn.unit", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("debug.toggle", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.enable", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.disable", _hx_tab_array({[0]="dev"}, 1));
@@ -5802,6 +5818,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("tutorial.no", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("tutorial.yes", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("level.spawn.unit", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("debug.toggle", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.disable", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.enable", true);
@@ -5905,6 +5922,39 @@ __shared_project_intent_processors_IntentCheatsProcessor.prototype.__class__ =  
 __shared_project_intent_processors_IntentCheatsProcessor.__super__ = __shared_project_intent_processors_IntentSubProcessor
 setmetatable(__shared_project_intent_processors_IntentCheatsProcessor.prototype,{__index=__shared_project_intent_processors_IntentSubProcessor.prototype})
 
+__shared_project_intent_processors_IntentLevelProcessor.new = function(world,shared1,i18n) 
+  local self = _hx_new(__shared_project_intent_processors_IntentLevelProcessor.prototype)
+  __shared_project_intent_processors_IntentLevelProcessor.super(self,world,shared1,i18n)
+  return self
+end
+__shared_project_intent_processors_IntentLevelProcessor.super = function(self,world,shared1,i18n) 
+  __shared_project_intent_processors_IntentSubProcessor.super(self,world,shared1,i18n);
+end
+__shared_project_intent_processors_IntentLevelProcessor.__name__ = true
+__shared_project_intent_processors_IntentLevelProcessor.prototype = _hx_a();
+__shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent = function(self,intent,data) 
+  if (intent == "level.spawn.unit") then 
+    if (data == nil) then 
+      _G.error("LEVEL_SPAWN_UNIT no data",0);
+    end;
+    if (data.unit == nil) then 
+      _G.error("LEVEL_SPAWN_UNIT no unit",0);
+    end;
+    local unitType = __shared_project_configs_UnitConfig.unitTypeGetById(data.unit);
+    if (unitType == nil) then 
+      _G.error("LEVEL_SPAWN_UNIT unknown unit",0);
+    end;
+    self.world.levelModel.playerModel:unitsSpawnUnit(unitType);
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  else
+    do return nil end;
+  end;
+end
+
+__shared_project_intent_processors_IntentLevelProcessor.prototype.__class__ =  __shared_project_intent_processors_IntentLevelProcessor
+__shared_project_intent_processors_IntentLevelProcessor.__super__ = __shared_project_intent_processors_IntentSubProcessor
+setmetatable(__shared_project_intent_processors_IntentLevelProcessor.prototype,{__index=__shared_project_intent_processors_IntentSubProcessor.prototype})
+
 __shared_project_intent_processors_IntentModalProcessor.new = function(world,shared1,i18n) 
   local self = _hx_new(__shared_project_intent_processors_IntentModalProcessor.prototype)
   __shared_project_intent_processors_IntentModalProcessor.super(self,world,shared1,i18n)
@@ -5936,9 +5986,11 @@ __shared_project_intent_processors_IntentProcessor.super = function(self,world,s
   self.processerCheats = __shared_project_intent_processors_IntentCheatsProcessor.new(self.world, self.shared, self.i18n);
   self.processerModal = __shared_project_intent_processors_IntentModalProcessor.new(self.world, self.shared, self.i18n);
   self.processerTutorial = __shared_project_intent_processors_IntentTutorialProcessor.new(self.world, self.shared, self.i18n);
+  self.processerLevel = __shared_project_intent_processors_IntentLevelProcessor.new(self.world, self.shared, self.i18n);
   self.processerCheats:setBaseProcessor(self);
   self.processerModal:setBaseProcessor(self);
   self.processerTutorial:setBaseProcessor(self);
+  self.processerLevel:setBaseProcessor(self);
 end
 __shared_project_intent_processors_IntentProcessor.__name__ = true
 __shared_project_intent_processors_IntentProcessor.prototype = _hx_a();
@@ -5948,6 +6000,7 @@ __shared_project_intent_processors_IntentProcessor.prototype.shared= nil;
 __shared_project_intent_processors_IntentProcessor.prototype.processerCheats= nil;
 __shared_project_intent_processors_IntentProcessor.prototype.processerModal= nil;
 __shared_project_intent_processors_IntentProcessor.prototype.processerTutorial= nil;
+__shared_project_intent_processors_IntentProcessor.prototype.processerLevel= nil;
 __shared_project_intent_processors_IntentProcessor.prototype.speechBuilder= nil;
 __shared_project_intent_processors_IntentProcessor.prototype.ask = function(self,text) 
   self.speechBuilder:text(text);
@@ -5961,7 +6014,7 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     __shared_project_analytics_AnalyticsHelper.sendProcessIntentEvent(self.world, intent, data);
     __shared_project_analytics_AnalyticsHelper.sendPlayerInfoEvent(self.world);
   end;
-  __haxe_Log.trace(Std.string("process intent:") .. Std.string(intent), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=62,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+  __haxe_Log.trace(Std.string("process intent:") .. Std.string(intent), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=65,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
   if (intent == "main.welcome") then 
     self:ask(self.i18n:tr("conv/welcome"));
     __shared_project_analytics_AnalyticsHelper.sendGameLaunchEvent(self.world);
@@ -5990,6 +6043,10 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
   if (result ~= nil) then 
     do return result end;
   end;
+  result = self.processerLevel:processIntent(intent, data);
+  if (result ~= nil) then 
+    do return result end;
+  end;
   if (intent) == "actions.iap.buy" then 
     if (data == nil) then 
       _G.error("no data",0);
@@ -5997,7 +6054,7 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     if (data.iapKey == nil) then 
       _G.error("no iap key",0);
     end;
-    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=115,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=121,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.fallback" then 
     self:ask(self.i18n:tr("conv/fallback"));
@@ -6192,6 +6249,9 @@ __shared_project_model_PlayerModel.__name__ = true
 __shared_project_model_PlayerModel.prototype = _hx_a();
 __shared_project_model_PlayerModel.prototype.world= nil;
 __shared_project_model_PlayerModel.prototype.ds= nil;
+__shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType) 
+  self.world.speechBuilder:text(Std.string("spawn ") .. Std.string(unitType));
+end
 __shared_project_model_PlayerModel.prototype.modelRestore = function(self) 
 end
 __shared_project_model_PlayerModel.prototype.moneyChange = function(self,value,tag) 

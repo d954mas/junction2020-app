@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.project.enums.UnitType;
 import shared.project.configs.GameConfig;
 import Array;
 import shared.base.event.ModelEventName.EventHelper;
@@ -16,6 +17,10 @@ class PlayerModel {
         this.world = world;
         this.ds = this.world.storageGet();
         modelRestore();
+    }
+
+    public function unitsSpawnUnit(unitType:UnitType){
+        world.speechBuilder.text("spawn " + unitType);
     }
 
     public function modelRestore():Void {

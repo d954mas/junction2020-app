@@ -3,6 +3,7 @@ local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local ManaPanel = require "models.view.resources.mana_panel"
 local MoneyPanel = require "models.view.resources.money_panel"
 local WORLD = require "libs_project.words"
+local GUI = require "libs_project.gui.gui"
 
 local Script = COMMON.new_n28s()
 
@@ -13,9 +14,9 @@ function Script:bind_vh()
 	self.views = {
 		mana_panel = ManaPanel("mana_panel",WORLD),
 		money_panel = MoneyPanel("money_panel",WORLD),
+		btn_spawn_knight = GUI.ButtonIconTest("btn_spawn_knight"),
+		btn_spawn_archer = GUI.ButtonIconTest("btn_spawn_archer"),
 	}
-	self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana(),true)
-	self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money(),true)
 end
 
 function Script:init()
@@ -26,11 +27,21 @@ function Script:init()
 end
 
 function Script:init_gui()
+	self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana(),true)
+	self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money(),true)
+
 	self.scheduler = COMMON.RX.CooperativeScheduler.create()
 	self.subscriptions = COMMON.RX.SubscriptionsStorage()
 	self.subscriptions:add( COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):go(self.scheduler):subscribe(function()
 		self:storage_changed()
 	end))
+
+	self.views.btn_spawn_knight:set_input_listener(function ()
+		interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
+	end)
+	self.views.btn_spawn_archer:set_input_listener(function ()
+		interactive_canvas.send_text_query("level.spawn.unit ARCHER")
+	end)
 end
 
 function Script:storage_changed()
@@ -51,6 +62,8 @@ function Script:update(dt)
 end
 
 function Script:on_input(action_id, action)
+	self.views.btn_spawn_knight:on_input(action_id,action)
+	self.views.btn_spawn_archer:on_input(action_id,action)
 end
 
 COMMON.N28S.register(Script)

@@ -22,4 +22,11 @@ class UnitConfig {
             rewardByLevel: [1, 2, 3, 4, 5]
         }
     ];
+
+    public static function unitTypeGetById(id:String):Null<UnitType>{
+        if(id == Std.string(UnitType.ARCHER)){return UnitType.ARCHER;}
+        else if(id == Std.string(UnitType.KNIGHT)){return UnitType.KNIGHT;}
+
+        return null;
+    }
 }
