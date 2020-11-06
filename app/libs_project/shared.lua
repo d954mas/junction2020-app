@@ -126,6 +126,7 @@ __shared_base_Localization = _hx_e()
 __shared_base_MatchWords = _hx_e()
 __shared_base_NativeApi = _hx_e()
 __shared_base_SpeechCommands = _hx_e()
+__shared_base_event_EventHelper = _hx_e()
 __shared_base_model_WorldBaseModel = _hx_e()
 __shared_base_struct_ContextStruct = _hx_e()
 __shared_base_utils_GameUtils = _hx_e()
@@ -155,6 +156,7 @@ __shared_project_intent_processors_IntentCheatsProcessor = _hx_e()
 __shared_project_intent_processors_IntentModalProcessor = _hx_e()
 __shared_project_intent_processors_IntentProcessor = _hx_e()
 __shared_project_intent_processors_IntentTutorialProcessor = _hx_e()
+__shared_project_model_LevelModel = _hx_e()
 __shared_project_model_Restrictions = _hx_e()
 __shared_project_model_World = _hx_e()
 __shared_project_storage_Storage = _hx_e()
@@ -5066,6 +5068,12 @@ __shared_base_SpeechCommands.load = function()
   __shared_base_SpeechCommands.eng = __shared_base_SpeechCommands.parseCommands(__haxe_Resource.getString("speech_commands_en"));
 end
 
+__shared_base_event_EventHelper.new = {}
+__shared_base_event_EventHelper.__name__ = true
+__shared_base_event_EventHelper.levelNew = function(world) 
+  world:eventEmit("LEVEL_NEW");
+end
+
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
   __shared_base_model_WorldBaseModel.super(self,storage)
@@ -5871,7 +5879,7 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     if (data.iapKey == nil) then 
       _G.error("no iap key",0);
     end;
-    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=114,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=115,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.fallback" then 
     self:ask(self.i18n:tr("conv/fallback"));
@@ -5879,6 +5887,7 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
   elseif (intent) == "main.keep_working" then 
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "webapp.load_done" then 
+    self.world:onGameLoaded();
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;else
   _G.error(Std.string("UnknownIntent:") .. Std.string(intent),0); end;
 end
@@ -5903,6 +5912,56 @@ __shared_project_intent_processors_IntentTutorialProcessor.prototype.__class__ =
 __shared_project_intent_processors_IntentTutorialProcessor.__super__ = __shared_project_intent_processors_IntentSubProcessor
 setmetatable(__shared_project_intent_processors_IntentTutorialProcessor.prototype,{__index=__shared_project_intent_processors_IntentSubProcessor.prototype})
 
+__shared_project_model_LevelModel.new = function(world) 
+  local self = _hx_new(__shared_project_model_LevelModel.prototype)
+  __shared_project_model_LevelModel.super(self,world)
+  return self
+end
+__shared_project_model_LevelModel.super = function(self,world) 
+  self.world = world;
+  self.ds = self.world:storageGet();
+end
+__shared_project_model_LevelModel.__name__ = true
+__shared_project_model_LevelModel.prototype = _hx_a();
+__shared_project_model_LevelModel.prototype.world= nil;
+__shared_project_model_LevelModel.prototype.ds= nil;
+__shared_project_model_LevelModel.prototype.createPlayer = function(self) 
+  do return _hx_e() end
+end
+__shared_project_model_LevelModel.prototype.createEnemy = function(self) 
+  do return _hx_e() end
+end
+__shared_project_model_LevelModel.prototype.createRoadPart = function(self,x,y,type) 
+  do return _hx_o({__fields__={x=true,y=true,type=true,idx=true},x=x,y=y,type=type,idx=(x * 10) + y}) end
+end
+__shared_project_model_LevelModel.prototype.createPrevLevelForFirstGame = function(self) 
+  local level = _hx_o({__fields__={player=true,enemy=true,roadToEnemy=true},player=self:createPlayer(),enemy=self:createEnemy(),roadToEnemy=Array.new()});
+  level.roadToEnemy:push(self:createRoadPart(0, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(1, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(2, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(3, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(4, 0, "BASE"));
+  do return level end
+end
+__shared_project_model_LevelModel.prototype.createLevel = function(self) 
+  local prevLevel = self.world:storageGet().level;
+  if (prevLevel == nil) then 
+    prevLevel = self:createPrevLevelForFirstGame();
+  end;
+  local level = _hx_o({__fields__={player=true,enemy=true,roadToEnemy=true},player=self:createPlayer(),enemy=self:createEnemy(),roadToEnemy=Array.new()});
+  local startX = prevLevel.roadToEnemy[prevLevel.roadToEnemy.length - 1].x;
+  level.roadToEnemy:push(self:createRoadPart(startX + 1, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(startX + 2, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(startX + 3, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(startX + 4, 0, "BASE"));
+  level.roadToEnemy:push(self:createRoadPart(startX + 5, 0, "BASE"));
+  self.world:storageGet().levelPrev = prevLevel;
+  self.world:storageGet().level = level;
+  __shared_base_event_EventHelper.levelNew(self.world);
+end
+
+__shared_project_model_LevelModel.prototype.__class__ =  __shared_project_model_LevelModel
+
 __shared_project_model_Restrictions.new = {}
 _hx_exports["shared"]["project"]["model"]["Restrictions"] = __shared_project_model_Restrictions
 __shared_project_model_Restrictions.__name__ = true
@@ -5919,6 +5978,7 @@ __shared_project_model_World.super = function(self,storage)
   self.timers = __shared_project_timers_Timers.new();
   self.isDevServer = false;
   self.tutorialsModel = __shared_project_tutorial_TutorialsModel.new(self);
+  self.levelModel = __shared_project_model_LevelModel.new(self);
   self:restore();
   self.timers:init(self);
   self.speechBuilder = __shared_base_utils_GameUtils.getSpeechBuilder(self);
@@ -5935,6 +5995,7 @@ __shared_project_model_World.prototype.speechBuilderTutorial= nil;
 __shared_project_model_World.prototype.i18n= nil;
 __shared_project_model_World.prototype.isDevServer= nil;
 __shared_project_model_World.prototype.clientIntentIdx= nil;
+__shared_project_model_World.prototype.levelModel= nil;
 __shared_project_model_World.prototype.intentProcessor= nil;
 __shared_project_model_World.prototype.setIntentProcessor = function(self,intentProcessor) 
   self.intentProcessor = intentProcessor;
@@ -5944,6 +6005,13 @@ __shared_project_model_World.prototype.setI18n = function(self,i18n)
 end
 __shared_project_model_World.prototype.restore = function(self) 
   __shared_base_model_WorldBaseModel.prototype.restore(self);
+end
+__shared_project_model_World.prototype.onGameLoaded = function(self) 
+  self.storage.level = nil;
+  self.storage.levelPrev = nil;
+  if (self.storage.level == nil) then 
+    self.levelModel:createLevel();
+  end;
 end
 __shared_project_model_World.prototype.outputConversationStart = function(self) 
   local _g = 0;
@@ -6007,7 +6075,7 @@ __shared_project_model_World.prototype.canProcessIntent = function(self,name,dat
   end;
   local list = __shared_project_enums_Intents.intentContexts:get(name);
   if (list == nil) then 
-    __haxe_Log.trace(Std.string("unknown intent ") .. Std.string(name), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/World.hx",lineNumber=111,className="shared.project.model.World",methodName="canProcessIntent"}));
+    __haxe_Log.trace(Std.string("unknown intent ") .. Std.string(name), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/World.hx",lineNumber=122,className="shared.project.model.World",methodName="canProcessIntent"}));
     if (throwExeption) then 
       _G.error(Std.string("unknown intent ") .. Std.string(name),0);
     end;

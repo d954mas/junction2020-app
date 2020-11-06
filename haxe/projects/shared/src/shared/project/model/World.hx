@@ -26,6 +26,7 @@ class World extends WorldBaseModel<StorageStruct> {
     @:nullSafety(Off) public var i18n:I18n;
     public var isDevServer:Bool;
     public var clientIntentIdx:Int = -1;
+    @:nullSafety(Off) public var levelModel:LevelModel;
     @:nullSafety(Off) public var intentProcessor:IntentProcessor;
 
     public function new(storage:StorageStruct) {
@@ -34,6 +35,7 @@ class World extends WorldBaseModel<StorageStruct> {
         timers = new Timers();
         isDevServer = false;
         tutorialsModel = new TutorialsModel(this);
+        levelModel = new LevelModel(this);
         restore();
         timers.init(this);
         speechBuilder = GameUtils.getSpeechBuilder(this);
@@ -52,6 +54,15 @@ class World extends WorldBaseModel<StorageStruct> {
         super.restore();
     }
 
+    public function onGameLoaded() {
+        //todo add save load data when reopen game
+        storage.level = null;
+        storage.levelPrev = null;
+        if (storage.level == null) {
+            levelModel.createLevel();
+        }
+    }
+
     //clear old data.That was saved in storage(for example battle)
     public function outputConversationStart():ModelOutputResponse {
         //delete all context from prev state.
@@ -67,7 +78,7 @@ class World extends WorldBaseModel<StorageStruct> {
         return {code : ModelOutputResultCode.SUCCESS};
     }
 
-    public function isDevUser(){
+    public function isDevUser() {
         return (isDevServer || storage.profile.isDev);
     }
 

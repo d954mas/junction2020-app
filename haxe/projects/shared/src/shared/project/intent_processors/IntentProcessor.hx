@@ -101,6 +101,7 @@ class IntentProcessor {
 
             case Intent.WEBAPP_LOAD_DONE: //pass
                 world.tutorialsModel.startTutorialWhenLoadGameDone();
+                world.onGameLoaded();
                 return getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.MAIN_KEEP_WORKING: //pass
                 return getResult({code : ModelOutputResultCode.SUCCESS});

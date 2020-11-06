@@ -9,6 +9,7 @@ class BaseModel<Storage, World:WorldBaseModel<Storage> > {
     public function new(world:World) {
         this.world = world;
         this.ds = this.world.storageGet();
+        modelRestore();
     }
 
     public function modelRestore():Void {

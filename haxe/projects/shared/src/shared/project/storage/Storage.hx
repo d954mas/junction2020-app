@@ -1,5 +1,7 @@
 package shared.project.storage;
 
+import shared.project.enums.GameEnums.RoadType;
+import shared.project.storage.Storage.LevelEnemyStruct;
 import haxe.DynamicAccess;
 import shared.project.timers.BaseTimer.TimerStatus;
 import shared.project.tutorial.tutorials.TutorialBase;
@@ -78,6 +80,26 @@ typedef UtilsStruct = {
     var auto_listening:Bool;
 }
 
+typedef LevelPlayerStruct = {
+
+}
+typedef LevelEnemyStruct = {
+
+}
+
+typedef LevelRoadPart = {
+    var idx:Int;//idx of road.Increased fir every new road
+    var x:Int;
+    var y:Int;
+    var type:RoadType;
+}
+
+typedef LevelStruct = {
+    player:LevelPlayerStruct,
+    enemy:LevelEnemyStruct,
+    roadToEnemy:Array<LevelRoadPart>,
+}
+
 typedef StorageStruct = {
     var user:UserStorageStruct;
     var version:VersionStorageStruct;
@@ -90,6 +112,8 @@ typedef StorageStruct = {
     var timers:TimersStorageStruct;
     var tutorials:DynamicAccess<TutorialTypedef>;
     var utils:UtilsStruct;
+    @:optional var level:LevelStruct;
+    @:optional var levelPrev:LevelStruct;// prev level.Need to show right visual
 }
 
 typedef ClientStruct = {
@@ -153,9 +177,9 @@ class Storage {
             }
             var dtdId = Uuid.v4();
             //перегенерация id считаем что это новый аользователь.
-           // if (data.profile != null && data.profile.dtdId != null) {
-               // dtdId = data.profile.dtdId;
-           // }
+            // if (data.profile != null && data.profile.dtdId != null) {
+            // dtdId = data.profile.dtdId;
+            // }
 
             data.profile = {
                 cheatsEnabled:false,

@@ -1,8 +1,8 @@
 {
      "timers": {
-          "serverLastTime": 1604669343758.6,
-          "time": 1604669343758.6,
           "clientDeltaTime": 0,
+          "time": 1604676459847.7,
+          "serverLastTime": 1604676459847.7,
           "timerDelta": 0
      },
      "version": {
@@ -19,26 +19,44 @@
           "locale": "en",
           "permisions":           {}
      },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 1,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 29,
-          "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
-          "device": "sberbox",
-          "platform": "sber",
-          "gameSharedVersion": ""
-     },
      "tutorials":      {},
-     "iap": {
-          "current_iap": ""
+     "level": {
+          "roadToEnemy": [
+               {
+                    "type": "BASE",
+                    "x": 5,
+                    "idx": 50,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 6,
+                    "idx": 60,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 7,
+                    "idx": 70,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 8,
+                    "idx": 80,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 9,
+                    "idx": 90,
+                    "y": 0
+               }
+          ],
+          "enemy":           {},
+          "player":           {}
      },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
+     "timerDelta": 0,
      "profile": {
           "currentVersion": 421,
           "tag": "",
@@ -49,5 +67,59 @@
           "isDev": true,
           "firstLaunchTimestamp": 1604618196,
           "conversationIdAtStart": "1111"
+     },
+     "stat": {
+          "startGameCounter": 0,
+          "version": 1,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 37,
+          "gameBackendVersion": "",
+          "gameConfigVersion": "",
+          "userLevel": 1,
+          "device": "sberbox",
+          "platform": "sber",
+          "gameSharedVersion": ""
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "levelPrev": {
+          "roadToEnemy": [
+               {
+                    "type": "BASE",
+                    "x": 0,
+                    "idx": 0,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 1,
+                    "idx": 10,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 2,
+                    "idx": 20,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 3,
+                    "idx": 30,
+                    "y": 0
+               },
+               {
+                    "type": "BASE",
+                    "x": 4,
+                    "idx": 40,
+                    "y": 0
+               }
+          ],
+          "enemy":           {},
+          "player":           {}
      }
 }
