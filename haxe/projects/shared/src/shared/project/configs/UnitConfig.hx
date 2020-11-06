@@ -12,7 +12,7 @@ class UnitConfig {
         UnitType.ARCHER => {
             hpByLevel: [5, 10, 15, 20, 25],
             attackByLevel: [2, 4, 6, 8, 10],
-            attackRange: 2,
+            attackRange: 3,
             rewardByLevel: [1, 2, 3, 4, 5]
         },
         UnitType.KNIGHT => {
