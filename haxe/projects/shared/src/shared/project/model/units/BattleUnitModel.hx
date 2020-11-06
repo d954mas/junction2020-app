@@ -7,7 +7,7 @@ import shared.project.storage.Storage.BattleUnitStruct;
 class BattleUnitModel {
     private var struct:BattleUnitStruct;
     public function canAttack(enemy:BattleUnitModel):Bool {
-        return calculateDistance(enemy) <= struct.attackRange;
+        return calculateDistance(enemy) <= struct.attackRange && (struct.ownerId != enemy.struct.ownerId);
     }
 
     public function attack(enemy:BattleUnitModel) {

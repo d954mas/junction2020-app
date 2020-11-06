@@ -97,7 +97,7 @@ typedef LevelPlayerStruct = {
 }
 
 typedef LevelEnemyStruct = {
-    > LevelPlayerOrAiStruct
+    > LevelPlayerOrAiStruct,
 }
 
 typedef LevelRoadPart = {
