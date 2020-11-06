@@ -4,7 +4,7 @@ import shared.base.output.ModelOutputResultCode;
 import shared.project.enums.Intent;
 import shared.Shared.OutputResponce;
 
-class IntentCheatsProcessor extends IntentSubProcessor {
+class IntentLevelProcessor extends IntentSubProcessor {
 
     public override function processIntent(intent:Intent, ?data:Dynamic):Null<OutputResponce> {
         var storage = world.storageGet();
@@ -21,20 +21,6 @@ class IntentCheatsProcessor extends IntentSubProcessor {
                 var modelResult = this.world.outputCheatsDisable();
                 ask(i18n.tr("conv/cheats_disabled"));
                 return baseProcessor.getResult(modelResult);
-            case Intent.CHEATS_MONEY_ADD:
-                ask(i18n.tr("add money"));
-                world.levelModel.playerModel.moneyChange(100,"Cheats");
-                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
-            case Intent.CHEATS_MANA_ADD:
-                ask(i18n.tr("add mana"));
-                world.levelModel.playerModel.manaChange(100,"Cheats");
-                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
-            case Intent.CHEATS_RESTORE_HP:
-                ask(i18n.tr("restore hp"));
-                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
-            case Intent.CHEATS_KILL_ALL_ENEMIES:
-                ask(i18n.tr("kill all enemies"));
-                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             default: return null;
         }
         throw "no return for intent:" + intent;

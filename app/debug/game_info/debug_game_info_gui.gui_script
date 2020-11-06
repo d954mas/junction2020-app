@@ -62,6 +62,10 @@ function Script:bind_vh()
 		btn_cheats = GUI.ButtonIconTest("btn_cheats"),
 		cheats = {
 			btn_enable = GUI.ButtonIconTest("cheats_root/btn_enable"),
+			btn_money_add = GUI.ButtonIconTest("cheats_root/buttons/btn_money_add"),
+			btn_mana_add = GUI.ButtonIconTest("cheats_root/buttons/btn_mana_add"),
+			btn_restore_hp = GUI.ButtonIconTest("cheats_root/buttons/btn_restore_hp"),
+			btn_kill_all_enemies = GUI.ButtonIconTest("cheats_root/buttons/btn_kill_all_enemies"),
 		}
 	}
 
@@ -121,6 +125,18 @@ function Script:bind_vh()
 	end)
 	self.views.cheats.btn_enable:set_input_listener(function()
 		interactive_canvas.send_text_query(DEBUG_INFO.cheatsEnabled and INTENTS.INTENTS.CHEATS_DISABLE or INTENTS.INTENTS.CHEATS_ENABLE)
+	end)
+	self.views.cheats.btn_money_add:set_input_listener(function()
+		interactive_canvas.send_text_query("cheats.money.add")
+	end)
+	self.views.cheats.btn_mana_add:set_input_listener(function()
+		interactive_canvas.send_text_query("cheats.mana.add")
+	end)
+	self.views.cheats.btn_restore_hp:set_input_listener(function()
+		interactive_canvas.send_text_query("cheats.restore_hp")
+	end)
+	self.views.cheats.btn_kill_all_enemies:set_input_listener(function()
+		interactive_canvas.send_text_query("cheats.kill_all_enemies")
 	end)
 
 
@@ -256,7 +272,13 @@ function Script:on_input(action_id, action)
 		result = result or self.views.btn_time_up:on_input(action_id, action)
 		result = result or self.views.btn_time_down:on_input(action_id, action)
 		result = result or self.views.btn_cheats:on_input(action_id, action)
+
 		result = result or self.views.cheats.btn_enable:on_input(action_id, action)
+		result = result or self.views.cheats.btn_kill_all_enemies:on_input(action_id, action)
+		result = result or self.views.cheats.btn_mana_add:on_input(action_id, action)
+		result = result or self.views.cheats.btn_money_add:on_input(action_id, action)
+		result = result or self.views.cheats.btn_restore_hp:on_input(action_id, action)
+
 		if (DEBUG_INFO.cheatsEnabled) then
 			--result = result or self.views.cheats.btn_attack:on_input(action_id, action)
 			

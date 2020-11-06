@@ -12,7 +12,7 @@ import shared.base.model.BaseModel;
 class LevelModel {
     private var world:World;
     private var ds:StorageStruct;
-    private var playerModel:PlayerModel;
+    public var playerModel:PlayerModel;
     private var battleUnitModels:List<BattleUnitModel>;
 
     public function new(world:World) {

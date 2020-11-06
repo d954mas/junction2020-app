@@ -5792,15 +5792,23 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("main.keep_working", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("webapp.load_done", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("actions.iap.buy", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("debug.toggle", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.enable", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.disable", _hx_tab_array({[0]="dev"}, 1));
-  __shared_project_enums_Intents.intentContexts:set("debug.toggle", _hx_tab_array({[0]="dev"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("cheats.mana.add", _hx_tab_array({[0]="dev"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("cheats.money.add", _hx_tab_array({[0]="dev"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("cheats.kill_all_enemies", _hx_tab_array({[0]="dev"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("cheats.restore_hp", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("tutorial.no", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("tutorial.yes", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("debug.toggle", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.disable", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.enable", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.mana.add", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.money.add", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.kill_all_enemies", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.restore_hp", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("webapp.load_done", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.fallback", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.error", true);
@@ -5871,6 +5879,20 @@ __shared_project_intent_processors_IntentCheatsProcessor.prototype.processIntent
     local modelResult1 = self.world:outputCheatsEnable();
     self:ask(self.i18n:tr("conv/cheats_enabled"));
     do return self.baseProcessor:getResult(modelResult1) end;
+  elseif (intent) == "cheats.kill_all_enemies" then 
+    self:ask(self.i18n:tr("kill all enemies"));
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "cheats.mana.add" then 
+    self:ask(self.i18n:tr("add mana"));
+    self.world.levelModel.playerModel:manaChange(100, "Cheats");
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "cheats.money.add" then 
+    self:ask(self.i18n:tr("add money"));
+    self.world.levelModel.playerModel:moneyChange(100, "Cheats");
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "cheats.restore_hp" then 
+    self:ask(self.i18n:tr("restore hp"));
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "debug.toggle" then 
     if (not self.world:isDev()) then 
       _G.error("cheats only work in dev mode",0);

@@ -15,6 +15,10 @@ enum abstract Intent(String) {
 
     var CHEATS_ENABLE = "cheats.enable";
     var CHEATS_DISABLE = "cheats.disable";
+    var CHEATS_MONEY_ADD = "cheats.money.add";
+    var CHEATS_MANA_ADD = "cheats.mana.add";
+    var CHEATS_RESTORE_HP = "cheats.restore_hp";
+    var CHEATS_KILL_ALL_ENEMIES = "cheats.kill_all_enemies";
 
     var DEBUG_TOGGLE = "debug.toggle";
 
@@ -46,10 +50,13 @@ var intent:Intent;
         intentContexts[Intent.WEBAPP_LOAD_DONE] = [];
         intentContexts[Intent.IAP_BUY] = [];
 
-
+        intentContexts[Intent.DEBUG_TOGGLE] = [ContextName.DEV];
         intentContexts[Intent.CHEATS_ENABLE] = [ContextName.DEV];
         intentContexts[Intent.CHEATS_DISABLE] = [ContextName.DEV];
-        intentContexts[Intent.DEBUG_TOGGLE] = [ContextName.DEV];
+        intentContexts[Intent.CHEATS_MANA_ADD] = [ContextName.DEV];
+        intentContexts[Intent.CHEATS_MONEY_ADD] = [ContextName.DEV];
+        intentContexts[Intent.CHEATS_KILL_ALL_ENEMIES] = [ContextName.DEV];
+        intentContexts[Intent.CHEATS_RESTORE_HP] = [ContextName.DEV];
 
 
         intentContexts[Intent.TUTORIAL_NO] = [];
@@ -59,8 +66,14 @@ var intent:Intent;
 
         ignoreTutorialCheck.set(Intent.MAIN_WELCOME, true);
         ignoreTutorialCheck.set(Intent.DEBUG_TOGGLE, true);
+
         ignoreTutorialCheck.set(Intent.CHEATS_DISABLE, true);
         ignoreTutorialCheck.set(Intent.CHEATS_ENABLE, true);
+        ignoreTutorialCheck.set(Intent.CHEATS_MANA_ADD, true);
+        ignoreTutorialCheck.set(Intent.CHEATS_MONEY_ADD, true);
+        ignoreTutorialCheck.set(Intent.CHEATS_KILL_ALL_ENEMIES, true);
+        ignoreTutorialCheck.set(Intent.CHEATS_RESTORE_HP, true);
+
         ignoreTutorialCheck.set(Intent.WEBAPP_LOAD_DONE, true);
         ignoreTutorialCheck.set(Intent.MAIN_FALLBACK, true);
         ignoreTutorialCheck.set(Intent.MAIN_ERROR, true);

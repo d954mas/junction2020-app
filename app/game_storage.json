@@ -1,9 +1,9 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1604702409570.1,
-          "serverLastTime": 1604702409570.1,
-          "clientDeltaTime": 0
+          "time": 1604703522229.4,
+          "clientDeltaTime": 0,
+          "serverLastTime": 1604703522229.4
      },
      "version": {
           "server": "dev",
@@ -103,8 +103,8 @@
                }
           ],
           "player": {
-               "mana": 0,
-               "money": 20,
+               "mana": 100,
+               "money": 220,
                "id": 0
           }
      },
@@ -114,7 +114,7 @@
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 26,
+          "intentIdx": 42,
           "gameBackendVersion": "",
           "gameSharedVersion": "",
           "device": "sberbox",
@@ -136,7 +136,7 @@
           "uuid": "62e09997-327f-4e0a-865c-364f09141285",
           "conversationIdAtStart": "1111",
           "isDev": true,
-          "cheatsEnabled": false,
+          "cheatsEnabled": true,
           "conversationIdCurrent": "1111"
      }
 }
