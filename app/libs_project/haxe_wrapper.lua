@@ -76,6 +76,22 @@ function M.game_config_speech_platform_get()
 	return SHARED.shared.project.configs.GameConfig.PLATFORM
 end
 
+
+function M.level_castle_get_by_idx(idx)
+	return M.get_world().levelModel:castlesGetByIdx(idx)
+end
+
+function M.level_castles_get_array()
+	return M.get_world().storage.level.castles
+end
+
+function M.level_road_get_by_idx(idx)
+	return M.get_world().levelModel:roadsGetByIdx(idx)
+end
+function M.level_roads_get_array()
+	return M.get_world().storage.level.roads
+end
+
 return M
 
 

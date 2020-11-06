@@ -41,6 +41,10 @@ M.GAME_SIZE = {
 	height = 680
 }
 
+M.CONFIG = {
+	CASTLE_DMOVE = 90
+}
+
 M.FACTORIES = {
 	BATTLE_CHAR = msg.url("battle:/words/factories#/factory_char")
 }

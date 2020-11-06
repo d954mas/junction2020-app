@@ -1,10 +1,13 @@
 package shared.project.model;
+import Array;
 import shared.project.enums.GameEnums.RoadType;
 import shared.project.storage.Storage;
 import shared.project.storage.Storage.LevelPlayerStruct;
 import shared.base.event.ModelEventName.EventHelper;
 import shared.project.storage.Storage.LevelStruct;
 import shared.base.model.BaseModel;
+
+@:expose @:keep
 class LevelModel {
     private var world:World;
     private var ds:StorageStruct;
@@ -96,6 +99,20 @@ class LevelModel {
         roadPlayerToEnemy.push(createRoadPart(startX + 5, 0, RoadType.BASE));
 
         level.roads.push(roadPlayerToEnemy);
+    }
+
+
+
+
+    function castlesGetByIdx(idx:Int):CastleStruct{
+        var level = world.storageGet().level;
+        if(level == null){throw "no level model castlesGetByIdx";}
+        return level.castles[idx];
+    }
+    function roadsGetByIdx(idx:Int):Array<LevelRoadPart>{
+        var level = world.storageGet().level;
+        if(level == null){throw "no level model roadsGetByIdx";}
+        return level.roads[idx];
     }
 
 }

@@ -32,7 +32,7 @@ function Cameras:init()
 		aspect_ratio = vmath.vector3(1280, 680, 0),
 		use_view_area = true,
 		view_area = vmath.vector3(1280, 680,0),
-		scale_mode = Camera.SCALEMODE.FIXEDAREA
+		scale_mode = Camera.SCALEMODE.FIXEDWIDTH
 	})
 	self.battle_camera3d = Camera("3d",{
 		orthographic = false,
