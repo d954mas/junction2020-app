@@ -59,7 +59,47 @@ class LevelModel {
     private function levelNextTurnBattles() {
         for (attacker in battleUnitModels) {
             var canAttack = Lambda.filter(battleUnitModels, function(v) {return attacker.canAttack(v);});
+            if (canAttack.length == 0) {
+                if (attacker.canMove()) {
+                    var newPos:LevelRoadPart;
+                    if (attacker.getOwnerId() > 0) {
+                        newPos = unitNewPosition(attacker);
+                        attacker.move(newPos);
+                    }
+                }
+            } else {
+                var defender = canAttack[0];
+                attacker.attack(defender);
+                if (defender.canAttack(attacker)) {
+                    defender.attack(attacker);
+                }
+                if (!defender.isAlive()) {
+                    battleUnitModels.remove(defender);
+                }
+                if (!attacker.isAlive()) {
+                    battleUnitModels.remove(attacker);
+                }
+            }
         }
+    }
+
+    private function unitNewPosition(unit:IBattleUnit) {
+        var road = roadByRoadPart(unit.getPos());
+        if (unit.getOwnerId() > 0) {
+            //change behavior if enemies can go off the roadPlayerToEnemy, current behavior
+            //might cause IndexOutOfBoundsException
+            return road[road.indexOf(unit.getPos()) - 1];
+        }
+        return road[road.indexOf(unit.getPos()) + 1];
+    }
+
+    private function roadByRoadPart(part:LevelRoadPart) {
+        if (ds.level != null) {
+            for (road in ds.level.roads) {
+                if (road.indexOf(part) != -1) return road;
+            }
+        }
+        throw "Part doesnt belong to any road";
     }
 
     private function levelNextTurnCaravans() {}
