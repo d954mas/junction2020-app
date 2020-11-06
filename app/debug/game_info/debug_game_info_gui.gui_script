@@ -76,6 +76,7 @@ function Script:bind_vh()
 	gui.set_enabled(self.vh.list_response, false)
 	gui.set_enabled(self.vh.lbl_contexts, false)
 	gui.set_enabled(self.vh.cheats_root, false)
+	gui.set_enabled(self.vh.text_input.root, COMMON.CONSTANTS.SHOW_TEXT_INPUT)
 
 	if(not COMMON.CONSTANTS.HTML5)then
 		gui.set_position(self.views.btn_debug_show.vh.root,vmath.vector3(1240,650,0))
@@ -267,16 +268,15 @@ function Script:on_input(action_id, action)
 		end)
 		GOOEY.static_list("list_response", "list_response/stencil", self.list_response_data, action_id, action, nil, function()
 		end)
-
-		local input = GOOEY_DIRTY.input(self.vh.text_input.input.name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, { empty_text = "" })
-		GOOEY_DIRTY.button(self.vh.text_input.input_btn_send.name, action_id, action, function()
-			local text = input.current_text
-			if text ~= "" then
-				input.set_text("")
-				interactive_canvas.send_text_query(text)
-			end
-		end)
 	end
+	local input = GOOEY_DIRTY.input(self.vh.text_input.input.name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, { empty_text = "" })
+	GOOEY_DIRTY.button(self.vh.text_input.input_btn_send.name, action_id, action, function()
+		local text = input.current_text
+		if text ~= "" then
+			input.set_text("")
+			interactive_canvas.send_text_query(text)
+		end
+	end)
 	return result
 end
 

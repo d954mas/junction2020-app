@@ -5,9 +5,10 @@ local TAG = "RestApiInteractiveCanvas"
 local ANDROID = sys.get_sys_info().system_name == "Android"
 local Canvas = COMMON.class("RestApiInteractiveCanvas")
 
-function Canvas:initialize()
+function Canvas:initialize(url)
 	self.listeners = {}
 	self.idle = true
+	self.url = assert(url)
 end
 
 function Canvas:init()
@@ -51,7 +52,7 @@ function Canvas:send_text_query(text)
 			}
 		}
 
-		http.request("https://monstrarium-dev.herokuapp.com/rest_api_android", "POST", function(_, id, responce)
+		http.request(self.url, "POST", function(_, id, responce)
 			self.idle = true
 			if (responce.status == 200) then
 				COMMON.d("get response:" .. responce.response,TAG)
@@ -96,8 +97,8 @@ end
 
 local M = {}
 
-function M.register()
-	M.canvas = Canvas()
+function M.register(url)
+	M.canvas = Canvas(url)
 	interactive_canvas = {
 		init = function()
 			M.canvas:init()

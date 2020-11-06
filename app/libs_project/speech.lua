@@ -38,28 +38,12 @@ function Speech:init()
         FAKE_INTERACTIVE_CANVAS.register()
         interactive_canvas.init()
         interactive_canvas.listener_register(self.interactive_canvas_listener)
-    elseif (COMMON.CONSTANTS.INTERACTIVE_CANVAS_SBERBANK) then
-        SBER_INTERACTIVE_CANVAS.register(self.interactive_canvas_listener)
+    elseif (COMMON.CONSTANTS.REST_CANVAS_LOCAL) then
+        REST_INTERACTIOVE_CANVAS.register("http://localhost:8080/rest_api")
         interactive_canvas.init()
+        interactive_canvas.listener_register(self.interactive_canvas_listener)
     elseif (COMMON.CONSTANTS.REST_CANVAS) then
-        REST_INTERACTIOVE_CANVAS.register()
-        if (sys.get_sys_info().system_name == "Android") then
-            speech_recognition.init()
-            speech_recognition.start()
-            local debugInfo = requiref "debug.debug_info"
-            speech_recognition.set_callback(function(_, msg, data)
-                if msg ~= 3 then
-                    --3 have a lot of spam
-                    debugInfo.speech_recognition = data.result
-                end
-                if msg == 2 then
-                    debugInfo.speech_recognition = data.result
-                    if (data.result) then
-                        interactive_canvas.send_text_query(data.result)
-                    end
-                end
-            end)
-        end
+        REST_INTERACTIOVE_CANVAS.register("https://junction2020-google-prod.herokuapp.com/rest_api")
         interactive_canvas.init()
         interactive_canvas.listener_register(self.interactive_canvas_listener)
     elseif interactive_canvas then
