@@ -11,10 +11,12 @@ import shared.base.model.BaseModel;
 class LevelModel {
     private var world:World;
     private var ds:StorageStruct;
+    private var playerModel:PlayerModel;
 
     public function new(world:World) {
         this.world = world;
         this.ds = this.world.storageGet();
+        this.playerModel = new PlayerModel(world);
         modelRestore();
     }
 
@@ -23,10 +25,13 @@ class LevelModel {
     }
 
     private function createPlayer():LevelPlayerStruct {
-        return {}
+        return {
+            mana:0,
+            money:20,
+        }
     }
 
-    private function createEnemy():LevelPlayerStruct {
+    private function createEnemy():LevelEnemyStruct {
         return {}
     }
 
@@ -34,10 +39,43 @@ class LevelModel {
         return {x:x, y:y, type:type, idx:x * 10 + y};
     }
 
+    private function levelNextTurnBattles() {}
+
+    private function levelNextTurnCaravans() {}
+
+    private function levelNextTurnRegenMoney() {
+        var money = 0; //todo add money regen count;
+        playerModel.moneyChange(money, "startTurnRegen");
+    }
+
+    private function levelNextTurnRegenMana() {
+        var mana = 5; //todo add money regen count;
+        playerModel.manaChange(mana, "startTurnRegen");
+    }
+
+    private function levelNextCheckWinLose() {}
+
+    private function levelNextTurn() {
+        var level = world.storageGet().level;
+        if (level == null) { throw "no level in levelNextTurn";}
+        EventHelper.levelNextTurn(world);
+        level.turn++;
+        levelNextTurnBattles();
+        levelNextTurnCaravans();
+
+        levelNextTurnRegenMoney();
+        levelNextTurnRegenMana();
+
+        levelNextCheckWinLose();
+
+        //add
+    }
+
     private function levelFirstInitial():LevelStruct {
         var player = createPlayer();
         var enemy = createEnemy();
         var level:LevelStruct = {
+            turn:0,
             player:createPlayer(),
             enemy:createEnemy(),
             castles:new Array<CastleStruct>(),
@@ -81,7 +119,7 @@ class LevelModel {
 
     public function levelNextCastle() {
         var level = world.storageGet().level;
-        if(level == null){
+        if (level == null) {
             throw "can't move to next castle level storage is null";
         }
         var enemy = createEnemy();
@@ -104,16 +142,15 @@ class LevelModel {
     }
 
 
-
-
-    function castlesGetByIdx(idx:Int):CastleStruct{
+    function castlesGetByIdx(idx:Int):CastleStruct {
         var level = world.storageGet().level;
-        if(level == null){throw "no level model castlesGetByIdx";}
+        if (level == null) {throw "no level model castlesGetByIdx";}
         return level.castles[idx];
     }
-    function roadsGetByIdx(idx:Int):Array<LevelRoadPart>{
+
+    function roadsGetByIdx(idx:Int):Array<LevelRoadPart> {
         var level = world.storageGet().level;
-        if(level == null){throw "no level model roadsGetByIdx";}
+        if (level == null) {throw "no level model roadsGetByIdx";}
         return level.roads[idx];
     }
 

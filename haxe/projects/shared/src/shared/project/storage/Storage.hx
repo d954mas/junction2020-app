@@ -85,7 +85,8 @@ typedef CastleStruct = {
 }
 
 typedef LevelPlayerStruct = {
-
+    var money:Int;
+    var mana:Int;
 }
 
 typedef LevelEnemyStruct = {
@@ -100,6 +101,7 @@ typedef LevelRoadPart = {
 }
 
 typedef LevelStruct = {
+    turn:Int,
     player:LevelPlayerStruct,
     enemy:LevelEnemyStruct,
     castles:Array<CastleStruct>,
