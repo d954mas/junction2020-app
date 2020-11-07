@@ -10,6 +10,8 @@ enum abstract Intent(String) {
     var MAIN_FALLBACK = "main.fallback";
     var MAIN_ERROR = "main.error";
     var MAIN_KEEP_WORKING = "main.keep_working"; //every 3m to keep action online
+    var MAIN_HELP = "main.help";
+
     var WEBAPP_LOAD_DONE = "webapp.load_done";
     var IAP_BUY = "actions.iap.buy";
 
@@ -52,6 +54,7 @@ var intent:Intent;
         intentContexts[Intent.MAIN_FALLBACK] = [];
         intentContexts[Intent.MAIN_ERROR] = [];
         intentContexts[Intent.MAIN_KEEP_WORKING] = [];
+        intentContexts[Intent.MAIN_HELP] = [];
 
         intentContexts[Intent.WEBAPP_LOAD_DONE] = [];
         intentContexts[Intent.IAP_BUY] = [];
