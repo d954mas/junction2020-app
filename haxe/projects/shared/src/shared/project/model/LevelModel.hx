@@ -35,9 +35,10 @@ class LevelModel {
         battleUnitModels.push(unit);
         EventHelper.levelUnitSpawn(world, unit.getId(),unit.getStruct());
     }
+
     private function addUnitCastle(unit:BattleUnitModel) {
         battleUnitModels.push(unit);
-       //EventHelper.levelUnitSpawn(world, unit.getId());
+        //EventHelper.levelUnitSpawn(world, unit.getId());
     }
 
     public function modelRestore():Void {
@@ -45,9 +46,9 @@ class LevelModel {
             //lua плохо реагирует на пустой массив
             if (Reflect.hasField(ds.level.units, "length")) {
                 for (unit in ds.level.units) {
-                    if(unit.type == UnitType.CASTLE){
+                    if (unit.type == UnitType.CASTLE) {
                         battleUnitModels.add(new CastleUnitModel(unit, world));
-                    }else{
+                    } else {
                         battleUnitModels.add(new BattleUnitModel(unit, world));
                     }
 
@@ -142,6 +143,11 @@ class LevelModel {
     private function levelNextTurnBattles() {
         for (attacker in battleUnitModels) {
             var canAttack = Lambda.filter(battleUnitModels, function(v) {return attacker.canAttack(v);});
+            haxe.ds.ArraySort.sort(canAttack, function(a, b) {
+                if (!a.canMove() && b.canMove()) return -1;
+                else if (a.canMove() && !b.canMove()) return 1;
+                else return 0;
+            });
             if (canAttack.length == 0) {
                 if (attacker.canMove()) {
                     var newPos:LevelRoadPart;
@@ -204,7 +210,23 @@ class LevelModel {
         playerModel.manaChange(mana, "startTurnRegen");
     }
 
-    private function levelNextCheckWinLose() {}
+    private function levelNextCheckWinLose() {
+        var playerDidntLose = Lambda.fold(ds.level.castles,
+            function(castle, acc) {return acc || (castle.ownerId == 0 && castle.hp > 0);},
+            false
+        );
+        var allEnemiesLost = Lambda.fold(ds.level.castles,
+            function(castle, acc) {return acc && (castle.ownerId > 0 && castle.hp <= 0);},
+            true
+        );
+        if (!playerDidntLose) {
+            //YOU LOST
+
+        }
+        else if (allEnemiesLost) {
+            levelNextCastle();
+        }
+    }
 
     public function levelNextTurn() {
         var level = world.storageGet().level;
@@ -261,11 +283,11 @@ class LevelModel {
         level.roads.push(roadResToPlayer);
         level.roads.push(roadPlayerToEnemy);
 
-        var resourceUnit = unitsSpawnUnitCastle(0,0);
+        var resourceUnit = unitsSpawnUnitCastle(0, 0);
         resourceUnit.getStruct().roadPartIdx = 0;
         level.castles.push({idx:level.castles.length, unitId:resourceUnit.getId()}); //resources_castle
-        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(0,0).getId()});//player_castle
-        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(1,0).getId()}); //enemy_castle
+        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(0, 0).getId()});//player_castle
+        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(1, 0).getId()}); //enemy_castle
 
 
         return level;
@@ -300,9 +322,10 @@ class LevelModel {
         roadPlayerToEnemy.push(createRoadPart(startX + 6, 0, RoadType.BASE));
         roadPlayerToEnemy.push(createRoadPart(startX + 7, 0, RoadType.CASTLE));
 
+        level.units = new Array<BattleUnitStruct>();
         level.roads.push(roadPlayerToEnemy);
 
-        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(1,0).getId()}); //enemy_castle
+        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(1, 0).getId()}); //enemy_castle
 
         EventHelper.levelMoveToNext(world);
     }
