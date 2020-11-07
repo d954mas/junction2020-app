@@ -70,7 +70,7 @@ embedded_instances {
   data: ""
   position {
     x: 89.0
-    y: 31.0
+    y: 41.0
     z: 0.0
   }
   rotation {
@@ -92,7 +92,7 @@ embedded_instances {
   data: ""
   position {
     x: 4.0
-    y: 31.0
+    y: 41.0
     z: 0.0
   }
   rotation {
@@ -245,8 +245,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -27.0
-    y: 86.0
+    x: -15.0
+    y: 84.0
     z: 0.0
   }
   rotation {
@@ -256,8 +256,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 0.33
-    y: 0.33
+    x: 0.45
+    y: 0.45
     z: 1.0
   }
 }
@@ -298,7 +298,7 @@ embedded_instances {
   "}\\n"
   "leading: 1.0\\n"
   "tracking: 0.0\\n"
-  "pivot: PIVOT_W\\n"
+  "pivot: PIVOT_CENTER\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "line_break: false\\n"
   "text: \\\"10\\\"\\n"
@@ -306,7 +306,7 @@ embedded_instances {
   "material: \\\"/builtins/fonts/label-df.material\\\"\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
+  "    x: 25.758\n"
   "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"

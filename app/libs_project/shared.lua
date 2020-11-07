@@ -6034,8 +6034,20 @@ __shared_project_configs_UnitConfig.unitTypeGetById = function(id)
     if (id == "KNIGHT") then 
       do return "KNIGHT" end;
     else
-      if (id == "CASTLE") then 
-        do return "CASTLE" end;
+      if (id == "SHIELD") then 
+        do return "SHIELD" end;
+      else
+        if (id == "SPEARMAN") then 
+          do return "SPEARMAN" end;
+        else
+          if (id == "MAGE") then 
+            do return "MAGE" end;
+          else
+            if (id == "CASTLE") then 
+              do return "CASTLE" end;
+            end;
+          end;
+        end;
       end;
     end;
   end;
@@ -6203,7 +6215,18 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     else
       amount = Std.parseInt(data.amount);
     end;
-    self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount);
+    local scales = __shared_project_configs_UnitConfig.scalesByUnitType:get(unitType);
+    if (scales == nil) then 
+      _G.error("bad scales",0);
+    end;
+    local price = scales.costByLevel[0];
+    local cost = amount * price;
+    if (self.world.levelModel.playerModel:canSpendMoney(cost)) then 
+      self.world.levelModel.playerModel:moneyChange(-cost, "spawn unit");
+      self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount);
+    else
+      self:ask(Std.string("not enought money.Need ") .. Std.string(price));
+    end;
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "level.turn.skip" then 
     self:ask("skip");
@@ -6382,10 +6405,28 @@ __shared_project_model_EnemyModel.prototype.turn = function(self)
   end;
   local step = _G.math.fmod(level.turn, 6);
   if (step == 2) then 
-    self:unitsSpawnUnit("KNIGHT");
+    local chance = _G.math.random();
+    if (chance < 0.5) then 
+      self:unitsSpawnUnit("KNIGHT");
+    else
+      if (chance < 0.8) then 
+        self:unitsSpawnUnit("SHIELD");
+      else
+        self:unitsSpawnUnit("SPEARMAN");
+      end;
+    end;
   else
     if (step == 5) then 
-      self:unitsSpawnUnit("ARCHER");
+      local chance1 = _G.math.random();
+      if (chance1 < 0.5) then 
+        self:unitsSpawnUnit("ARCHER");
+      else
+        if (chance1 < 0.8) then 
+          self:unitsSpawnUnit("MAGE");
+        else
+          self:unitsSpawnUnit("KNIGHT");
+        end;
+      end;
     end;
   end;
 end
@@ -6541,7 +6582,7 @@ __shared_project_model_LevelModel.prototype.createPlayer = function(self)
     _g = _g + 1;
     unitLevels[Std.string(type)] = 1;
   end;
-  do return _hx_o({__fields__={id=true,unitLevels=true,unitQueue=true,mana=true,money=true},id=0,unitLevels=unitLevels,unitQueue=Array.new(),mana=0,money=20}) end
+  do return _hx_o({__fields__={id=true,unitLevels=true,unitQueue=true,mana=true,money=true},id=0,unitLevels=unitLevels,unitQueue=Array.new(),mana=0,money=__shared_project_configs_GameConfig.START_MONEY}) end
 end
 __shared_project_model_LevelModel.prototype.createEnemy = function(self) 
   local unitLevels = _hx_e();
@@ -6625,6 +6666,9 @@ __shared_project_model_LevelModel.prototype.removeDeadUnits = function(self)
     local unitModel = self:unitsGetUnitById(unit.id);
     if (unit.type ~= "CASTLE") then 
       __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
+      if (unitModel:getOwnerId() > 0) then 
+        self.world.levelModel.playerModel:moneyChange(unitModel:getReward(), "kill enemy");
+      end;
       self.battleUnitModels:remove(unitModel);
     end;
   end;
@@ -6684,7 +6728,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=293,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=297,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -6832,6 +6876,8 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   persistCastleUnits:push(newUnit:getStruct());
   level.units = Array.new();
   level.units = level.units:concat(persistCastleUnits);
+  self.world.levelModel.playerModel:moneyChange(__shared_project_configs_GameConfig.START_MONEY - level.player.money, "reset castle");
+  self.world.levelModel.playerModel:manaChange(0 - level.player.mana, "reset castle");
   __shared_base_event_EventHelper.levelCastleEnemyDestroy(self.world);
   __shared_base_event_EventHelper.levelMoveToNext(self.world);
 end
@@ -6940,6 +6986,13 @@ __shared_project_model_PlayerModel.prototype.moneyChange = function(self,value,t
   local level1 = level.player;
   level1.money = level1.money + value;
   __shared_base_event_EventHelper.levelMoneyChange(self.world, value, tag);
+end
+__shared_project_model_PlayerModel.prototype.canSpendMoney = function(self,value) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:moneyChange",0);
+  end;
+  do return level.player.money >= value end
 end
 __shared_project_model_PlayerModel.prototype.manaChange = function(self,value,tag) 
   local level = self.world:storageGet().level;
@@ -7861,16 +7914,24 @@ local _hx_static_init = function()
   
   __shared_project_configs_GameConfig.MAX_MANA = 100;
   
+  __shared_project_configs_GameConfig.START_MONEY = 200;
+  
   __shared_project_configs_UnitConfig.scalesByUnitType = (function() 
     local _hx_2
     
     local _g = __haxe_ds_StringMap.new();
     
-    _g:set("ARCHER", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=2, 4, 6, 8, 10}, 5),attackRange=3,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
+    _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5),rewardByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5)}));
     
-    _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=4, 8, 12, 16, 20}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
+    _g:set("ARCHER", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=2,costByLevel=_hx_tab_array({[0]=125, 125, 125, 125, 125}, 5),rewardByLevel=_hx_tab_array({[0]=75, 75, 75, 75, 75}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("SHIELD", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=4, 4, 4, 4, 4}, 5),attackByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=200, 200, 200, 200, 200}, 5),rewardByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5)}));
+    
+    _g:set("SPEARMAN", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=3, 3, 3, 3, 3}, 5),attackByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=250, 250, 250, 250, 250}, 5),rewardByLevel=_hx_tab_array({[0]=150, 150, 150, 150, 150}, 5)}));
+    
+    _g:set("MAGE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=4, 4, 4, 4, 4}, 5),attackByLevel=_hx_tab_array({[0]=3, 3, 3, 3, 3}, 5),attackRange=2,costByLevel=_hx_tab_array({[0]=400, 400, 400, 400, 400}, 5),rewardByLevel=_hx_tab_array({[0]=250, 250, 250, 250, 250}, 5)}));
+    
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2
@@ -7884,7 +7945,7 @@ local _hx_static_init = function()
   
   __shared_project_enums_Intents.commandCloseOrder = Array.new();
   
-  __shared_project_enums__UnitType_UnitType_Impl_.ALL_TYPES = _hx_tab_array({[0]="ARCHER", "KNIGHT", "CASTLE"}, 3);
+  __shared_project_enums__UnitType_UnitType_Impl_.ALL_TYPES = _hx_tab_array({[0]="KNIGHT", "ARCHER", "SHIELD", "SPEARMAN", "MAGE", "CASTLE"}, 6);
   
   __shared_project_utils_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
   

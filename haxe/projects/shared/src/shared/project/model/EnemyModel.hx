@@ -24,14 +24,28 @@ class EnemyModel {
 
     }
 
-    public function turn(){
+    public function turn() {
         var level = world.storageGet().level;
-        if(level == null){throw "enemy can't turn no level";}
+        if (level == null) {throw "enemy can't turn no level";}
         var step = level.turn % 6;
-        if(step == 2){
-            unitsSpawnUnit(UnitType.KNIGHT);
-        }else if(step == 5){
-            unitsSpawnUnit(UnitType.ARCHER);
+        if (step == 2) {
+            var chance = Math.random();
+            if (chance < 0.5) {
+                unitsSpawnUnit(UnitType.KNIGHT);
+            } else if (chance < 0.8) {
+                unitsSpawnUnit(UnitType.SHIELD);
+            } else {
+                unitsSpawnUnit(UnitType.SPEARMAN);
+            }
+        } else if (step == 5) {
+            var chance = Math.random();
+            if (chance < 0.5) {
+                unitsSpawnUnit(UnitType.ARCHER);
+            } else if (chance < 0.8) {
+                unitsSpawnUnit(UnitType.MAGE);
+            } else {
+                unitsSpawnUnit(UnitType.KNIGHT);
+            }
         }
     }
 

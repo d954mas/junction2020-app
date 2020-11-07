@@ -1,9 +1,9 @@
 {
      "timers": {
-          "clientDeltaTime": 0,
-          "time": 1604773316260.7,
-          "serverLastTime": 1604773316260.7,
-          "timerDelta": 0
+          "timerDelta": 0,
+          "time": 1604779865504.7,
+          "serverLastTime": 1604779865504.7,
+          "clientDeltaTime": 0
      },
      "version": {
           "server": "dev",
@@ -19,159 +19,52 @@
           "name": "name",
           "permisions":           {}
      },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "cheatsEnabled": true,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
-          "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
-     },
+     "tutorials":      {},
      "timerDelta": 0,
      "stat": {
           "startGameCounter": 0,
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 2520,
+          "intentIdx": 2631,
           "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
+          "gameSharedVersion": "",
           "device": "sberbox",
+          "userLevel": 1,
           "platform": "sber",
-          "gameSharedVersion": ""
+          "gameConfigVersion": ""
      },
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": true,
+          "conversationIdCurrent": "1111"
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
      "level": {
           "player": {
                "unitLevels": {
+                    "MAGE": 1,
                     "CASTLE": 1,
-                    "ARCHER": 1,
-                    "KNIGHT": 1
+                    "SHIELD": 1,
+                    "SPEARMAN": 1,
+                    "KNIGHT": 1,
+                    "ARCHER": 1
                },
-               "mana": 75,
+               "mana": 25,
                "id": 0,
-               "money": 20,
-               "unitQueue": [
-                    {
-                         "unitType": "KNIGHT",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "KNIGHT",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "KNIGHT",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "KNIGHT",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "KNIGHT",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "KNIGHT",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "KNIGHT",
-                         "ownerId": 0
-                    }
-               ]
-          },
-          "unitIdx": 25,
-          "lose": false,
-          "units": [
-               {
-                    "id": 0,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "CASTLE",
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 1,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "CASTLE",
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 23,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 14000,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 23,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 14000,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 24,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 20000,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 0
-               }
-          ],
-          "turn": 15,
-          "enemy": {
-               "unitLevels": {
-                    "CASTLE": 1,
-                    "ARCHER": 1,
-                    "KNIGHT": 1
-               },
-               "id": 1,
+               "money": 150,
                "unitQueue":                []
           },
-          "castles": [
-               {
-                    "unitId": 0,
-                    "idx": 0
-               },
-               {
-                    "unitId": 1,
-                    "idx": 1
-               },
-               {
-                    "unitId": 23,
-                    "idx": 2
-               },
-               {
-                    "unitId": 24,
-                    "idx": 3
-               }
-          ],
           "roads": [
                [
                     {
@@ -260,57 +153,93 @@
                          "idx": 13000,
                          "y": 0
                     }
-               ],
-               [
-                    {
-                         "type": "CASTLE",
-                         "x": 14,
-                         "idx": 14000,
-                         "y": 0
-                    },
-                    {
-                         "type": "BASE",
-                         "x": 15,
-                         "idx": 15000,
-                         "y": 0
-                    },
-                    {
-                         "type": "BASE",
-                         "x": 16,
-                         "idx": 16000,
-                         "y": 0
-                    },
-                    {
-                         "type": "BASE",
-                         "x": 17,
-                         "idx": 17000,
-                         "y": 0
-                    },
-                    {
-                         "type": "BASE",
-                         "x": 18,
-                         "idx": 18000,
-                         "y": 0
-                    },
-                    {
-                         "type": "BASE",
-                         "x": 19,
-                         "idx": 19000,
-                         "y": 0
-                    },
-                    {
-                         "type": "CASTLE",
-                         "x": 20,
-                         "idx": 20000,
-                         "y": 0
-                    }
                ]
-          ]
-     },
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
-     "tutorials":      {}
+          ],
+          "units": [
+               {
+                    "id": 0,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 1,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 7000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 2,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 13000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 1,
+                    "reward": 0
+               },
+               {
+                    "id": 5,
+                    "attackRange": 1,
+                    "hp": 2,
+                    "roadPartIdx": 9000,
+                    "attackLvl": 1,
+                    "hpLvl": 1,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 50
+               },
+               {
+                    "id": 6,
+                    "attackRange": 2,
+                    "hp": 4,
+                    "roadPartIdx": 12000,
+                    "attackLvl": 0,
+                    "type": "MAGE",
+                    "hpLvl": 0,
+                    "ownerId": 1,
+                    "reward": 250
+               }
+          ],
+          "unitIdx": 7,
+          "turn": 5,
+          "enemy": {
+               "unitLevels": {
+                    "MAGE": 1,
+                    "CASTLE": 1,
+                    "SHIELD": 1,
+                    "SPEARMAN": 1,
+                    "KNIGHT": 1,
+                    "ARCHER": 1
+               },
+               "unitQueue":                [],
+               "id": 1
+          },
+          "castles": [
+               {
+                    "unitId": 0,
+                    "idx": 0
+               },
+               {
+                    "unitId": 1,
+                    "idx": 1
+               },
+               {
+                    "unitId": 2,
+                    "idx": 2
+               }
+          ],
+          "lose": false
+     }
 }

@@ -18,6 +18,10 @@ function Script:bind_vh()
         btn_skip = GUI.ButtonIconTest("btn_skip"),
         btn_spawn_knight = GUI.ButtonIconTest("btn_spawn_knight"),
         btn_spawn_archer = GUI.ButtonIconTest("btn_spawn_archer"),
+        btn_spawn_spearman = GUI.ButtonIconTest("btn_spawn_spearman"),
+        btn_spawn_shield = GUI.ButtonIconTest("btn_spawn_shield"),
+        btn_spawn_mage = GUI.ButtonIconTest("btn_spawn_mage"),
+
     }
 end
 
@@ -48,6 +52,15 @@ function Script:init_gui()
     self.views.btn_spawn_archer:set_input_listener(function()
         interactive_canvas.send_text_query("level.spawn.unit ARCHER")
     end)
+    self.views.btn_spawn_spearman:set_input_listener(function()
+        interactive_canvas.send_text_query("level.spawn.unit SPEARMAN")
+    end)
+    self.views.btn_spawn_mage:set_input_listener(function()
+        interactive_canvas.send_text_query("level.spawn.unit MAGE")
+    end)
+    self.views.btn_spawn_shield:set_input_listener(function()
+        interactive_canvas.send_text_query("level.spawn.unit SHIELD")
+    end)
 end
 
 function Script:storage_changed()
@@ -71,6 +84,9 @@ end
 function Script:on_input(action_id, action)
     self.views.btn_spawn_knight:on_input(action_id, action)
     self.views.btn_spawn_archer:on_input(action_id, action)
+    self.views.btn_spawn_spearman:on_input(action_id, action)
+    self.views.btn_spawn_mage:on_input(action_id, action)
+    self.views.btn_spawn_shield:on_input(action_id, action)
     self.views.btn_skip:on_input(action_id, action)
 end
 

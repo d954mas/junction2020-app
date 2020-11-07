@@ -36,6 +36,16 @@ function View:bind_vh()
         ---@type Ticklabel
         label = TickLabel(gui.get_node(self.root_name .. "/lbl"))
     }
+    self.vh = {
+        bar = gui.get_node(self.root_name .. "/bar"),
+        bar_bg = gui.get_node(self.root_name .. "/bar_bg")
+    }
+    self.bar_size = gui.get_size(self.vh.bar_bg)
+    self.views.label.gui_refresh = function(sself)
+        gui.set_text(sself.lbl, math.floor(sself.animation.value) .. "/" .. 100)
+        local percent = sself.animation.value/100
+        gui.set_size(self.vh.bar_bg,vmath.vector3(self.bar_size.x * percent, self.bar_size.y, self.bar_size.z))
+    end
 end
 
 return View
