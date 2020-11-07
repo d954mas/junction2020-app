@@ -1,9 +1,9 @@
 {
      "timers": {
-          "serverLastTime": 1604782035971.6,
-          "time": 1604782035971.6,
-          "clientDeltaTime": 0,
-          "timerDelta": 0
+          "timerDelta": 0,
+          "time": 1604784885139.8,
+          "serverLastTime": 1604784885139.8,
+          "clientDeltaTime": 0
      },
      "version": {
           "server": "dev",
@@ -19,8 +19,40 @@
           "locale": "en",
           "permisions":           {}
      },
+     "tutorials":      {},
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": false,
+          "conversationIdCurrent": "1111"
+     },
+     "stat": {
+          "startGameCounter": 0,
+          "version": 3,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 27,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "sberbox",
+          "userLevel": 1,
+          "platform": "sber",
+          "gameConfigVersion": ""
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
      "level": {
-          "player": {
+          "lose": false,
+          "enemy": {
                "unitLevels": {
                     "MAGE": 1,
                     "CASTLE": 1,
@@ -29,11 +61,10 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 110,
-               "id": 0,
-               "money": 30,
+               "id": 1,
                "unitQueue":                []
           },
+          "caravans":           [],
           "roads": [
                [
                     {
@@ -139,7 +170,7 @@
                {
                     "id": 1,
                     "attackRange": 1,
-                    "hp": 50,
+                    "hp": 38,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
                     "type": "CASTLE",
@@ -159,19 +190,29 @@
                     "reward": 0
                },
                {
-                    "id": 3,
+                    "id": 4,
                     "attackRange": 2,
+                    "hp": 4,
+                    "roadPartIdx": 9000,
+                    "attackLvl": 0,
+                    "type": "MAGE",
+                    "hpLvl": 0,
+                    "ownerId": 1,
+                    "reward": 250
+               },
+               {
+                    "id": 5,
+                    "attackRange": 1,
                     "hp": 2,
-                    "roadPartIdx": 8000,
-                    "attackLvl": 1,
-                    "type": "ARCHER",
-                    "hpLvl": 1,
-                    "ownerId": 0,
-                    "reward": 75
+                    "roadPartIdx": 10000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 1,
+                    "reward": 50
                }
           ],
-          "unitIdx": 4,
-          "enemy": {
+          "player": {
                "unitLevels": {
                     "MAGE": 1,
                     "CASTLE": 1,
@@ -180,10 +221,12 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "id": 1,
+               "mana": 50,
+               "id": 0,
+               "money": 350,
                "unitQueue":                []
           },
-          "turn": 1,
+          "turn": 10,
           "castles": [
                {
                     "unitId": 0,
@@ -198,37 +241,6 @@
                     "idx": 2
                }
           ],
-          "lose": false
-     },
-     "timerDelta": 0,
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "cheatsEnabled": true,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
-          "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
-     },
-     "tutorials":      {},
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 2,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 2674,
-          "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
-          "device": "sberbox",
-          "platform": "sber",
-          "gameSharedVersion": ""
+          "unitIdx": 6
      }
 }

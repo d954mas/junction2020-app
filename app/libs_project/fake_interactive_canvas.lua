@@ -38,6 +38,9 @@ function Canvas:send_text_query(text)
 	elseif (text:find("level.spawn.unit ") == 1 or text:find("level/spawn/unit ") == 1) then
 		local parts = COMMON.string_split(text, " ")
 		self:send_request("level.spawn.unit", { unit = parts[2] })
+	elseif (text:find("level.cast ") == 1 or text:find("level.cast ") == 1) then
+		local parts = COMMON.string_split(text, " ")
+		self:send_request("level.cast", { spell = parts[2] })
 	else
 		text = text:gsub("/", ".")
 		self:send_request(text)

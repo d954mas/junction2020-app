@@ -70,3 +70,30 @@ class UnitConfig {
         return null;
     }
 }
+
+typedef MageScales = {
+var costByLevel:Array<Int>;
+var powerByLevel:Array<Int>;
+};
+
+class MageConfig {
+    public static var scalesByMageType:haxe.ds.Map<MageType, MageScales> = [
+        MageType.FIREBALL => {
+        costByLevel: [50, 50, 50, 50, 50],
+        powerByLevel: [2, 2, 2, 2, 2],
+    },
+        MageType.ICE => {
+        costByLevel: [100, 100, 100, 100, 100],
+        powerByLevel: [2, 2, 2, 2, 2],
+
+    },
+    ];
+
+    public static function mageTypeGetById(id:String):Null<MageType> {
+        if (id == Std.string(MageType.FIREBALL)) {return MageType.FIREBALL;}
+        else if (id == Std.string(MageType.ICE)) {return MageType.ICE;}
+
+
+        return null;
+    }
+}

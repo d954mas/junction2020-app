@@ -16,6 +16,10 @@ function Script:bind_vh()
         price_spearman = gui.get_node("btn_spawn_spearman/lbl_price"),
         price_shield = gui.get_node("btn_spawn_shield/lbl_price"),
         price_mage = gui.get_node("btn_spawn_mage/lbl_price"),
+
+
+        price_cast_fireball = gui.get_node("btn_cast_fireball/lbl_price"),
+        price_cast_ice = gui.get_node("btn_cast_ice/lbl_price"),
     }
     self.views = {
         mana_panel = ManaPanel("mana_panel", WORLD),
@@ -26,6 +30,9 @@ function Script:bind_vh()
         btn_spawn_spearman = GUI.ButtonScale("btn_spawn_spearman"),
         btn_spawn_shield = GUI.ButtonScale("btn_spawn_shield"),
         btn_spawn_mage = GUI.ButtonScale("btn_spawn_mage"),
+
+        btn_cast_fireball = GUI.ButtonScale("btn_cast_fireball"),
+        btn_cast_ice = GUI.ButtonScale("btn_cast_ice"),
     }
 end
 
@@ -66,11 +73,22 @@ function Script:init_gui()
         interactive_canvas.send_text_query("level.spawn.unit SHIELD")
     end)
 
+    self.views.btn_cast_fireball:set_input_listener(function()
+        interactive_canvas.send_text_query("level.cast FIREBALL")
+    end)
+
+    self.views.btn_cast_ice:set_input_listener(function()
+        interactive_canvas.send_text_query("level.cast ICE")
+    end)
+
     gui.set_text(self.vh.price_archer, HAXE_WRAPPER.level_player_unit_get_price("ARCHER"))
-    gui.set_text(self.vh.price_knight,HAXE_WRAPPER.level_player_unit_get_price("KNIGHT"))
-    gui.set_text(self.vh.price_spearman,HAXE_WRAPPER.level_player_unit_get_price("SPEARMAN"))
-    gui.set_text(self.vh.price_shield,HAXE_WRAPPER.level_player_unit_get_price("SHIELD"))
-    gui.set_text(self.vh.price_mage,HAXE_WRAPPER.level_player_unit_get_price("MAGE"))
+    gui.set_text(self.vh.price_knight, HAXE_WRAPPER.level_player_unit_get_price("KNIGHT"))
+    gui.set_text(self.vh.price_spearman, HAXE_WRAPPER.level_player_unit_get_price("SPEARMAN"))
+    gui.set_text(self.vh.price_shield, HAXE_WRAPPER.level_player_unit_get_price("SHIELD"))
+    gui.set_text(self.vh.price_mage, HAXE_WRAPPER.level_player_unit_get_price("MAGE"))
+
+    gui.set_text(self.vh.price_cast_fireball, HAXE_WRAPPER.level_player_mage_get_price("FIREBALL"))
+    gui.set_text(self.vh.price_cast_ice, HAXE_WRAPPER.level_player_mage_get_price("ICE"))
 end
 
 function Script:storage_changed()
@@ -97,6 +115,10 @@ function Script:on_input(action_id, action)
     self.views.btn_spawn_spearman:on_input(action_id, action)
     self.views.btn_spawn_mage:on_input(action_id, action)
     self.views.btn_spawn_shield:on_input(action_id, action)
+
+    self.views.btn_cast_fireball:on_input(action_id, action)
+    self.views.btn_cast_ice:on_input(action_id, action)
+
     self.views.btn_skip:on_input(action_id, action)
 end
 

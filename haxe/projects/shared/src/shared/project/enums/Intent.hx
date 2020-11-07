@@ -27,6 +27,7 @@ enum abstract Intent(String) {
 
 
     var LEVEL_SPAWN_UNIT = "level.spawn.unit";
+    var LEVEL_CAST = "level.cast";
     var LEVEL_TURN_SKIP = "level.turn.skip";
 
     var LOSE_MODAL_RESTART = "lose.modal.restart";
@@ -55,6 +56,7 @@ var intent:Intent;
         intentContexts[Intent.WEBAPP_LOAD_DONE] = [];
         intentContexts[Intent.IAP_BUY] = [];
 
+        intentContexts[Intent.LEVEL_CAST] = [];
         intentContexts[Intent.LEVEL_SPAWN_UNIT] = [];
         intentContexts[Intent.LEVEL_TURN_SKIP] = [];
 
@@ -76,6 +78,7 @@ var intent:Intent;
         ignoreTutorialCheck.set(Intent.MAIN_WELCOME, true);
         ignoreTutorialCheck.set(Intent.LOSE_MODAL_RESTART, true);
         ignoreTutorialCheck.set(Intent.LEVEL_SPAWN_UNIT, true);
+        ignoreTutorialCheck.set(Intent.LEVEL_CAST, true);
         ignoreTutorialCheck.set(Intent.LEVEL_TURN_SKIP, true);
         ignoreTutorialCheck.set(Intent.DEBUG_TOGGLE, true);
 

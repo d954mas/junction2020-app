@@ -34,6 +34,25 @@ class IntentLevelProcessor extends IntentSubProcessor {
 
 
                 return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+            case Intent.LEVEL_CAST:
+                if (data == null) {throw "LEVEL_CAST no data";}
+                if (data.spell == null) {throw "LEVEL_CAST no spell";}
+                var spelType = MageConfig.mageTypeGetById(data.spell);
+                if (spelType == null) {throw "LEVEL_CAST unknown spell";}
+
+                var scales = MageConfig.scalesByMageType[spelType];
+                if (scales == null) {throw "bad scales";}
+                var price = world.levelModel.playerModel.mageGetPrice(spelType);
+                var cost = price;
+                if (world.levelModel.playerModel.canSpendMana(cost)) {
+                    world.levelModel.playerModel.manaChange(-cost, "cast");
+                    //world.levelModel.playerModel.unitsSpawnUnit(unitType, amount);
+                } else {
+                    ask("not enought mana.Need " + price);
+                }
+
+
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.LEVEL_TURN_SKIP:
                 ask("skip");
                 EventHelper.levelTurnStart(world);

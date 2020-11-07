@@ -157,6 +157,7 @@ __shared_project_analytics_events_predefined_PlayerInfoEvent = _hx_e()
 __shared_project_analytics_events_predefined_TutorialEvent = _hx_e()
 __shared_project_configs_GameConfig = _hx_e()
 __shared_project_configs_UnitConfig = _hx_e()
+__shared_project_configs_MageConfig = _hx_e()
 __shared_project_enums_Intents = _hx_e()
 __shared_project_enums__UnitType_UnitType_Impl_ = _hx_e()
 __shared_project_intent_processors_IntentSubProcessor = _hx_e()
@@ -166,6 +167,7 @@ __shared_project_intent_processors_IntentModalProcessor = _hx_e()
 __shared_project_intent_processors_IntentProcessor = _hx_e()
 __shared_project_intent_processors_IntentTutorialProcessor = _hx_e()
 __shared_project_model_EnemyModel = _hx_e()
+__shared_project_model_IBasicUnit = _hx_e()
 __shared_project_model_IBattleUnit = _hx_e()
 __shared_project_model_LevelModel = _hx_e()
 __shared_project_model_PlayerModel = _hx_e()
@@ -173,6 +175,7 @@ __shared_project_model_Restrictions = _hx_e()
 __shared_project_model_World = _hx_e()
 __shared_project_model_units_BattleUnitModel = _hx_e()
 __shared_project_model_units_CastleUnitModel = _hx_e()
+__shared_project_model_units_ResourceUnitModel = _hx_e()
 __shared_project_storage_Storage = _hx_e()
 __shared_project_timers_Timers = _hx_e()
 __shared_project_tutorial_TutorialsModel = _hx_e()
@@ -5380,6 +5383,9 @@ end
 __shared_base_event_EventHelper.levelUnitSpawn = function(world,id,struct) 
   world:eventEmit("LEVEL_UNIT_SPAWN", _hx_o({__fields__={id=true,struct=true},id=id,struct=Reflect.copy(struct)}));
 end
+__shared_base_event_EventHelper.levelCaravanSpawn = function(world,id,struct) 
+  world:eventEmit("LEVEL_CARAVAN_SPAWN", _hx_o({__fields__={id=true,struct=true},id=id,struct=Reflect.copy(struct)}));
+end
 __shared_base_event_EventHelper.levelUnitMove = function(world,id,roadId) 
   world:eventEmit("LEVEL_UNIT_MOVE", _hx_o({__fields__={id=true,roadId=true},id=id,roadId=roadId}));
 end
@@ -6054,6 +6060,19 @@ __shared_project_configs_UnitConfig.unitTypeGetById = function(id)
   do return nil end;
 end
 
+__shared_project_configs_MageConfig.new = {}
+__shared_project_configs_MageConfig.__name__ = true
+__shared_project_configs_MageConfig.mageTypeGetById = function(id) 
+  if (id == "FIREBALL") then 
+    do return "FIREBALL" end;
+  else
+    if (id == "ICE") then 
+      do return "ICE" end;
+    end;
+  end;
+  do return nil end;
+end
+
 __shared_project_enums_Intents.new = {}
 _hx_exports["shared"]["project"]["enums"]["Intents"] = __shared_project_enums_Intents
 __shared_project_enums_Intents.__name__ = true
@@ -6065,6 +6084,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("main.keep_working", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("webapp.load_done", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("actions.iap.buy", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("level.cast", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.spawn.unit", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.turn.skip", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("lose.modal.restart", _hx_tab_array({[0]="lose_modal"}, 1));
@@ -6080,6 +6100,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("lose.modal.restart", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.spawn.unit", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("level.cast", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.turn.skip", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("debug.toggle", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.disable", true);
@@ -6198,7 +6219,28 @@ end
 __shared_project_intent_processors_IntentLevelProcessor.__name__ = true
 __shared_project_intent_processors_IntentLevelProcessor.prototype = _hx_a();
 __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent = function(self,intent,data) 
-  if (intent) == "level.spawn.unit" then 
+  if (intent) == "level.cast" then 
+    if (data == nil) then 
+      _G.error("LEVEL_CAST no data",0);
+    end;
+    if (data.spell == nil) then 
+      _G.error("LEVEL_CAST no spell",0);
+    end;
+    local spelType = __shared_project_configs_MageConfig.mageTypeGetById(data.spell);
+    if (spelType == nil) then 
+      _G.error("LEVEL_CAST unknown spell",0);
+    end;
+    if (__shared_project_configs_MageConfig.scalesByMageType:get(spelType) == nil) then 
+      _G.error("bad scales",0);
+    end;
+    local price = self.world.levelModel.playerModel:mageGetPrice(spelType);
+    if (self.world.levelModel.playerModel:canSpendMana(price)) then 
+      self.world.levelModel.playerModel:manaChange(-price, "cast");
+    else
+      self:ask(Std.string("not enought mana.Need ") .. Std.string(price));
+    end;
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "level.spawn.unit" then 
     if (data == nil) then 
       _G.error("LEVEL_SPAWN_UNIT no data",0);
     end;
@@ -6218,13 +6260,13 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     if (__shared_project_configs_UnitConfig.scalesByUnitType:get(unitType) == nil) then 
       _G.error("bad scales",0);
     end;
-    local price = self.world.levelModel.playerModel:unitGetPrice(unitType);
-    local cost = amount * price;
+    local price1 = self.world.levelModel.playerModel:unitGetPrice(unitType);
+    local cost = amount * price1;
     if (self.world.levelModel.playerModel:canSpendMoney(cost)) then 
       self.world.levelModel.playerModel:moneyChange(-cost, "spawn unit");
       self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount);
     else
-      self:ask(Std.string("not enought money.Need ") .. Std.string(price));
+      self:ask(Std.string("not enought money.Need ") .. Std.string(price1));
     end;
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "level.turn.skip" then 
@@ -6432,8 +6474,12 @@ end
 
 __shared_project_model_EnemyModel.prototype.__class__ =  __shared_project_model_EnemyModel
 
+__shared_project_model_IBasicUnit.new = {}
+__shared_project_model_IBasicUnit.__name__ = true
+
 __shared_project_model_IBattleUnit.new = {}
 __shared_project_model_IBattleUnit.__name__ = true
+__shared_project_model_IBattleUnit.__interfaces__ = {__shared_project_model_IBasicUnit}
 __shared_project_model_IBattleUnit.prototype = _hx_a();
 __shared_project_model_IBattleUnit.prototype.takeDamage= nil;
 __shared_project_model_IBattleUnit.prototype.getPos= nil;
@@ -6453,6 +6499,7 @@ __shared_project_model_LevelModel.super = function(self,world)
   self.playerModel = __shared_project_model_PlayerModel.new(world);
   self.enemyModel = __shared_project_model_EnemyModel.new(world);
   self.battleUnitModels = __haxe_ds_List.new();
+  self.resourceUnitModels = __haxe_ds_List.new();
   self:modelRestore();
 end
 _hx_exports["shared"]["project"]["model"]["LevelModel"] = __shared_project_model_LevelModel
@@ -6463,6 +6510,7 @@ __shared_project_model_LevelModel.prototype.ds= nil;
 __shared_project_model_LevelModel.prototype.playerModel= nil;
 __shared_project_model_LevelModel.prototype.enemyModel= nil;
 __shared_project_model_LevelModel.prototype.battleUnitModels= nil;
+__shared_project_model_LevelModel.prototype.resourceUnitModels= nil;
 __shared_project_model_LevelModel.prototype.restart = function(self) 
   local storage = self.world:storageGet();
   if (storage.level ~= nil) then 
@@ -6503,6 +6551,23 @@ __shared_project_model_LevelModel.prototype.modelRestore = function(self)
         end;
       end;
     end;
+    local o1 = self.ds.level.caravans;
+    if ((function() 
+      local _hx_2
+      if ((_G.type(o1) == "string") and ((String.prototype.length ~= nil) or true)) then 
+      _hx_2 = true; elseif (o1.__fields__ ~= nil) then 
+      _hx_2 = o1.__fields__.length ~= nil; else 
+      _hx_2 = o1.length ~= nil; end
+      return _hx_2
+    end )()) then 
+      local _g2 = 0;
+      local _g11 = self.ds.level.caravans;
+      while (_g2 < _g11.length) do 
+        local caravan = _g11[_g2];
+        _g2 = _g2 + 1;
+        self.resourceUnitModels:add(__shared_project_model_units_ResourceUnitModel.new(caravan, self.world));
+      end;
+    end;
   end;
 end
 __shared_project_model_LevelModel.prototype.enqueueUnits = function(self,ownerId,type,amount) 
@@ -6511,6 +6576,25 @@ __shared_project_model_LevelModel.prototype.enqueueUnits = function(self,ownerId
   while (counter > 0) do 
     owner.unitQueue:push(_hx_o({__fields__={ownerId=true,unitType=true},ownerId=ownerId,unitType=type}));
     counter = counter - 1;
+  end;
+end
+__shared_project_model_LevelModel.prototype.dequeUnits = function(self,ownerId,type,amount) 
+  local counter = amount;
+  local owner = self:getPlayerById(ownerId);
+  if (owner ~= nil) then 
+    local queuedOfType = Lambda.filter(owner.unitQueue, function(v) 
+      do return v.unitType == type end;
+    end);
+    local _g = 0;
+    while (_g < queuedOfType.length) do 
+      local unit = queuedOfType[_g];
+      _g = _g + 1;
+      owner.unitQueue:remove(unit);
+      counter = counter - 1;
+      if (counter == 0) then 
+        break;
+      end;
+    end;
   end;
 end
 __shared_project_model_LevelModel.prototype.unitsSpawnUnitCastle = function(self,ownerId,unitLevel) 
@@ -6535,6 +6619,24 @@ __shared_project_model_LevelModel.prototype.unitsSpawnUnitCastle = function(self
   local model = __shared_project_model_units_CastleUnitModel.new(unit, self.world);
   self:addUnitCastle(model);
   do return model end
+end
+__shared_project_model_LevelModel.prototype.getResourceCastlePos = function(self) 
+  do return self.ds.level.roads[self.ds.level.roads.length - 2][0] end
+end
+__shared_project_model_LevelModel.prototype.getUnloadPos = function(self) 
+  local road = self.ds.level.roads[self.ds.level.roads.length - 2];
+  do return road[road.length - 1] end
+end
+__shared_project_model_LevelModel.prototype.spawnCaravan = function(self,level) 
+  if (self.ds.level.caravans.length < __shared_project_configs_UnitConfig.caravanCount) then 
+    local caravan = _hx_o({__fields__={roadPartIdx=true,ownerId=true,id=true,resources=true,resourceLvl=true},roadPartIdx=self:getUnloadPos().idx,ownerId=0,id=self.ds.level.caravans.length,resources=0,resourceLvl=level});
+    self.ds.level.caravans:push(caravan);
+    self:addCaravan(__shared_project_model_units_ResourceUnitModel.new(caravan, self.world));
+  end;
+end
+__shared_project_model_LevelModel.prototype.addCaravan = function(self,model) 
+  self.resourceUnitModels:add(model);
+  __shared_base_event_EventHelper.levelCaravanSpawn(self.world, model:getId(), model:getStruct());
 end
 __shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,ownerId,type,unitLevel) 
   local level = self.world:storageGet().level;
@@ -6702,6 +6804,30 @@ __shared_project_model_LevelModel.prototype.roadByRoadPart = function(self,part)
   _G.error("Part doesnt belong to any road",0);
 end
 __shared_project_model_LevelModel.prototype.levelNextTurnCaravans = function(self) 
+  local _g_head = self.resourceUnitModels.h;
+  while (_g_head ~= nil) do 
+    local val = _g_head.item;
+    _g_head = _g_head.next;
+    if (val:canLoad()) then 
+      val:loadResources();
+    else
+      if (val:canUnload()) then 
+        val:unloadResources();
+      else
+        if (val:canMove()) then 
+          val:move(self:caravanNewPos(val).idx);
+        end;
+      end;
+    end;
+  end;
+end
+__shared_project_model_LevelModel.prototype.caravanNewPos = function(self,caravan) 
+  local road = self:roadByRoadPart(caravan:getPos());
+  if (caravan:getResources() > 0) then 
+    do return road[road:indexOf(caravan:getPos()) + 1] end;
+  else
+    do return road[road:indexOf(caravan:getPos()) - 1] end;
+  end;
 end
 __shared_project_model_LevelModel.prototype.levelNextTurnRegenMoney = function(self) 
   self.playerModel:moneyChange(__shared_project_configs_GameConfig.MONEY_REGEN, "startTurnRegen");
@@ -6727,7 +6853,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=296,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=369,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -6785,6 +6911,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurn = function(self)
   self.enemyModel:turn();
   self:levelNextTurnQueue();
   self:levelNextTurnBattles();
+  self:levelNextTurnCaravans();
   self:levelNextTurnRegenMoney();
   self:levelNextTurnRegenMana();
   __shared_base_event_EventHelper.levelTurnEnd(self.world);
@@ -6793,7 +6920,7 @@ end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
   self:createPlayer();
   self:createEnemy();
-  local level = _hx_o({__fields__={turn=true,lose=true,unitIdx=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,lose=false,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
+  local level = _hx_o({__fields__={turn=true,lose=true,unitIdx=true,player=true,enemy=true,caravans=true,castles=true,roads=true,units=true},turn=0,lose=false,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),caravans=Array.new(),castles=Array.new(),roads=Array.new(),units=Array.new()});
   self.world:storageGet().level = level;
   local roadResToPlayer = Array.new();
   roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
@@ -6993,12 +7120,33 @@ __shared_project_model_PlayerModel.prototype.canSpendMoney = function(self,value
   end;
   do return level.player.money >= value end
 end
+__shared_project_model_PlayerModel.prototype.canSpendMana = function(self,value) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:moneyChange",0);
+  end;
+  do return level.player.mana >= value end
+end
 __shared_project_model_PlayerModel.prototype.unitGetPrice = function(self,type) 
   local scales = __shared_project_configs_UnitConfig.scalesByUnitType:get(type);
   if (scales == nil) then 
     _G.error("bad scales",0);
   end;
   do return scales.costByLevel[0] end
+end
+__shared_project_model_PlayerModel.prototype.mageGetPrice = function(self,type) 
+  local scales = __shared_project_configs_MageConfig.scalesByMageType:get(type);
+  if (scales == nil) then 
+    _G.error("bad scales",0);
+  end;
+  do return scales.costByLevel[0] end
+end
+__shared_project_model_PlayerModel.prototype.mageGetPower = function(self,type) 
+  local scales = __shared_project_configs_MageConfig.scalesByMageType:get(type);
+  if (scales == nil) then 
+    _G.error("bad scales",0);
+  end;
+  do return scales.powerByLevel[0] end
 end
 __shared_project_model_PlayerModel.prototype.manaChange = function(self,value,tag) 
   local level = self.world:storageGet().level;
@@ -7385,6 +7533,69 @@ __shared_project_model_units_CastleUnitModel.prototype.__class__ =  __shared_pro
 __shared_project_model_units_CastleUnitModel.__super__ = __shared_project_model_units_BattleUnitModel
 setmetatable(__shared_project_model_units_CastleUnitModel.prototype,{__index=__shared_project_model_units_BattleUnitModel.prototype})
 
+__shared_project_model_units_ResourceUnitModel.new = function(struct,world) 
+  local self = _hx_new(__shared_project_model_units_ResourceUnitModel.prototype)
+  __shared_project_model_units_ResourceUnitModel.super(self,struct,world)
+  return self
+end
+__shared_project_model_units_ResourceUnitModel.super = function(self,struct,world) 
+  self.struct = struct;
+  self.world = world;
+end
+__shared_project_model_units_ResourceUnitModel.__name__ = true
+__shared_project_model_units_ResourceUnitModel.__interfaces__ = {__shared_project_model_IBasicUnit}
+__shared_project_model_units_ResourceUnitModel.prototype = _hx_a();
+__shared_project_model_units_ResourceUnitModel.prototype.struct= nil;
+__shared_project_model_units_ResourceUnitModel.prototype.world= nil;
+__shared_project_model_units_ResourceUnitModel.prototype.getPos = function(self) 
+  do return self.world.levelModel:roadsFindPartById(self.struct.roadPartIdx) end
+end
+__shared_project_model_units_ResourceUnitModel.prototype.canMove = function(self) 
+  do return true end
+end
+__shared_project_model_units_ResourceUnitModel.prototype.move = function(self,roadPartIdx) 
+  self.struct.roadPartIdx = roadPartIdx;
+  __shared_base_event_EventHelper.levelUnitMove(self.world, self:getId(), roadPartIdx);
+end
+__shared_project_model_units_ResourceUnitModel.prototype.getId = function(self) 
+  do return self.struct.id end
+end
+__shared_project_model_units_ResourceUnitModel.prototype.getResources = function(self) 
+  do return self.struct.resources end
+end
+__shared_project_model_units_ResourceUnitModel.prototype.canLoad = function(self) 
+  if (self.world.levelModel:getResourceCastlePos().idx == self.struct.roadPartIdx) then 
+    do return true end;
+  else
+    do return false end;
+  end;
+end
+__shared_project_model_units_ResourceUnitModel.prototype.loadResources = function(self) 
+  if (self:canLoad()) then 
+    local tmp = self.struct;
+    tmp.resources = tmp.resources + __shared_project_configs_UnitConfig.resourceScale[self.struct.resourceLvl];
+  end;
+end
+__shared_project_model_units_ResourceUnitModel.prototype.canUnload = function(self) 
+  if (self.world.levelModel:getUnloadPos().idx == self.struct.roadPartIdx) then 
+    do return true end;
+  else
+    do return false end;
+  end;
+end
+__shared_project_model_units_ResourceUnitModel.prototype.unloadResources = function(self) 
+  if (self:canUnload()) then 
+    local tmp = self.world:storageGet().level.player;
+    tmp.money = tmp.money + self.struct.resources;
+    self.struct.resources = 0;
+  end;
+end
+__shared_project_model_units_ResourceUnitModel.prototype.getStruct = function(self) 
+  do return self.struct end
+end
+
+__shared_project_model_units_ResourceUnitModel.prototype.__class__ =  __shared_project_model_units_ResourceUnitModel
+
 __shared_project_storage_Storage.new = {}
 __shared_project_storage_Storage.__name__ = true
 __shared_project_storage_Storage.initNewStorage = function(data,force) 
@@ -7392,7 +7603,7 @@ __shared_project_storage_Storage.initNewStorage = function(data,force)
     force = true;
   end;
   if ((data.stat == nil) or force) then 
-    data.stat = _hx_o({__fields__={version=true,startGameCounter=true,intentIdx=true,platform=true,device=true,dayAfterInstall=true,gameConfigVersion=true,gameLocaleVersion=true,gameSharedVersion=true,gameBackendVersion=true,userLevel=true},version=2,startGameCounter=0,intentIdx=0,platform="sber",device="sberbox",dayAfterInstall=0,gameConfigVersion="",gameLocaleVersion="",gameSharedVersion="",gameBackendVersion="",userLevel=1});
+    data.stat = _hx_o({__fields__={version=true,startGameCounter=true,intentIdx=true,platform=true,device=true,dayAfterInstall=true,gameConfigVersion=true,gameLocaleVersion=true,gameSharedVersion=true,gameBackendVersion=true,userLevel=true},version=3,startGameCounter=0,intentIdx=0,platform="sber",device="sberbox",dayAfterInstall=0,gameConfigVersion="",gameLocaleVersion="",gameSharedVersion="",gameBackendVersion="",userLevel=1});
     data.iap = _hx_o({__fields__={current_iap=true,skuGoogle=true},current_iap="",skuGoogle=nil});
     local uuid = Uuid.v4();
     if ((data.profile ~= nil) and (data.profile.uuid ~= nil)) then 
@@ -7437,10 +7648,10 @@ __shared_project_storage_Storage.migrations = function(data)
     __shared_project_storage_Storage.initNewStorage(data);
     do return end;
   end;
-  if (data.stat.version < 2) then 
+  if (data.stat.version < 3) then 
     __shared_project_storage_Storage.initNewStorage(data, true);
   end;
-  data.stat.version = 2;
+  data.stat.version = 3;
 end
 __shared_project_storage_Storage.restore = function(data) 
   local result = __haxe_Json.parse(data);
@@ -7947,6 +8158,23 @@ local _hx_static_init = function()
     
     _hx_2 = _g;
     return _hx_2
+  end )();
+  
+  __shared_project_configs_UnitConfig.caravanCount = 2;
+  
+  __shared_project_configs_UnitConfig.resourceScale = _hx_tab_array({[0]=10, 20, 40, 50, 60}, 5);
+  
+  __shared_project_configs_MageConfig.scalesByMageType = (function() 
+    local _hx_3
+    
+    local _g = __haxe_ds_StringMap.new();
+    
+    _g:set("FIREBALL", _hx_o({__fields__={costByLevel=true,powerByLevel=true},costByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5)}));
+    
+    _g:set("ICE", _hx_o({__fields__={costByLevel=true,powerByLevel=true},costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5)}));
+    
+    _hx_3 = _g;
+    return _hx_3
   end )();
   
   __shared_project_enums_Intents.intentContexts = __haxe_ds_StringMap.new();

@@ -50,10 +50,29 @@ class PlayerModel {
         return (level.player.money >= value);
     }
 
+    public function canSpendMana(value:Int) {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for playerModel:moneyChange";}
+        return (level.player.mana >= value);
+    }
+
     public function unitGetPrice(type:UnitType){
         var scales = UnitConfig.scalesByUnitType[type];
         if (scales == null) {throw "bad scales";}
         var price = scales.costByLevel[0];
+        return price;
+    }
+
+    public function mageGetPrice(type:MageType){
+        var scales = MageConfig.scalesByMageType[type];
+        if (scales == null) {throw "bad scales";}
+        var price = scales.costByLevel[0];
+        return price;
+    }
+    public function mageGetPower(type:MageType){
+        var scales = MageConfig.scalesByMageType[type];
+        if (scales == null) {throw "bad scales";}
+        var price = scales.powerByLevel[0];
         return price;
     }
 

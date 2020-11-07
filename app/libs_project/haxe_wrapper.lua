@@ -86,6 +86,10 @@ function M.level_player_unit_get_price(unit)
     return M.get_world().levelModel.playerModel:unitGetPrice(unit)
 end
 
+function M.level_player_mage_get_price(unit)
+    return M.get_world().levelModel.playerModel:mageGetPrice(unit)
+end
+
 function M.level_castle_get_by_idx(idx)
     return M.get_world().levelModel:castlesGetByIdx(idx)
 end
