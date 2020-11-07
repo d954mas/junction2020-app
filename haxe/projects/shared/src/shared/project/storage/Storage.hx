@@ -146,7 +146,7 @@ typedef CastleUnitStruct = {
 
 typedef CastleStruct = {
     var idx:Int;
-    var unit:CastleUnitStruct;
+    var unitId:Int;
 }
 
 typedef BattleUnitStruct = {

@@ -6421,9 +6421,9 @@ __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(13, 0, "CASTLE"));
   level.roads:push(roadResToPlayer);
   level.roads:push(roadPlayerToEnemy);
-  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(0, 0):getStruct()}));
-  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(0, 0):getStruct()}));
-  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(1, 0):getStruct()}));
+  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(0, 0):getId()}));
+  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(0, 0):getId()}));
+  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(1, 0):getId()}));
   do return level end
 end
 __shared_project_model_LevelModel.prototype.createLevel = function(self) 
@@ -6451,7 +6451,7 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(startX + 6, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 7, 0, "CASTLE"));
   level.roads:push(roadPlayerToEnemy);
-  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(1, 0):getStruct()}));
+  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(1, 0):getId()}));
   __shared_base_event_EventHelper.levelMoveToNext(self.world);
 end
 __shared_project_model_LevelModel.prototype.castlesGetByIdx = function(self,idx) 
