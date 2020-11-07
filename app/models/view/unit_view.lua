@@ -111,6 +111,29 @@ function View:animation_attack()
     return action
 end
 
+function View:is_player()
+    return self.haxe_unit_initial:getOwnerId() == 0
+end
+
+function View:animation_ice_on()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local action = ACTIONS.Parallel()
+    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.x", easing = TWEEN.easing.inExpo, from = 1, to = 0, time = 0.33 })
+    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.y", easing = TWEEN.easing.inExpo, from = 1, to = 0, time = 0.33 })
+    ctx:remove()
+    return action
+end
+
+function View:animation_ice_off()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local action = ACTIONS.Parallel()
+    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.x", easing = TWEEN.easing.inExpo, from = 0, to = 1, time = 0.33 })
+    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.y", easing = TWEEN.easing.inExpo, from = 0, to = 1, time = 0.33 })
+    ctx:remove()
+    return action
+end
+
+
 function View:animation_take_damage()
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()

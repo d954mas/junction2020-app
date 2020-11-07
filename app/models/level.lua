@@ -40,6 +40,7 @@ end
 function Level:animation_turn_start()
     self.threads = {
         die = ACTIONS.Parallel(),
+        spell = ACTIONS.Parallel(),
         dieMoveToNextCastle = ACTIONS.Parallel(),
         move = ACTIONS.Parallel(),
         spawn = ACTIONS.Parallel(),
@@ -60,6 +61,32 @@ function Level:animation_spell_start(type)
         spell = ACTIONS.Parallel(),
     }
     self.spell_type = type
+
+    if (self.spell_type == "ICE") then
+        for _, unit in ipairs(self.views.units) do
+            if (not unit:is_player()) then
+                self.threads_mage.spell:add_action(unit:animation_ice_on())
+            end
+        end
+        for _, castle in ipairs(self.views.castles) do
+            if (not castle:is_player()) then
+                self.threads_mage.spell:add_action(castle:animation_ice_on())
+            end
+        end
+    end
+end
+
+function Level:animation_ice_off()
+    for _, unit in ipairs(self.views.units) do
+        if (not unit:is_player()) then
+            self.threads.spell:add_action(unit:animation_ice_off())
+        end
+    end
+    for _, castle in ipairs(self.views.castles) do
+        if (not castle:is_player()) then
+            self.threads.spell:add_action(castle:animation_ice_off())
+        end
+    end
 end
 function Level:animation_spell_end()
     self.spell_type = nil
@@ -69,7 +96,7 @@ function Level:animation_spell_end()
             threads.take_damage,
             threads.die,
         }
-        while (#orders > 0 or #threads.spell.childs>0) do
+        while (#orders > 0 or #threads.spell.childs > 0) do
             local dt = coroutine.yield()
             local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
             threads.spell:update(dt)
@@ -100,6 +127,7 @@ function Level:animation_turn_end()
             threads.attack,
             threads.take_damage,
             threads.die,
+            threads.spell,
             threads.dieMoveToNextCastle,
             threads.castle_change,
         }
@@ -179,7 +207,7 @@ function Level:units_die_unit(id)
     local unit_view = self:units_view_by_id(id)
     if (unit_view) then
         local action = unit_view:die()
-        if(self.threads_mage)then
+        if (self.threads_mage) then
             self.threads_mage.die:add_action(action)
         else
             self.threads.die:add_action(action)
@@ -204,7 +232,7 @@ function Level:units_attack_unit(attacker_id, defender_id)
     local unit_view_defender = self:units_view_by_id(defender_id)
     if (unit_view_defender) then
         local action = unit_view_defender:animation_take_damage()
-        if(attacker_id == -10000)then
+        if (attacker_id == -10000) then
             self.threads_mage.take_damage:add_action(action)
         end
 

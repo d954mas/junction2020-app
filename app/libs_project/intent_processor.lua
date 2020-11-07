@@ -159,6 +159,8 @@ function Processor:process_events(events, data)
             self.world.level_model:animation_spell_start(assert(event.data.type))
         elseif event.name == "LEVEL_CAST_SPELL_END" then
             self.world.level_model:animation_spell_end(assert(event.data.type))
+        elseif event.name == "LEVEL_SPELL_ICE_END" then
+            self.world.level_model:animation_ice_off()
         end
     end
 end
