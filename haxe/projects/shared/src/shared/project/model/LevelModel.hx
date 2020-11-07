@@ -112,14 +112,25 @@ class LevelModel {
 
         var road = level.roads[level.roads.length - 1];
         //PLAYER
+        var roadPartIdx:Int;
         if (ownerId == 0) {
-            unit.roadPartIdx = road[0].idx;
+            roadPartIdx = road[0].idx;
         } else { //ENEMY
-            unit.roadPartIdx = road[road.length - 1].idx;
+            roadPartIdx = road[road.length - 1].idx;
         }
-        var isPartFree = Lambda.count(level.units)
-        level.units.push(unit);
-        addUnit(new BattleUnitModel(unit, world));
+
+        if (canMoveToPart(roadPartIdx)) {
+            unit.roadPartIdx = roadPartIdx;
+            level.units.push(unit);
+            addUnit(new BattleUnitModel(unit, world));
+            return true;
+        }
+        else return false;
+    }
+
+    private function canMoveToPart(partIdx:Int) {
+        @:nullSafety(Off)
+        return Lambda.count(ds.level.units, function (v) {return v.type != UnitType.CASTLE && v.roadPartIdx == partIdx;}) == 0;
     }
 
     private function createPlayer():LevelPlayerStruct {
