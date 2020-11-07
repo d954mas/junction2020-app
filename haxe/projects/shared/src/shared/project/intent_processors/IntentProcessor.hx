@@ -1,4 +1,5 @@
 package shared.project.intent_processors;
+import shared.project.utils.TranslationUtils;
 import jsoni18n.I18n;
 import shared.base.enums.ContextName;
 import shared.base.output.ModelOutputResponse;
@@ -74,6 +75,7 @@ class IntentProcessor {
             AnalyticsHelper.sendGameSessionEvent(world);
             return getResult(this.world.outputConversationStart());
         }
+
         if (intent != Intent.IAP_BUY) {
             //Server was updates
             if (world.storageGet().version.version != world.storageGet().profile.currentVersion) {
@@ -111,10 +113,24 @@ class IntentProcessor {
                 return getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.MAIN_KEEP_WORKING: //pass
                 return getResult({code : ModelOutputResultCode.SUCCESS});
+            case Intent.MAIN_HELP:
+                if (data.question != null) {
+                    var localizationInput = "conv/" + data.question;
+                    var argMap = TranslationUtils.getSpellCostMap(data.question, world);
+                    var localized = i18n.tr(localizationInput, argMap);
+                    if (localized == localizationInput) {
+                        return processIntent(MAIN_FALLBACK);
+                    } else {
+                        ask(localized);
+                    }
+                } else {
+                    return processIntent(MAIN_FALLBACK);
+                }
+                return getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.MAIN_FALLBACK:
                 ask(i18n.tr("conv/fallback"));
-                if(world.storageGet().level!=null){
-                  //  world.levelModel.levelNextCastle();
+                if (world.storageGet().level != null) {
+                    //  world.levelModel.levelNextCastle();
                 }
 
                 return getResult({code : ModelOutputResultCode.SUCCESS});
