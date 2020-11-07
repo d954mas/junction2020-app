@@ -5413,6 +5413,12 @@ end
 __shared_base_event_EventHelper.levelCastleEnemyDestroy = function(world) 
   world:eventEmit("LEVEL_CASTLE_ENEMY_DESTROY");
 end
+__shared_base_event_EventHelper.levelCastSpellStart = function(world,type) 
+  world:eventEmit("LEVEL_CAST_SPELL_START", _hx_o({__fields__={type=true},type=type}));
+end
+__shared_base_event_EventHelper.levelCastSpellEnd = function(world,type) 
+  world:eventEmit("LEVEL_CAST_SPELL_END", _hx_o({__fields__={type=true},type=type}));
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -6236,6 +6242,7 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     local price = self.world.levelModel.playerModel:mageGetPrice(spelType);
     if (self.world.levelModel.playerModel:canSpendMana(price)) then 
       self.world.levelModel.playerModel:manaChange(-price, "cast");
+      self.world.levelModel.playerModel:castSpell(spelType);
     else
       self:ask(Std.string("not enought mana.Need ") .. Std.string(price));
     end;
@@ -7119,6 +7126,12 @@ __shared_project_model_PlayerModel.prototype.canSpendMoney = function(self,value
     _G.error("no level model for playerModel:moneyChange",0);
   end;
   do return level.player.money >= value end
+end
+__shared_project_model_PlayerModel.prototype.castSpell = function(self,type) 
+  __shared_base_event_EventHelper.levelTurnStart(self.world);
+  __shared_base_event_EventHelper.levelCastSpellStart(self.world, type);
+  __shared_base_event_EventHelper.levelCastSpellEnd(self.world, type);
+  self.world.levelModel:levelNextTurn();
 end
 __shared_project_model_PlayerModel.prototype.canSpendMana = function(self,value) 
   local level = self.world:storageGet().level;

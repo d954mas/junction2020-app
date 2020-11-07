@@ -1,5 +1,6 @@
 package shared.base.event;
 
+import shared.project.enums.UnitType.MageType;
 import shared.project.storage.Storage.ResourceUnitStruct;
 import shared.project.storage.Storage.BattleUnitStruct;
 import shared.project.model.World;
@@ -23,6 +24,8 @@ enum abstract ModelEventName(String) {
     var LEVEL_CASTLE_ENEMY_DESTROY;
     var LEVEL_RESTART;
     var LEVEL_CARAVAN_SPAWN;
+    var LEVEL_CAST_SPELL_START;
+    var LEVEL_CAST_SPELL_END;
 }
 
 class EventHelper {
@@ -88,6 +91,14 @@ class EventHelper {
     }
     public static function levelCastleEnemyDestroy(world:World) {
         world.eventEmit(LEVEL_CASTLE_ENEMY_DESTROY);
+    }
+
+    public static function levelCastSpellStart(world:World,type:MageType) {
+        world.eventEmit(LEVEL_CAST_SPELL_START,{type:type});
+    }
+
+    public static function levelCastSpellEnd(world:World,type:MageType) {
+        world.eventEmit(LEVEL_CAST_SPELL_END,{type:type});
     }
 }
 

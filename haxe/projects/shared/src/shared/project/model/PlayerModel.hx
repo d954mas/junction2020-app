@@ -50,6 +50,15 @@ class PlayerModel {
         return (level.player.money >= value);
     }
 
+    public function castSpell(type:MageType){
+        EventHelper.levelTurnStart(world);
+
+        EventHelper.levelCastSpellStart(world,type);
+        EventHelper.levelCastSpellEnd(world,type);
+
+        world.levelModel.levelNextTurn();
+    }
+
     public function canSpendMana(value:Int) {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model for playerModel:moneyChange";}
