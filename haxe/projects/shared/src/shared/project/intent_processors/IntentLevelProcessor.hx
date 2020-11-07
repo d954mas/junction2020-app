@@ -17,7 +17,10 @@ class IntentLevelProcessor extends IntentSubProcessor {
                 if(data.unit == null){throw "LEVEL_SPAWN_UNIT no unit";}
                 var unitType = UnitConfig.unitTypeGetById(data.unit);
                 if(unitType == null){throw "LEVEL_SPAWN_UNIT unknown unit";}
-                world.levelModel.playerModel.unitsSpawnUnit(unitType);
+                var amount:Int;
+                if (data.amount == null) {amount = 1;}
+                else @:nullSafety(Off) amount = Std.parseInt(data.amount);
+                world.levelModel.playerModel.unitsSpawnUnit(unitType, amount);
                 return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             case Intent.LEVEL_TURN_SKIP:
                 ask("skip");

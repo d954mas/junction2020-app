@@ -313,17 +313,17 @@ class LevelModel {
             var playerQueue = level.player.unitQueue;
             var enemyQueue = level.enemy.unitQueue;
             if (playerQueue.length > 0) {
-                var entry:UnitQueueEntry = playerQueue[playerQueue.length - 1];
+                var entry:UnitQueueEntry = playerQueue[0];
                 @:nullSafety(Off) var success = unitsSpawnUnit(entry.ownerId, entry.unitType, level.player.unitLevels[Std.string(entry.unitType)]);
                 if (success) {
-                    playerQueue.pop();
+                    playerQueue.shift();
                 }
             }
             if (enemyQueue.length > 0) {
-                var entry:UnitQueueEntry = enemyQueue[enemyQueue.length - 1];
+                var entry:UnitQueueEntry = enemyQueue[0];
                 @:nullSafety(Off) var success = unitsSpawnUnit(entry.ownerId, entry.unitType, level.enemy.unitLevels[Std.string(entry.unitType)]);
                 if (success) {
-                    enemyQueue.pop();
+                    enemyQueue.shift();
                 }
             }
         }
