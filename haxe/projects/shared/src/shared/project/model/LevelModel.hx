@@ -34,7 +34,7 @@ class LevelModel {
 
     private function addUnit(unit:BattleUnitModel) {
         battleUnitModels.push(unit);
-        EventHelper.levelUnitSpawn(world, unit.getId(),unit.getStruct());
+        EventHelper.levelUnitSpawn(world, unit.getId(), unit.getStruct());
     }
 
     private function addUnitCastle(unit:BattleUnitModel) {
@@ -130,7 +130,7 @@ class LevelModel {
 
     private function canMoveToPart(partIdx:Int) {
         @:nullSafety(Off)
-        return Lambda.count(ds.level.units, function (v) {return v.type != UnitType.CASTLE && v.roadPartIdx == partIdx;}) == 0;
+        return Lambda.count(ds.level.units, function(v) {return v.type != UnitType.CASTLE && v.roadPartIdx == partIdx;}) == 0;
     }
 
     private function createPlayer():LevelPlayerStruct {
@@ -164,7 +164,9 @@ class LevelModel {
                     var newPos:LevelRoadPart;
                     //if (attacker.getOwnerId() > 0) { //Не понял и закомментировал. Почему ходит только враг
                     newPos = unitNewPosition(attacker);
-                    attacker.move(newPos.idx);
+                    if (canMoveToPart(newPos.idx)) {
+                        attacker.move(newPos.idx);
+                    }
                     // }
                 }
             } else {
@@ -183,7 +185,7 @@ class LevelModel {
             ds.level.units.remove(unit);
             var unitModel = unitsGetUnitById(unit.id);
             if (unit.type == UnitType.CASTLE) {
-                var castle = Lambda.find(ds.level.castles, function (v) {return v.unitId == unit.id;});
+                var castle = Lambda.find(ds.level.castles, function(v) {return v.unitId == unit.id;});
                 ds.level.castles.remove(castle);
             }
             EventHelper.levelUnitDied(world, unit.id);
