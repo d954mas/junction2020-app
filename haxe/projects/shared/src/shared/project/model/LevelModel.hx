@@ -24,7 +24,7 @@ class LevelModel {
     private var ds:StorageStruct;
     public var playerModel:PlayerModel;
     public var enemyModel:EnemyModel;
-    private var battleUnitModels:List<BattleUnitModel>;
+    public var battleUnitModels:List<BattleUnitModel>;
     private var resourceUnitModels:List<ResourceUnitModel>;
 
     public function new(world:World) {
@@ -283,7 +283,7 @@ class LevelModel {
     }
 
     @:nullSafety(Off)
-    private function removeDeadUnits() {
+    public function removeDeadUnits() {
         var dead = Lambda.filter(ds.level.units, function(u) {return u.hp == 0;});
         var deadModels = Lambda.filter(battleUnitModels, function(u) {return !u.isAlive();});
         for (unit in dead) {

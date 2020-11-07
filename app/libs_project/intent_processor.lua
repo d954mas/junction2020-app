@@ -155,6 +155,10 @@ function Processor:process_events(events, data)
                     coroutine.yield()
                 end
             end)
+        elseif event.name == "LEVEL_CAST_SPELL_START" then
+            self.world.level_model:animation_spell_start(assert(event.data.type))
+        elseif event.name == "LEVEL_CAST_SPELL_END" then
+            self.world.level_model:animation_spell_end(assert(event.data.type))
         end
     end
 end

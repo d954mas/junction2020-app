@@ -46,7 +46,7 @@ class IntentLevelProcessor extends IntentSubProcessor {
                 var cost = price;
                 if (world.levelModel.playerModel.canSpendMana(cost)) {
                     world.levelModel.playerModel.manaChange(-cost, "cast");
-                    world.levelModel.playerModel.castSpell(spelType);
+                    world.levelModel.playerModel.castSpell(spelType,false);
 
                     //world.levelModel.playerModel.unitsSpawnUnit(unitType, amount);
                 } else {

@@ -61,13 +61,23 @@ class PlayerModel {
         return (level.player.money >= value);
     }
 
-    public function castSpell(type:MageType){
-        EventHelper.levelTurnStart(world);
+    public function castSpell(type:MageType, newTurn:Bool){
+       if(newTurn){EventHelper.levelTurnStart(world);}
 
         EventHelper.levelCastSpellStart(world,type);
+        var power = mageGetPower(type);
+        if(type == MageType.FIREBALL){
+            for(unit in world.levelModel.battleUnitModels){
+                if(unit.getOwnerId()>0 && unit.getType()!= UnitType.CASTLE){
+                    unit.takeDamage(power);
+                    EventHelper.levelUnitAttack(world, -10000, unit.getId());
+                }
+            }
+            world.levelModel.removeDeadUnits();
+        }
         EventHelper.levelCastSpellEnd(world,type);
 
-        world.levelModel.levelNextTurn();
+        if(newTurn){world.levelModel.levelNextTurn();};
     }
 
     public function canSpendMana(value:Int) {

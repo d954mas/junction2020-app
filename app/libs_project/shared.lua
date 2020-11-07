@@ -6103,6 +6103,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("cheats.restore_hp", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("tutorial.no", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("tutorial.yes", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("level.spawn.caravan", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("lose.modal.restart", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.spawn.unit", true);
@@ -6242,10 +6243,14 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     local price = self.world.levelModel.playerModel:mageGetPrice(spelType);
     if (self.world.levelModel.playerModel:canSpendMana(price)) then 
       self.world.levelModel.playerModel:manaChange(-price, "cast");
-      self.world.levelModel.playerModel:castSpell(spelType);
+      self.world.levelModel.playerModel:castSpell(spelType, false);
     else
       self:ask(Std.string("not enought mana.Need ") .. Std.string(price));
     end;
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "level.spawn.caravan" then 
+    self:ask("caravan");
+    self.world.levelModel.playerModel:spawnCaravan();
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "level.spawn.unit" then 
     if (data == nil) then 
@@ -6558,6 +6563,7 @@ __shared_project_model_LevelModel.prototype.modelRestore = function(self)
         end;
       end;
     end;
+    __haxe_Log.trace(Std.string("DBG_CAR: ") .. Std.string(Std.string(self.ds.level.caravans)), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=74,className="shared.project.model.LevelModel",methodName="modelRestore"}));
     local o1 = self.ds.level.caravans;
     if ((function() 
       local _hx_2
@@ -6636,10 +6642,13 @@ __shared_project_model_LevelModel.prototype.getUnloadPos = function(self)
 end
 __shared_project_model_LevelModel.prototype.spawnCaravan = function(self,level) 
   if (self.ds.level.caravans.length < __shared_project_configs_UnitConfig.caravanCount) then 
-    local caravan = _hx_o({__fields__={roadPartIdx=true,ownerId=true,id=true,resources=true,resourceLvl=true},roadPartIdx=self:getUnloadPos().idx,ownerId=0,id=self.ds.level.caravans.length,resources=0,resourceLvl=level});
+    local caravan = _hx_o({__fields__={roadPartIdx=true,ownerId=true,id=true,resources=true,resourceLvl=true},roadPartIdx=self:getUnloadPos().idx,ownerId=0,id=self.ds.level.caravanIdx,resources=0,resourceLvl=level});
+    self.ds.level.caravanIdx = self.ds.level.caravanIdx + 1;
     self.ds.level.caravans:push(caravan);
     self:addCaravan(__shared_project_model_units_ResourceUnitModel.new(caravan, self.world));
+    do return true end;
   end;
+  do return false end
 end
 __shared_project_model_LevelModel.prototype.addCaravan = function(self,model) 
   self.resourceUnitModels:add(model);
@@ -6690,7 +6699,7 @@ __shared_project_model_LevelModel.prototype.createPlayer = function(self)
     _g = _g + 1;
     unitLevels[Std.string(type)] = 1;
   end;
-  do return _hx_o({__fields__={id=true,unitLevels=true,unitQueue=true,mana=true,money=true},id=0,unitLevels=unitLevels,unitQueue=Array.new(),mana=__shared_project_configs_GameConfig.START_MANA,money=__shared_project_configs_GameConfig.START_MONEY}) end
+  do return _hx_o({__fields__={id=true,unitLevels=true,caravanLevel=true,unitQueue=true,mana=true,money=true},id=0,unitLevels=unitLevels,caravanLevel=1,unitQueue=Array.new(),mana=__shared_project_configs_GameConfig.START_MANA,money=__shared_project_configs_GameConfig.START_MONEY}) end
 end
 __shared_project_model_LevelModel.prototype.createEnemy = function(self) 
   local unitLevels = _hx_e();
@@ -6857,10 +6866,10 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
         _G.error(Std.string("no unit levelNextCheckWinLose1 with id:") .. Std.string(castle.unitId),0);
       end;
     end) > 0;
-    Lambda.count(self.ds.level.castles, function(castle1) 
+    local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=369,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=373,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -6869,13 +6878,15 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
       else
         _G.error(Std.string("no unit levelNextCheckWinLose2 with id:") .. Std.string(castle1.unitId),0);
       end;
-    end);
+    end) == 0;
     if (playerLose) then 
       self.ds.level.lose = true;
       self.world:contextChange("lose_modal");
       __shared_base_event_EventHelper.levelLost(self.world);
     else
-      self:levelNextCastle();
+      if (allEnemiesLost) then 
+        self:levelNextCastle();
+      end;
     end;
   else
     _G.error("no level",0);
@@ -6925,7 +6936,7 @@ end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
   self:createPlayer();
   self:createEnemy();
-  local level = _hx_o({__fields__={turn=true,lose=true,unitIdx=true,player=true,enemy=true,caravans=true,castles=true,roads=true,units=true},turn=0,lose=false,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),caravans=Array.new(),castles=Array.new(),roads=Array.new(),units=Array.new()});
+  local level = _hx_o({__fields__={turn=true,lose=true,unitIdx=true,caravanIdx=true,player=true,enemy=true,caravans=true,castles=true,roads=true,units=true},turn=0,lose=false,unitIdx=0,caravanIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),caravans=Array.new(),castles=Array.new(),roads=Array.new(),units=Array.new()});
   self.world:storageGet().level = level;
   local roadResToPlayer = Array.new();
   roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
@@ -7095,6 +7106,15 @@ __shared_project_model_PlayerModel.__name__ = true
 __shared_project_model_PlayerModel.prototype = _hx_a();
 __shared_project_model_PlayerModel.prototype.world= nil;
 __shared_project_model_PlayerModel.prototype.ds= nil;
+__shared_project_model_PlayerModel.prototype.spawnCaravan = function(self) 
+  local success = self.world.levelModel:spawnCaravan(self.ds.level.player.caravanLevel);
+  if (success) then 
+    __shared_base_event_EventHelper.levelTurnStart(self.world);
+    self.world.speechBuilder:text("spawned caravan");
+    self.world.levelModel:levelNextTurn();
+  end;
+  do return success end
+end
 __shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType,amount) 
   __shared_base_event_EventHelper.levelTurnStart(self.world);
   self.world.levelModel:enqueueUnits(0, unitType, amount);
@@ -7125,11 +7145,28 @@ __shared_project_model_PlayerModel.prototype.canSpendMoney = function(self,value
   end;
   do return level.player.money >= value end
 end
-__shared_project_model_PlayerModel.prototype.castSpell = function(self,type) 
-  __shared_base_event_EventHelper.levelTurnStart(self.world);
+__shared_project_model_PlayerModel.prototype.castSpell = function(self,type,newTurn) 
+  if (newTurn) then 
+    __shared_base_event_EventHelper.levelTurnStart(self.world);
+  end;
   __shared_base_event_EventHelper.levelCastSpellStart(self.world, type);
+  local power = self:mageGetPower(type);
+  if (type == "FIREBALL") then 
+    local _g_head = self.world.levelModel.battleUnitModels.h;
+    while (_g_head ~= nil) do 
+      local val = _g_head.item;
+      _g_head = _g_head.next;
+      if ((val:getOwnerId() > 0) and (val:getType() ~= "CASTLE")) then 
+        val:takeDamage(power);
+        __shared_base_event_EventHelper.levelUnitAttack(self.world, -10000, val:getId());
+      end;
+    end;
+    self.world.levelModel:removeDeadUnits();
+  end;
   __shared_base_event_EventHelper.levelCastSpellEnd(self.world, type);
-  self.world.levelModel:levelNextTurn();
+  if (newTurn) then 
+    self.world.levelModel:levelNextTurn();
+  end;
 end
 __shared_project_model_PlayerModel.prototype.canSpendMana = function(self,value) 
   local level = self.world:storageGet().level;

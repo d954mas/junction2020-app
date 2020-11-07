@@ -47,9 +47,48 @@ function Level:animation_turn_start()
         take_damage = ACTIONS.Parallel(),
         castle_change = ACTIONS.Parallel(),
     }
+
     while (self.animation_sequence.current ~= nil) do
         self.animation_sequence:update(0.33)
     end
+end
+
+function Level:animation_spell_start(type)
+    self.threads_mage = {
+        die = ACTIONS.Parallel(),
+        take_damage = ACTIONS.Parallel(),
+        spell = ACTIONS.Parallel(),
+    }
+    self.spell_type = type
+end
+function Level:animation_spell_end()
+    self.spell_type = nil
+    local threads = self.threads_mage
+    self.animation_sequence:add_action(function()
+        local orders = {
+            threads.take_damage,
+            threads.die,
+        }
+        while (#orders > 0 or #threads.spell.childs>0) do
+            local dt = coroutine.yield()
+            local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+            threads.spell:update(dt)
+            local order = orders[1]
+            if (order) then
+                order:update(dt)
+                if (#order.childs == 0) then
+                    table.remove(orders, 1)
+                end
+            end
+            ctx:remove()
+        end
+    end)
+    self.threads_mage = nil
+    self.world.thread_sequence:add_action(function()
+        while (self.animation_sequence.current ~= nil) do
+            coroutine.yield()
+        end
+    end)
 end
 
 function Level:animation_turn_end()
@@ -64,13 +103,13 @@ function Level:animation_turn_end()
             threads.dieMoveToNextCastle,
             threads.castle_change,
         }
-        while (#orders> 0) do
+        while (#orders > 0) do
             local dt = coroutine.yield()
             local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
             local order = orders[1]
             order:update(dt)
             if (#order.childs == 0) then
-                table.remove(orders,1)
+                table.remove(orders, 1)
             end
             ctx:remove()
         end
@@ -140,14 +179,19 @@ function Level:units_die_unit(id)
     local unit_view = self:units_view_by_id(id)
     if (unit_view) then
         local action = unit_view:die()
-        self.threads.die:add_action(action)
+        if(self.threads_mage)then
+            self.threads_mage.die:add_action(action)
+        else
+            self.threads.die:add_action(action)
+        end
+
     else
         COMMON.w("no unit view for die.Is it castle?", "LEVEL")
     end
     -- end)
 end
 
-function Level:units_attack_unit(attacker_id,defender_id)
+function Level:units_attack_unit(attacker_id, defender_id)
     -- self.world.thread_sequence:add_action(function()
     local unit_view = self:units_view_by_id(attacker_id)
     if (unit_view) then
@@ -160,7 +204,10 @@ function Level:units_attack_unit(attacker_id,defender_id)
     local unit_view_defender = self:units_view_by_id(defender_id)
     if (unit_view_defender) then
         local action = unit_view_defender:animation_take_damage()
-        self.threads.take_damage:add_action(action)
+        if(attacker_id == -10000)then
+            self.threads_mage.take_damage:add_action(action)
+        end
+
     else
         COMMON.w("no unit view for attack.Is it castle?", "LEVEL")
     end
@@ -202,9 +249,9 @@ function Level:move_to_next()
             time = time - dt
         end
         CAMERAS.battle_camera:set_position(vmath.vector3(new_x, current_y, 0))
-        local bg_pos = math.floor((new_x-640)/2048)
+        local bg_pos = math.floor((new_x - 640) / 2048)
         local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-        go.set_position(vmath.vector3(0 + 2048*bg_pos,30,-1),"/bg")
+        go.set_position(vmath.vector3(0 + 2048 * bg_pos, 30, -1), "/bg")
         ctx:remove()
     end)
 end
