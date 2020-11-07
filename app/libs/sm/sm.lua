@@ -4,7 +4,8 @@ local SM = require "libs.sm.scene_manager"
 local sm = SM()
 
 sm.SCENES = {
-	MAIN = "MainScene"
+	MAIN = "MainScene",
+	LOSE_MODAL = "LoseModal"
 }
 
 return sm

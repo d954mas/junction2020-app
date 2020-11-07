@@ -14,6 +14,11 @@ class IntentModalProcessor extends IntentSubProcessor {
     public override function processIntent(intent:Intent, ?data:Dynamic):Null<OutputResponce> {
         var storage = world.storageGet();
         switch(intent){
+            case Intent.LOSE_MODAL_RESTART:
+                ask("restart");
+
+                world.levelModel.restart();
+                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             default: return null;
         }
 

@@ -10,6 +10,9 @@ Manager.NAMES = {
 	ERROR_GUI = "ERROR_GUI",
 	MAIN_SCENE = "MAIN_SCENE",
 	MAIN_SCENE_GUI = "MAIN_SCENE_GUI",
+	LOSE_MODAL = "LOSE_MODAL",
+	LOSE_MODAL_GUI = "LOSE_MODAL_GUI",
+
 }
 
 ---@class ContextStackWrapperMain:ContextStackWrapper

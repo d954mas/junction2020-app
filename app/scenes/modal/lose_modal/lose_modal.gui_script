@@ -1,0 +1,43 @@
+local COMMON = require "libs.common"
+local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
+local ManaPanel = require "models.view.resources.mana_panel"
+local MoneyPanel = require "models.view.resources.money_panel"
+local WORLD = require "libs_project.words"
+local GUI = require "libs_project.gui.gui"
+
+local Script = COMMON.new_n28s()
+
+function Script:bind_vh()
+    self.vh = {
+        root = gui.get_node("root"),
+    }
+    self.views = {
+        btn_restart = GUI.ButtonIconTest("btn_restart"),
+    }
+end
+
+function Script:init()
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.LOSE_MODAL_GUI)
+    COMMON.input_acquire()
+    self:bind_vh()
+    self:init_gui()
+end
+
+function Script:init_gui()
+    gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.MODAL_5)
+    self.views.btn_restart:set_input_listener(function()
+        interactive_canvas.send_text_query("lose.modal.restart")
+    end)
+end
+
+function Script:final()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.LOSE_MODAL_GUI)
+    COMMON.input_release()
+end
+
+
+function Script:on_input(action_id, action)
+    self.views.btn_restart:on_input(action_id, action)
+end
+
+COMMON.N28S.register(Script)

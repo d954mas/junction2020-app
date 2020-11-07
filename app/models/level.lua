@@ -43,8 +43,10 @@ function Level:animation_turn_start()
         dieMoveToNextCastle = ACTIONS.Parallel(),
         move = ACTIONS.Parallel(),
         spawn = ACTIONS.Parallel(),
+        attack = ACTIONS.Parallel(),
+        take_damage = ACTIONS.Parallel(),
     }
-    while (self.animation_sequence.current ~= nil)do
+    while (self.animation_sequence.current ~= nil) do
         self.animation_sequence:update(0.33)
     end
 end
@@ -52,21 +54,28 @@ end
 function Level:animation_turn_end()
     self.animation_sequence:add_action(function()
         local threads = self.threads
-        while (#threads.spawn.childs > 0 or #threads.move.childs > 0 or #threads.die.childs > 0 or #threads.dieMoveToNextCastle.childs > 0) do
+        local orders = {
+            threads.spawn,
+            threads.move,
+            threads.attack,
+            threads.take_damage,
+            threads.die,
+            threads.dieMoveToNextCastle,
+        }
+        while (#orders> 0) do
             local dt = coroutine.yield()
             local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-            threads.spawn:update(dt)
-            if (#threads.spawn.childs == 0) then
-                threads.move:update(dt)
-            end
-            if (#threads.move.childs == 0 and #threads.spawn.childs == 0) then
-                threads.die:update(dt)
-            end
-
-            if (#threads.die.childs == 0 and #threads.spawn.childs == 0 and #threads.move.childs == 0) then
-                threads.dieMoveToNextCastle:update(dt)
+            local order = orders[1]
+            order:update(dt)
+            if (#order.childs == 0) then
+                table.remove(orders,1)
             end
             ctx:remove()
+        end
+    end)
+    self.world.thread_sequence:add_action(function()
+        while (self.animation_sequence.current ~= nil) do
+            coroutine.yield()
         end
     end)
 end
@@ -100,11 +109,11 @@ end
 
 function Level:units_spawn_unit(id, struct)
     --self.world.thread_sequence:add_action(function()
-        local unit_view = UnitView(id, self.world, struct)
-        local action = unit_view:animation_spawn();
-        self.threads.spawn:add_action(action)
-        table.insert(self.views.units, unit_view)
-   -- end)
+    local unit_view = UnitView(id, self.world, struct)
+    local action = unit_view:animation_spawn();
+    self.threads.spawn:add_action(action)
+    table.insert(self.views.units, unit_view)
+    -- end)
 end
 
 function Level:units_view_by_id(id)
@@ -116,36 +125,57 @@ function Level:units_view_by_id(id)
 end
 
 function Level:units_move_unit(id, roadId)
-   -- self.world.thread_sequence:add_action(function()
-        local unit_view = self:units_view_by_id(id)
-        local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
-        self.threads.move:add_action(action)
+    -- self.world.thread_sequence:add_action(function()
+    local unit_view = self:units_view_by_id(id)
+    local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
+    self.threads.move:add_action(action)
     --end)
 end
 
 function Level:units_die_unit(id)
-   -- self.world.thread_sequence:add_action(function()
-        local unit = HAXE_WRAPPER.level_units_get_by_id(id)
-        local unit_view = self:units_view_by_id(id)
-        if (unit_view) then
-            local action = unit_view:die()
-            self.threads.die:add_action(action)
-        else
-            COMMON.w("no unit view for die.Is it castle?", "LEVEL")
-        end
-   -- end)
+    -- self.world.thread_sequence:add_action(function()
+    local unit = HAXE_WRAPPER.level_units_get_by_id(id)
+    local unit_view = self:units_view_by_id(id)
+    if (unit_view) then
+        local action = unit_view:die()
+        self.threads.die:add_action(action)
+    else
+        COMMON.w("no unit view for die.Is it castle?", "LEVEL")
+    end
+    -- end)
 end
+
+function Level:units_attack_unit(attacker_id,defender_id)
+    -- self.world.thread_sequence:add_action(function()
+    local unit_view = self:units_view_by_id(attacker_id)
+    if (unit_view) then
+        local action = unit_view:animation_attack()
+        self.threads.attack:add_action(action)
+    else
+        COMMON.w("no unit view for attack.Is it castle?", "LEVEL")
+    end
+
+    local unit_view_defender = self:units_view_by_id(defender_id)
+    if (unit_view_defender) then
+        local action = unit_view_defender:animation_take_damage()
+        self.threads.take_damage:add_action(action)
+    else
+        COMMON.w("no unit view for attack.Is it castle?", "LEVEL")
+    end
+    -- end)
+end
+
 function Level:units_die_unit_move_to_next_castle(id)
-   -- self.world.thread_sequence:add_action(function()
-        local unit = HAXE_WRAPPER.level_units_get_by_id(id)
-        local unit_view = self:units_view_by_id(id)
-        if (unit_view) then
-            local action = unit_view:die()
-            self.threads.dieMoveToNextCastle:add_action(action)
-        else
-            COMMON.w("no unit view for die.Is it castle?", "LEVEL")
-        end
-   -- end)
+    -- self.world.thread_sequence:add_action(function()
+    local unit = HAXE_WRAPPER.level_units_get_by_id(id)
+    local unit_view = self:units_view_by_id(id)
+    if (unit_view) then
+        local action = unit_view:die()
+        self.threads.dieMoveToNextCastle:add_action(action)
+    else
+        COMMON.w("no unit view for die.Is it castle?", "LEVEL")
+    end
+    -- end)
 end
 
 function Level:move_to_next()
