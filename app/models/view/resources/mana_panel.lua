@@ -42,8 +42,8 @@ function View:bind_vh()
     }
     self.bar_size = gui.get_size(self.vh.bar_bg)
     self.views.label.gui_refresh = function(sself)
-        gui.set_text(sself.lbl, math.floor(sself.animation.value) .. "/" .. 100)
-        local percent = sself.animation.value/100
+        gui.set_text(sself.lbl, math.floor(sself.animation.value) .. "/" .. HAXE_WRAPPER.game_config_mana_man())
+        local percent = sself.animation.value/HAXE_WRAPPER.game_config_mana_man()
         gui.set_size(self.vh.bar_bg,vmath.vector3(self.bar_size.x * percent, self.bar_size.y, self.bar_size.z))
     end
 end

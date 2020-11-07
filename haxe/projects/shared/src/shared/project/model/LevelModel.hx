@@ -164,7 +164,7 @@ class LevelModel {
             id: 0,
             unitLevels: unitLevels,
             unitQueue:new Array<UnitQueueEntry>(),
-            mana:0,
+            mana:GameConfig.START_MANA,
             money:GameConfig.START_MONEY,
         }
     }
@@ -271,14 +271,13 @@ class LevelModel {
     private function levelNextTurnCaravans() {}
 
     private function levelNextTurnRegenMoney() {
-        var money = 0; //todo add money regen count;
-        playerModel.moneyChange(money, "startTurnRegen");
+        playerModel.moneyChange(GameConfig.MONEY_REGEN, "startTurnRegen");
     }
 
     private function levelNextTurnRegenMana() {
-        var mana = 5; //todo add money regen count;
-        playerModel.manaChange(mana, "startTurnRegen");
+        playerModel.manaChange(GameConfig.MANA_REGEN, "startTurnRegen");
     }
+
 
     private function levelNextCheckWinLose() {
         if (ds.level != null) {
@@ -476,7 +475,7 @@ class LevelModel {
         level.units = level.units.concat(persistCastleUnits);
 
         world.levelModel.playerModel.moneyChange(GameConfig.START_MONEY - level.player.money, "reset castle");
-        world.levelModel.playerModel.manaChange(0 - level.player.mana, "reset castle");
+        world.levelModel.playerModel.manaChange(GameConfig.START_MANA - level.player.mana, "reset castle");
 
         EventHelper.levelCastleEnemyDestroy(world);
         EventHelper.levelMoveToNext(world);

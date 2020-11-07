@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.project.configs.UnitConfig;
 import shared.project.enums.UnitType;
 import shared.project.configs.GameConfig;
 import Array;
@@ -47,6 +48,13 @@ class PlayerModel {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model for playerModel:moneyChange";}
         return (level.player.money >= value);
+    }
+
+    public function unitGetPrice(type:UnitType){
+        var scales = UnitConfig.scalesByUnitType[type];
+        if (scales == null) {throw "bad scales";}
+        var price = scales.costByLevel[0];
+        return price;
     }
 
 

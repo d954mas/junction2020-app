@@ -11,17 +11,21 @@ function Script:bind_vh()
     self.vh = {
         root = gui.get_node("root"),
         lbl_turn = gui.get_node("lbl_turn"),
+        price_knight = gui.get_node("btn_spawn_knight/lbl_price"),
+        price_archer = gui.get_node("btn_spawn_archer/lbl_price"),
+        price_spearman = gui.get_node("btn_spawn_spearman/lbl_price"),
+        price_shield = gui.get_node("btn_spawn_shield/lbl_price"),
+        price_mage = gui.get_node("btn_spawn_mage/lbl_price"),
     }
     self.views = {
         mana_panel = ManaPanel("mana_panel", WORLD),
         money_panel = MoneyPanel("money_panel", WORLD),
         btn_skip = GUI.ButtonIconTest("btn_skip"),
-        btn_spawn_knight = GUI.ButtonIconTest("btn_spawn_knight"),
-        btn_spawn_archer = GUI.ButtonIconTest("btn_spawn_archer"),
-        btn_spawn_spearman = GUI.ButtonIconTest("btn_spawn_spearman"),
-        btn_spawn_shield = GUI.ButtonIconTest("btn_spawn_shield"),
-        btn_spawn_mage = GUI.ButtonIconTest("btn_spawn_mage"),
-
+        btn_spawn_knight = GUI.ButtonScale("btn_spawn_knight"),
+        btn_spawn_archer = GUI.ButtonScale("btn_spawn_archer"),
+        btn_spawn_spearman = GUI.ButtonScale("btn_spawn_spearman"),
+        btn_spawn_shield = GUI.ButtonScale("btn_spawn_shield"),
+        btn_spawn_mage = GUI.ButtonScale("btn_spawn_mage"),
     }
 end
 
@@ -61,6 +65,12 @@ function Script:init_gui()
     self.views.btn_spawn_shield:set_input_listener(function()
         interactive_canvas.send_text_query("level.spawn.unit SHIELD")
     end)
+
+    gui.set_text(self.vh.price_archer, HAXE_WRAPPER.level_player_unit_get_price("ARCHER"))
+    gui.set_text(self.vh.price_knight,HAXE_WRAPPER.level_player_unit_get_price("KNIGHT"))
+    gui.set_text(self.vh.price_spearman,HAXE_WRAPPER.level_player_unit_get_price("SPEARMAN"))
+    gui.set_text(self.vh.price_shield,HAXE_WRAPPER.level_player_unit_get_price("SHIELD"))
+    gui.set_text(self.vh.price_mage,HAXE_WRAPPER.level_player_unit_get_price("MAGE"))
 end
 
 function Script:storage_changed()
