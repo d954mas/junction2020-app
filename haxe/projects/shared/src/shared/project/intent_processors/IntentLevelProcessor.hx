@@ -60,6 +60,10 @@ class IntentLevelProcessor extends IntentSubProcessor {
                 EventHelper.levelTurnStart(world);
                 world.levelModel.levelNextTurn();
                 return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+            case Intent.LEVEL_SPAWN_CARAVAN:
+                ask("caravan");
+                world.levelModel.playerModel.spawnCaravan();
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
             default: return null;
         }
         throw "no return for intent:" + intent;

@@ -20,6 +20,17 @@ class PlayerModel {
         modelRestore();
     }
 
+    @:nullSafety(Off)
+    public function spawnCaravan():Bool {
+        var success = world.levelModel.spawnCaravan(ds.level.player.caravanLevel);
+        if (success) {
+            EventHelper.levelTurnStart(world);
+            world.speechBuilder.text("spawned caravan");
+            world.levelModel.levelNextTurn();
+        }
+        return success;
+    }
+
     public function unitsSpawnUnit(unitType:UnitType, amount:Int) {
         EventHelper.levelTurnStart(world);
         world.levelModel.enqueueUnits(0, unitType, amount);

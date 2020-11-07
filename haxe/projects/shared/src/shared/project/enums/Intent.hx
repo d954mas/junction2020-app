@@ -25,10 +25,10 @@ enum abstract Intent(String) {
     var TUTORIAL_YES = "tutorial.yes";
     var TUTORIAL_NO = "tutorial.no";
 
-
     var LEVEL_SPAWN_UNIT = "level.spawn.unit";
     var LEVEL_CAST = "level.cast";
     var LEVEL_TURN_SKIP = "level.turn.skip";
+    var LEVEL_SPAWN_CARAVAN = "level.spawn.caravan";
 
     var LOSE_MODAL_RESTART = "lose.modal.restart";
 }
@@ -73,6 +73,7 @@ var intent:Intent;
 
         intentContexts[Intent.TUTORIAL_NO] = [];
         intentContexts[Intent.TUTORIAL_YES] = [];
+        intentContexts[Intent.LEVEL_SPAWN_CARAVAN] = [];
 
 
         ignoreTutorialCheck.set(Intent.MAIN_WELCOME, true);
