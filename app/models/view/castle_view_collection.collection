@@ -29,7 +29,7 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/images/game/game.atlas\\\"\\n"
-  "default_animation: \\\"castle_1\\\"\\n"
+  "default_animation: \\\"castle_player\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
@@ -48,7 +48,7 @@ embedded_instances {
   ""
   position {
     x: 0.0
-    y: 80.5
+    y: 100.0
     z: 0.0
   }
   rotation {
@@ -58,8 +58,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 1.0
-    y: 1.0
+    x: 0.5
+    y: 0.5
     z: 1.0
   }
 }
@@ -70,7 +70,7 @@ embedded_instances {
   data: ""
   position {
     x: 89.0
-    y: 15.0
+    y: 31.0
     z: 0.0
   }
   rotation {
@@ -92,7 +92,7 @@ embedded_instances {
   data: ""
   position {
     x: 4.0
-    y: 15.0
+    y: 31.0
     z: 0.0
   }
   rotation {

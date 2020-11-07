@@ -46,12 +46,20 @@ function View:update(dt)
 
 end
 
+function View:road_pos_to_pos(road_pos)
+    road_pos = vmath.vector3(road_pos)
+    road_pos.x = road_pos.x - 20
+    road_pos.y = road_pos.y + 16
+    road_pos.z = -0.7
+    return road_pos
+end
+
 function View:road_move(road)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local roadIdx = math.ceil(road.x / 7)
     local roadPartIdx = road.x - (roadIdx) * 7
-    self.pos = self.world:road_idx_to_position(roadIdx, roadPartIdx)
-    self.pos.z = -0.7
+    self.pos = self:road_pos_to_pos(self.world:road_idx_to_position(roadIdx, roadPartIdx))
+
     go.set_position(self.pos, self.vh.root)
     ctx:remove()
 end
@@ -79,8 +87,7 @@ function View:animation_move(road)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local roadIdx = math.ceil(road.x / 7)
     local roadPartIdx = road.x - (roadIdx) * 7
-    local new_pos = self.world:road_idx_to_position(roadIdx, roadPartIdx)
-    new_pos.z = -0.7
+    local new_pos = self:road_pos_to_pos(self.world:road_idx_to_position(roadIdx, roadPartIdx))
     local pos = self.pos
   --  self.pos = new_pos
     local action = ACTIONS.Sequence()
