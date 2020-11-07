@@ -147,15 +147,18 @@ class LevelModel {
 
     @:nullSafety(Off)
     public function spawnCaravan(level:Int) {
-        var caravan = {
-            roadPartIdx:getUnloadPos().idx,
-            ownerId:0,
-            id: ds.level.caravans.length,
-            resources:0,
-            resourceLvl:level
+        if (ds.level.caravans.length < UnitConfig.caravanCount) {
+            var caravan = {
+                roadPartIdx:getUnloadPos().idx,
+                ownerId:0,
+                id: ds.level.caravans.length,
+                resources:0,
+                resourceLvl:level
+            }
+            ds.level.caravans.push(caravan);
+            var model = new ResourceUnitModel(caravan, world);
+            addCaravan(model);
         }
-        ds.level.caravans.push(caravan);
-        var model = new ResourceUnitModel(caravan, world);
 
     }
 
