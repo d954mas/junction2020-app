@@ -113,6 +113,10 @@ class IntentProcessor {
                 return getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.MAIN_FALLBACK:
                 ask(i18n.tr("conv/fallback"));
+                if(world.storageGet().level!=null){
+                  //  world.levelModel.levelNextCastle();
+                }
+
                 return getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.IAP_BUY:
                 if (data == null) {throw "no data";}

@@ -133,6 +133,7 @@ __shared_base_event_EventHelper = _hx_e()
 __shared_base_model_WorldBaseModel = _hx_e()
 __shared_base_struct_ContextStruct = _hx_e()
 __shared_base_utils_GameUtils = _hx_e()
+__shared_base_utils_MathUtils = _hx_e()
 __shared_base_utils_SpeechBuilder = _hx_e()
 __shared_base_utils_SpeechBuilderSber = _hx_e()
 __shared_project_analytics_AnalyticsHelper = _hx_e()
@@ -161,6 +162,7 @@ __shared_project_intent_processors_IntentLevelProcessor = _hx_e()
 __shared_project_intent_processors_IntentModalProcessor = _hx_e()
 __shared_project_intent_processors_IntentProcessor = _hx_e()
 __shared_project_intent_processors_IntentTutorialProcessor = _hx_e()
+__shared_project_model_IBattleUnit = _hx_e()
 __shared_project_model_LevelModel = _hx_e()
 __shared_project_model_PlayerModel = _hx_e()
 __shared_project_model_Restrictions = _hx_e()
@@ -761,6 +763,13 @@ Math.isFinite = function(f)
     do return f < _G.math.huge end;
   else
     do return false end;
+  end;
+end
+Math.max = function(a,b) 
+  if (Math.isNaN(a) or Math.isNaN(b)) then 
+    do return (0/0) end;
+  else
+    do return _G.math.max(a, b) end;
   end;
 end
 Math.min = function(a,b) 
@@ -2238,6 +2247,27 @@ __haxe_ds_List.prototype.add = function(self,item)
   end;
   self.q = x;
   self.length = self.length + 1;
+end
+__haxe_ds_List.prototype.remove = function(self,v) 
+  local prev = nil;
+  local l = self.h;
+  while (l ~= nil) do 
+    if (l.item == v) then 
+      if (prev == nil) then 
+        self.h = l.next;
+      else
+        prev.next = l.next;
+      end;
+      if (self.q == l) then 
+        self.q = prev;
+      end;
+      self.length = self.length - 1;
+      do return true end;
+    end;
+    prev = l;
+    l = l.next;
+  end;
+  do return false end
 end
 __haxe_ds_List.prototype.iterator = function(self) 
   do return __haxe_ds__List_ListIterator.new(self.h) end
@@ -5264,6 +5294,12 @@ __shared_base_utils_GameUtils.getSpeechBuilder = function(world)
   end;
 end
 
+__shared_base_utils_MathUtils.new = {}
+__shared_base_utils_MathUtils.__name__ = true
+__shared_base_utils_MathUtils.clamp = function(value,min,max) 
+  do return Math.min(Math.max(min, value), max) end;
+end
+
 __shared_base_utils_SpeechBuilder.new = function() 
   local self = _hx_new(__shared_base_utils_SpeechBuilder.prototype)
   __shared_base_utils_SpeechBuilder.super(self)
@@ -6054,10 +6090,13 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     if (data.iapKey == nil) then 
       _G.error("no iap key",0);
     end;
-    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=121,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=125,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.fallback" then 
     self:ask(self.i18n:tr("conv/fallback"));
+    if (self.world:storageGet().level ~= nil) then 
+      self.world.levelModel:levelNextCastle();
+    end;
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.keep_working" then 
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
@@ -6086,6 +6125,15 @@ end
 __shared_project_intent_processors_IntentTutorialProcessor.prototype.__class__ =  __shared_project_intent_processors_IntentTutorialProcessor
 __shared_project_intent_processors_IntentTutorialProcessor.__super__ = __shared_project_intent_processors_IntentSubProcessor
 setmetatable(__shared_project_intent_processors_IntentTutorialProcessor.prototype,{__index=__shared_project_intent_processors_IntentSubProcessor.prototype})
+
+__shared_project_model_IBattleUnit.new = {}
+__shared_project_model_IBattleUnit.__name__ = true
+__shared_project_model_IBattleUnit.prototype = _hx_a();
+__shared_project_model_IBattleUnit.prototype.takeDamage= nil;
+__shared_project_model_IBattleUnit.prototype.getPos= nil;
+__shared_project_model_IBattleUnit.prototype.getOwnerId= nil;
+
+__shared_project_model_IBattleUnit.prototype.__class__ =  __shared_project_model_IBattleUnit
 
 __shared_project_model_LevelModel.new = function(world) 
   local self = _hx_new(__shared_project_model_LevelModel.prototype)
@@ -6143,12 +6191,67 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
   while (_g_head ~= nil) do 
     local val = _g_head.item;
     _g_head = _g_head.next;
-    Lambda.filter(self.battleUnitModels, (function(attacker) 
+    local attacker = _hx_tab_array({[0]=val}, 1);
+    local canAttack = Lambda.filter(self.battleUnitModels, (function(attacker1) 
       do return function(v) 
-        do return attacker[0]:canAttack(v) end;
+        do return attacker1[0]:canAttack(v) end;
       end end;
-    end)(_hx_tab_array({[0]=val}, 1)));
+    end)(attacker));
+    if (canAttack.length == 0) then 
+      if (attacker[0]:canMove()) then 
+        local newPos;
+        if (attacker[0]:getOwnerId() > 0) then 
+          newPos = self:unitNewPosition(attacker[0]);
+          attacker[0]:move(newPos);
+        end;
+      end;
+    else
+      local defender = canAttack[0];
+      attacker[0]:attack(defender);
+      if (defender:canAttack(attacker[0])) then 
+        defender:attack(attacker[0]);
+      end;
+      if (not defender:isAlive()) then 
+        self.battleUnitModels:remove(defender);
+      end;
+      if (not attacker[0]:isAlive()) then 
+        self.battleUnitModels:remove(attacker[0]);
+      end;
+    end;
   end;
+  self:removeDeadUnits();
+end
+__shared_project_model_LevelModel.prototype.removeDeadUnits = function(self) 
+  local dead = Lambda.filter(self.ds.level.units, function(u) 
+    do return u.hp == 0 end;
+  end);
+  local _g = 0;
+  while (_g < dead.length) do 
+    local unit = dead[_g];
+    _g = _g + 1;
+    self.ds.level.units:remove(unit);
+  end;
+end
+__shared_project_model_LevelModel.prototype.unitNewPosition = function(self,unit) 
+  local road = self:roadByRoadPart(unit:getPos());
+  if (unit:getOwnerId() > 0) then 
+    do return road[road:indexOf(unit:getPos()) - 1] end;
+  end;
+  do return road[road:indexOf(unit:getPos()) + 1] end
+end
+__shared_project_model_LevelModel.prototype.roadByRoadPart = function(self,part) 
+  if (self.ds.level ~= nil) then 
+    local _g = 0;
+    local _g1 = self.ds.level.roads;
+    while (_g < _g1.length) do 
+      local road = _g1[_g];
+      _g = _g + 1;
+      if (road:indexOf(part) ~= -1) then 
+        do return road end;
+      end;
+    end;
+  end;
+  _G.error("Part doesnt belong to any road",0);
 end
 __shared_project_model_LevelModel.prototype.levelNextTurnCaravans = function(self) 
 end
@@ -6177,17 +6280,21 @@ __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self)
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   local roadResToPlayer = Array.new();
-  roadResToPlayer:push(self:createRoadPart(0, 0, "BASE"));
+  roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
   roadResToPlayer:push(self:createRoadPart(1, 0, "BASE"));
   roadResToPlayer:push(self:createRoadPart(2, 0, "BASE"));
   roadResToPlayer:push(self:createRoadPart(3, 0, "BASE"));
   roadResToPlayer:push(self:createRoadPart(4, 0, "BASE"));
+  roadResToPlayer:push(self:createRoadPart(5, 0, "BASE"));
+  roadResToPlayer:push(self:createRoadPart(6, 0, "CASTLE"));
   local roadPlayerToEnemy = Array.new();
-  roadPlayerToEnemy:push(self:createRoadPart(5, 0, "BASE"));
-  roadPlayerToEnemy:push(self:createRoadPart(6, 0, "BASE"));
-  roadPlayerToEnemy:push(self:createRoadPart(7, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(7, 0, "CASTLE"));
   roadPlayerToEnemy:push(self:createRoadPart(8, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(9, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(10, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(11, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(12, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(13, 0, "CASTLE"));
   level.roads:push(roadResToPlayer);
   level.roads:push(roadPlayerToEnemy);
   do return level end
@@ -6210,11 +6317,13 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   local startX = lastRoad[lastRoad.length - 1].x;
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   local roadPlayerToEnemy = Array.new();
-  roadPlayerToEnemy:push(self:createRoadPart(startX + 1, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 1, 0, "CASTLE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 2, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 3, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 4, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 5, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 6, 0, "BASE"));
+  roadPlayerToEnemy:push(self:createRoadPart(startX + 7, 0, "CASTLE"));
   level.roads:push(roadPlayerToEnemy);
   __shared_base_event_EventHelper.levelMoveToNext(self.world);
 end
@@ -6554,17 +6663,48 @@ __shared_project_model_units_BattleUnitModel.super = function(self,struct)
   self.struct = struct;
 end
 __shared_project_model_units_BattleUnitModel.__name__ = true
+__shared_project_model_units_BattleUnitModel.__interfaces__ = {__shared_project_model_IBattleUnit}
 __shared_project_model_units_BattleUnitModel.prototype = _hx_a();
 __shared_project_model_units_BattleUnitModel.prototype.struct= nil;
 __shared_project_model_units_BattleUnitModel.prototype.canAttack = function(self,enemy) 
   if (self:calculateDistance(enemy) <= self.struct.attackRange) then 
-    do return self.struct.ownerId ~= enemy.struct.ownerId end;
+    do return self:getOwnerId() ~= enemy:getOwnerId() end;
   else
     do return false end;
   end;
 end
+__shared_project_model_units_BattleUnitModel.prototype.attack = function(self,enemy) 
+  if (self:canAttack(enemy)) then 
+    enemy:takeDamage(self:calcDamage(enemy));
+  end;
+end
+__shared_project_model_units_BattleUnitModel.prototype.calcDamage = function(self,enemy) 
+  do return self:getScales().attackByLevel[self.struct.attackLvl - 1] end
+end
 __shared_project_model_units_BattleUnitModel.prototype.calculateDistance = function(self,other) 
-  do return _G.math.floor(_G.math.abs(self.struct.roadPart.x - other.struct.roadPart.x) + 0.5) + _G.math.floor(_G.math.abs(self.struct.roadPart.y - self.struct.roadPart.y) + 0.5) end
+  do return _G.math.floor(_G.math.abs(self:getPos().x - other:getPos().x) + 0.5) + _G.math.floor(_G.math.abs(self:getPos().y - other:getPos().y) + 0.5) end
+end
+__shared_project_model_units_BattleUnitModel.prototype.takeDamage = function(self,amount) 
+  local tmp = _G.math.floor(__shared_base_utils_MathUtils.clamp(self.struct.hp - amount, 0, self.struct.hp) + 0.5);
+  self.struct.hp = tmp;
+end
+__shared_project_model_units_BattleUnitModel.prototype.isAlive = function(self) 
+  do return self.struct.hp > 0 end
+end
+__shared_project_model_units_BattleUnitModel.prototype.getScales = function(self) 
+  do return __shared_project_configs_UnitConfig.scalesByUnitType:get(self.struct.type) end
+end
+__shared_project_model_units_BattleUnitModel.prototype.getPos = function(self) 
+  do return self.struct.roadPart end
+end
+__shared_project_model_units_BattleUnitModel.prototype.canMove = function(self) 
+  do return true end
+end
+__shared_project_model_units_BattleUnitModel.prototype.move = function(self,newPos) 
+  self.struct.roadPart = newPos;
+end
+__shared_project_model_units_BattleUnitModel.prototype.getOwnerId = function(self) 
+  do return self.struct.ownerId end
 end
 
 __shared_project_model_units_BattleUnitModel.prototype.__class__ =  __shared_project_model_units_BattleUnitModel
@@ -7103,6 +7243,19 @@ local _hx_static_init = function()
   __shared_project_configs_GameConfig.PLATFORM = "google";
   
   __shared_project_configs_GameConfig.MAX_MANA = 100;
+  
+  __shared_project_configs_UnitConfig.scalesByUnitType = (function() 
+    local _hx_2
+    
+    local _g = __haxe_ds_StringMap.new();
+    
+    _g:set("ARCHER", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=2, 4, 6, 8, 10}, 5),attackRange=3,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
+    
+    _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=4, 8, 12, 16, 20}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
+    
+    _hx_2 = _g;
+    return _hx_2
+  end )();
   
   __shared_project_enums_Intents.intentContexts = __haxe_ds_StringMap.new();
   

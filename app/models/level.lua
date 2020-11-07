@@ -54,7 +54,7 @@ function Level:move_to_next()
     self.world.thread_sequence:add_action(function ()
         local next_castle_id = #self.views.castles
         table.insert(self.views.castles, CastleView(next_castle_id,self.world))
-        table.insert(self.views.roads, RoadView(next_castle_id-1))
+        table.insert(self.views.roads, RoadView(next_castle_id-1,self.world))
         local max_time = 1
         local time = 1
         local current_y = CAMERAS.battle_camera.wpos.y

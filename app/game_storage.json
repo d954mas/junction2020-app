@@ -1,9 +1,9 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1604704922451.7,
+          "time": 1604717976762.8,
           "clientDeltaTime": 0,
-          "serverLastTime": 1604704922451.7
+          "serverLastTime": 1604717976762.8
      },
      "version": {
           "server": "dev",
@@ -26,7 +26,7 @@
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 62,
+          "intentIdx": 80,
           "gameBackendVersion": "",
           "gameSharedVersion": "",
           "device": "sberbox",
@@ -54,7 +54,7 @@
           "roads": [
                [
                     {
-                         "type": "BASE",
+                         "type": "CASTLE",
                          "x": 0,
                          "idx": 0,
                          "y": 0
@@ -82,9 +82,7 @@
                          "x": 4,
                          "idx": 4000,
                          "y": 0
-                    }
-               ],
-               [
+                    },
                     {
                          "type": "BASE",
                          "x": 5,
@@ -92,13 +90,15 @@
                          "y": 0
                     },
                     {
-                         "type": "BASE",
+                         "type": "CASTLE",
                          "x": 6,
                          "idx": 6000,
                          "y": 0
-                    },
+                    }
+               ],
+               [
                     {
-                         "type": "BASE",
+                         "type": "CASTLE",
                          "x": 7,
                          "idx": 7000,
                          "y": 0
@@ -113,6 +113,30 @@
                          "type": "BASE",
                          "x": 9,
                          "idx": 9000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 10,
+                         "idx": 10000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 11,
+                         "idx": 11000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 12,
+                         "idx": 12000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 13,
+                         "idx": 13000,
                          "y": 0
                     }
                ]

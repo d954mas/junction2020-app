@@ -158,19 +158,23 @@ class LevelModel {
 
         var roadResToPlayer:Array<LevelRoadPart> = new Array<LevelRoadPart>();
 
-        roadResToPlayer.push(createRoadPart(0, 0, RoadType.BASE));
+        roadResToPlayer.push(createRoadPart(0, 0, RoadType.CASTLE));
         roadResToPlayer.push(createRoadPart(1, 0, RoadType.BASE));
         roadResToPlayer.push(createRoadPart(2, 0, RoadType.BASE));
         roadResToPlayer.push(createRoadPart(3, 0, RoadType.BASE));
         roadResToPlayer.push(createRoadPart(4, 0, RoadType.BASE));
+        roadResToPlayer.push(createRoadPart(5, 0, RoadType.BASE));
+        roadResToPlayer.push(createRoadPart(6, 0, RoadType.CASTLE));
 
         var roadPlayerToEnemy:Array<LevelRoadPart> = new Array<LevelRoadPart>();
 
-        roadPlayerToEnemy.push(createRoadPart(5, 0, RoadType.BASE));
-        roadPlayerToEnemy.push(createRoadPart(6, 0, RoadType.BASE));
-        roadPlayerToEnemy.push(createRoadPart(7, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(7, 0, RoadType.CASTLE));
         roadPlayerToEnemy.push(createRoadPart(8, 0, RoadType.BASE));
         roadPlayerToEnemy.push(createRoadPart(9, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(10, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(11, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(12, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(13, 0, RoadType.CASTLE));
 
         level.roads.push(roadResToPlayer);
         level.roads.push(roadPlayerToEnemy);
@@ -201,11 +205,13 @@ class LevelModel {
         level.castles.push({idx:level.castles.length}); //enemy_castle
 
         var roadPlayerToEnemy:Array<LevelRoadPart> = new Array<LevelRoadPart>();
-        roadPlayerToEnemy.push(createRoadPart(startX + 1, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(startX + 1, 0, RoadType.CASTLE));
         roadPlayerToEnemy.push(createRoadPart(startX + 2, 0, RoadType.BASE));
         roadPlayerToEnemy.push(createRoadPart(startX + 3, 0, RoadType.BASE));
         roadPlayerToEnemy.push(createRoadPart(startX + 4, 0, RoadType.BASE));
         roadPlayerToEnemy.push(createRoadPart(startX + 5, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(startX + 6, 0, RoadType.BASE));
+        roadPlayerToEnemy.push(createRoadPart(startX + 7, 0, RoadType.CASTLE));
 
         level.roads.push(roadPlayerToEnemy);
 
