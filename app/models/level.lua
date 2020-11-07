@@ -45,6 +45,7 @@ function Level:animation_turn_start()
         spawn = ACTIONS.Parallel(),
         attack = ACTIONS.Parallel(),
         take_damage = ACTIONS.Parallel(),
+        castle_change = ACTIONS.Parallel(),
     }
     while (self.animation_sequence.current ~= nil) do
         self.animation_sequence:update(0.33)
@@ -61,6 +62,7 @@ function Level:animation_turn_end()
             threads.take_damage,
             threads.die,
             threads.dieMoveToNextCastle,
+            threads.castle_change,
         }
         while (#orders> 0) do
             local dt = coroutine.yield()
@@ -176,6 +178,11 @@ function Level:units_die_unit_move_to_next_castle(id)
         COMMON.w("no unit view for die.Is it castle?", "LEVEL")
     end
     -- end)
+end
+
+function Level:castle_enemy_destroy()
+    local castle_view = self.views.castles[#self.views.castles]
+    self.threads.castle_change:add_action(castle_view:animate_castle_change())
 end
 
 function Level:move_to_next()

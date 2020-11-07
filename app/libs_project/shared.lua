@@ -5404,6 +5404,9 @@ end
 __shared_base_event_EventHelper.levelRestart = function(world) 
   world:eventEmit("LEVEL_RESTART");
 end
+__shared_base_event_EventHelper.levelCastleEnemyDestroy = function(world) 
+  world:eventEmit("LEVEL_CASTLE_ENEMY_DESTROY");
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -6829,6 +6832,7 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   persistCastleUnits:push(newUnit:getStruct());
   level.units = Array.new();
   level.units = level.units:concat(persistCastleUnits);
+  __shared_base_event_EventHelper.levelCastleEnemyDestroy(self.world);
   __shared_base_event_EventHelper.levelMoveToNext(self.world);
 end
 __shared_project_model_LevelModel.prototype.castlesGetByIdx = function(self,idx) 

@@ -1,8 +1,8 @@
 {
      "timers": {
-          "serverLastTime": 1604772063158.4,
-          "time": 1604772063158.4,
           "clientDeltaTime": 0,
+          "time": 1604773316260.7,
+          "serverLastTime": 1604773316260.7,
           "timerDelta": 0
      },
      "version": {
@@ -15,12 +15,10 @@
      },
      "user": {
           "verification": "",
-          "name": "name",
           "locale": "en",
+          "name": "name",
           "permisions":           {}
      },
-     "tutorials":      {},
-     "timerDelta": 0,
      "profile": {
           "currentVersion": 421,
           "tag": "",
@@ -32,12 +30,13 @@
           "firstLaunchTimestamp": 1604618196,
           "conversationIdAtStart": "1111"
      },
+     "timerDelta": 0,
      "stat": {
           "startGameCounter": 0,
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 2380,
+          "intentIdx": 2520,
           "gameBackendVersion": "",
           "gameConfigVersion": "",
           "userLevel": 1,
@@ -45,11 +44,6 @@
           "platform": "sber",
           "gameSharedVersion": ""
      },
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
      "level": {
           "player": {
                "unitLevels": {
@@ -57,11 +51,41 @@
                     "ARCHER": 1,
                     "KNIGHT": 1
                },
-               "mana": 20,
+               "mana": 75,
                "id": 0,
                "money": 20,
-               "unitQueue":                []
+               "unitQueue": [
+                    {
+                         "unitType": "KNIGHT",
+                         "ownerId": 0
+                    },
+                    {
+                         "unitType": "KNIGHT",
+                         "ownerId": 0
+                    },
+                    {
+                         "unitType": "KNIGHT",
+                         "ownerId": 0
+                    },
+                    {
+                         "unitType": "KNIGHT",
+                         "ownerId": 0
+                    },
+                    {
+                         "unitType": "KNIGHT",
+                         "ownerId": 0
+                    },
+                    {
+                         "unitType": "KNIGHT",
+                         "ownerId": 0
+                    },
+                    {
+                         "unitType": "KNIGHT",
+                         "ownerId": 0
+                    }
+               ]
           },
+          "unitIdx": 25,
           "lose": false,
           "units": [
                {
@@ -70,8 +94,8 @@
                     "hp": 50,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 0,
                     "reward": 0
                },
@@ -81,32 +105,71 @@
                     "hp": 50,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 23,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 14000,
+                    "attackLvl": 0,
                     "type": "CASTLE",
                     "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 0
                },
                {
-                    "id": 2,
+                    "id": 23,
                     "attackRange": 1,
                     "hp": 50,
-                    "roadPartIdx": 13000,
+                    "roadPartIdx": 14000,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 24,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 20000,
                     "attackLvl": 0,
                     "type": "CASTLE",
                     "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 0
+               }
+          ],
+          "turn": 15,
+          "enemy": {
+               "unitLevels": {
+                    "CASTLE": 1,
+                    "ARCHER": 1,
+                    "KNIGHT": 1
+               },
+               "id": 1,
+               "unitQueue":                []
+          },
+          "castles": [
+               {
+                    "unitId": 0,
+                    "idx": 0
                },
                {
-                    "id": 3,
-                    "attackRange": 1,
-                    "hp": 6,
-                    "roadPartIdx": 10000,
-                    "attackLvl": 1,
-                    "hpLvl": 1,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 2
+                    "unitId": 1,
+                    "idx": 1
+               },
+               {
+                    "unitId": 23,
+                    "idx": 2
+               },
+               {
+                    "unitId": 24,
+                    "idx": 3
                }
           ],
           "roads": [
@@ -197,32 +260,57 @@
                          "idx": 13000,
                          "y": 0
                     }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 14,
+                         "idx": 14000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 15,
+                         "idx": 15000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 16,
+                         "idx": 16000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 17,
+                         "idx": 17000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 18,
+                         "idx": 18000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 19,
+                         "idx": 19000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 20,
+                         "idx": 20000,
+                         "y": 0
+                    }
                ]
-          ],
-          "enemy": {
-               "unitLevels": {
-                    "CASTLE": 1,
-                    "ARCHER": 1,
-                    "KNIGHT": 1
-               },
-               "id": 1,
-               "unitQueue":                []
-          },
-          "turn": 4,
-          "castles": [
-               {
-                    "unitId": 0,
-                    "idx": 0
-               },
-               {
-                    "unitId": 1,
-                    "idx": 1
-               },
-               {
-                    "unitId": 2,
-                    "idx": 2
-               }
-          ],
-          "unitIdx": 5
-     }
+          ]
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "tutorials":      {}
 }
