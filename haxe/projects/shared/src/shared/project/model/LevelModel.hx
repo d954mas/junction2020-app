@@ -108,7 +108,6 @@ class LevelModel {
             reward:scales.rewardByLevel[unitLevel]
         }
         level.unitIdx++;
-
         //ADD CHECK THAT NO UNITS IN SPAWN POINT
 
         var road = level.roads[level.roads.length - 1];
@@ -118,7 +117,7 @@ class LevelModel {
         } else { //ENEMY
             unit.roadPartIdx = road[road.length - 1].idx;
         }
-
+        var isPartFree = Lambda.count(level.units)
         level.units.push(unit);
         addUnit(new BattleUnitModel(unit, world));
     }
@@ -145,8 +144,8 @@ class LevelModel {
         for (attacker in battleUnitModels) {
             var canAttack = Lambda.filter(battleUnitModels, function(v) {return attacker.canAttack(v);});
             haxe.ds.ArraySort.sort(canAttack, function(a, b) {
-                if (!a.canMove() && b.canMove()) return -1;
-                else if (a.canMove() && !b.canMove()) return 1;
+                if (a.canMove() && !b.canMove()) return -1;
+                else if (!a.canMove() && b.canMove()) return 1;
                 else return 0;
             });
             if (canAttack.length == 0) {
