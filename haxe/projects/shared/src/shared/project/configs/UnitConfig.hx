@@ -22,7 +22,7 @@ class UnitConfig {
         rewardByLevel: [1, 2, 3, 4, 5]
     },
         UnitType.CASTLE => {
-        hpByLevel: [1, 100, 150, 200, 250],
+        hpByLevel: [50, 100, 150, 200, 250],
         attackByLevel: [1, 2, 3, 4, 5],
         attackRange: 1,
         rewardByLevel: [0, 0, 0, 0, 0]
