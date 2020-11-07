@@ -1,4 +1,5 @@
 package shared.project.model.units;
+import shared.base.event.ModelEventName.EventHelper;
 import shared.project.storage.Storage.LevelRoadPart;
 import shared.project.configs.UnitConfig;
 
@@ -8,6 +9,7 @@ import shared.project.storage.Storage.BattleUnitStruct;
 class BattleUnitModel implements IBattleUnit {
     private var struct:BattleUnitStruct;
     private var world:World;
+
     public function canAttack(enemy:IBattleUnit):Bool {
         return calculateDistance(enemy) <= struct.attackRange && (getOwnerId() != enemy.getOwnerId());
     }
@@ -24,7 +26,7 @@ class BattleUnitModel implements IBattleUnit {
         return baseDmg;
     }
 
-    public function new(struct:BattleUnitStruct,world:World) {
+    public function new(struct:BattleUnitStruct, world:World) {
         this.struct = struct;
         this.world = world;
     }
@@ -64,11 +66,13 @@ class BattleUnitModel implements IBattleUnit {
 
     public function move(roadPartIdx:Int):Void {
         struct.roadPartIdx = roadPartIdx;
+        EventHelper.levelUnitMove(world,getId(), roadPartIdx);
     }
 
     public function getOwnerId() {
         return struct.ownerId;
     }
+
     public function getId() {
         return struct.id;
     }

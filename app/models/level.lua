@@ -56,7 +56,20 @@ end
 function Level:units_spawn_unit(id)
     self.world.thread_sequence:add_action(function()
         local unit_view = UnitView(id, self.world)
-        table.insert(self.views, unit_view)
+        table.insert(self.views.units, unit_view)
+    end)
+end
+
+function Level:units_view_by_id(id)
+    for _, view in ipairs(self.views.units)do
+        if(view.unit_id == id) then return view end
+    end
+end
+
+function Level:units_move_unit(id,roadId)
+    self.world.thread_sequence:add_action(function()
+        local unit_view = self:units_view_by_id(id)
+        unit_view:road_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
     end)
 end
 

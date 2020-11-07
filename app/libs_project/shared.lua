@@ -5212,6 +5212,9 @@ end
 __shared_base_event_EventHelper.levelUnitSpawn = function(world,id) 
   world:eventEmit("LEVEL_UNIT_SPAWN", _hx_o({__fields__={id=true},id=id}));
 end
+__shared_base_event_EventHelper.levelUnitMove = function(world,id,roadId) 
+  world:eventEmit("LEVEL_UNIT_MOVE", _hx_o({__fields__={id=true,roadId=true},id=id,roadId=roadId}));
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -5855,6 +5858,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("webapp.load_done", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("actions.iap.buy", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.spawn.unit", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("level.turn.skip", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("debug.toggle", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.enable", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.disable", _hx_tab_array({[0]="dev"}, 1));
@@ -5866,6 +5870,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("tutorial.yes", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.spawn.unit", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("level.turn.skip", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("debug.toggle", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.disable", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("cheats.enable", true);
@@ -5980,7 +5985,7 @@ end
 __shared_project_intent_processors_IntentLevelProcessor.__name__ = true
 __shared_project_intent_processors_IntentLevelProcessor.prototype = _hx_a();
 __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent = function(self,intent,data) 
-  if (intent == "level.spawn.unit") then 
+  if (intent) == "level.spawn.unit" then 
     if (data == nil) then 
       _G.error("LEVEL_SPAWN_UNIT no data",0);
     end;
@@ -5993,9 +5998,11 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     end;
     self.world.levelModel.playerModel:unitsSpawnUnit(unitType);
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
-  else
-    do return nil end;
-  end;
+  elseif (intent) == "level.turn.skip" then 
+    self:ask("skip");
+    self.world.levelModel:levelNextTurn();
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;else
+  do return nil end; end;
 end
 
 __shared_project_intent_processors_IntentLevelProcessor.prototype.__class__ =  __shared_project_intent_processors_IntentLevelProcessor
@@ -6229,11 +6236,8 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
     end)(attacker));
     if (canAttack.length == 0) then 
       if (attacker[0]:canMove()) then 
-        local newPos;
-        if (attacker[0]:getOwnerId() > 0) then 
-          newPos = self:unitNewPosition(attacker[0]);
-          attacker[0]:move(newPos.idx);
-        end;
+        local newPos = self:unitNewPosition(attacker[0]);
+        attacker[0]:move(newPos.idx);
       end;
     else
       local defender = canAttack[0];
@@ -6265,9 +6269,17 @@ end
 __shared_project_model_LevelModel.prototype.unitNewPosition = function(self,unit) 
   local road = self:roadByRoadPart(unit:getPos());
   if (unit:getOwnerId() > 0) then 
-    do return road[road:indexOf(unit:getPos()) - 1] end;
+    local id = road:indexOf(unit:getPos()) - 1;
+    if (id < 0) then 
+      id = 0;
+    end;
+    do return road[id] end;
   end;
-  do return road[road:indexOf(unit:getPos()) + 1] end
+  local id1 = road:indexOf(unit:getPos()) + 1;
+  if (id1 >= road.length) then 
+    id1 = road.length - 1;
+  end;
+  do return road[id1] end
 end
 __shared_project_model_LevelModel.prototype.roadByRoadPart = function(self,part) 
   if (self.ds.level ~= nil) then 
@@ -6387,7 +6399,7 @@ __shared_project_model_LevelModel.prototype.roadsFindPartById = function(self,id
   if (level == nil) then 
     _G.error("no level model roadsFindPartById",0);
   end;
-  local road = self:roadsGetByIdx(_G.math.floor(_G.math.floor(id / 10) / 7));
+  local road = self:roadsGetByIdx(_G.math.floor(_G.math.floor(id / 1000) / 7));
   local _g = 0;
   while (_g < road.length) do 
     local roadPart = road[_g];
@@ -6777,6 +6789,7 @@ __shared_project_model_units_BattleUnitModel.prototype.canMove = function(self)
 end
 __shared_project_model_units_BattleUnitModel.prototype.move = function(self,roadPartIdx) 
   self.struct.roadPartIdx = roadPartIdx;
+  __shared_base_event_EventHelper.levelUnitMove(self.world, self:getId(), roadPartIdx);
 end
 __shared_project_model_units_BattleUnitModel.prototype.getOwnerId = function(self) 
   do return self.struct.ownerId end

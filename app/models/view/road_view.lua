@@ -2,9 +2,9 @@ local COMMON = require "libs.common"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 
 local FACTORY_URL = msg.url("main_scene:/factories#road_part_factory")
-local FACTORY_CASTLE_PART = {
-    ROOT = hash("root"),
-    ROAD = hash("road")
+local FACTORY_PART = {
+    ROOT = hash("/root"),
+    ROAD = hash("/road")
 }
 
 ---@class RoadPartView
@@ -27,8 +27,8 @@ function RoadPartView:bind_vh()
     self.road_pos = self.parent.world:road_idx_to_position(self.parent.roadIdx, self.idx)
     local parts = collectionfactory.create(FACTORY_URL, self.road_pos)
     self.vh = {
-        root = parts[FACTORY_CASTLE_PART.ROOT],
-        road = parts[FACTORY_CASTLE_PART.ROAD],
+        root = assert(parts[FACTORY_PART.ROOT]),
+        road = assert(parts[FACTORY_PART.ROAD]),
         road_sprite = nil
     }
     ctx:remove()

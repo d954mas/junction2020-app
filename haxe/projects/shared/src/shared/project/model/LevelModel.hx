@@ -101,10 +101,10 @@ class LevelModel {
             if (canAttack.length == 0) {
                 if (attacker.canMove()) {
                     var newPos:LevelRoadPart;
-                    if (attacker.getOwnerId() > 0) {
+                    //if (attacker.getOwnerId() > 0) { //Не понял и закомментировал. Почему ходит только враг
                         newPos = unitNewPosition(attacker);
                         attacker.move(newPos.idx);
-                    }
+                   // }
                 }
             } else {
                 var defender = canAttack[0];
@@ -136,9 +136,13 @@ class LevelModel {
         if (unit.getOwnerId() > 0) {
             //change behavior if enemies can go off the roadPlayerToEnemy, current behavior
             //might cause IndexOutOfBoundsException
-            return road[road.indexOf(unit.getPos()) - 1];
+            var id = road.indexOf(unit.getPos()) - 1;
+            if(id<0){id = 0;}
+            return road[id];
         }
-        return road[road.indexOf(unit.getPos()) + 1];
+        var id = road.indexOf(unit.getPos()) + 1;
+        if(id>=road.length){id = road.length-1;}
+        return road[id];
     }
 
     private function roadByRoadPart(part:LevelRoadPart) {
@@ -282,7 +286,7 @@ class LevelModel {
     public function roadsFindPartById(id):LevelRoadPart {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model roadsFindPartById";}
-        var roadX = Math.floor(id / 10);
+        var roadX = Math.floor(id / 1000);
         var roadIdx = Math.floor(roadX / 7);
         var road = roadsGetByIdx(roadIdx);
         for (roadPart in road) {

@@ -15,6 +15,7 @@ function Script:bind_vh()
     self.views = {
         mana_panel = ManaPanel("mana_panel", WORLD),
         money_panel = MoneyPanel("money_panel", WORLD),
+        btn_skip = GUI.ButtonIconTest("btn_skip"),
         btn_spawn_knight = GUI.ButtonIconTest("btn_spawn_knight"),
         btn_spawn_archer = GUI.ButtonIconTest("btn_spawn_archer"),
     }
@@ -40,6 +41,9 @@ function Script:init_gui()
 
     self.views.btn_spawn_knight:set_input_listener(function()
         interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
+    end)
+    self.views.btn_skip:set_input_listener(function()
+        interactive_canvas.send_text_query("level.turn.skip")
     end)
     self.views.btn_spawn_archer:set_input_listener(function()
         interactive_canvas.send_text_query("level.spawn.unit ARCHER")
@@ -67,6 +71,7 @@ end
 function Script:on_input(action_id, action)
     self.views.btn_spawn_knight:on_input(action_id, action)
     self.views.btn_spawn_archer:on_input(action_id, action)
+    self.views.btn_skip:on_input(action_id, action)
 end
 
 COMMON.N28S.register(Script)

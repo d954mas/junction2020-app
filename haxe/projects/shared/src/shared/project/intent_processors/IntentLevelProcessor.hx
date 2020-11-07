@@ -18,6 +18,10 @@ class IntentLevelProcessor extends IntentSubProcessor {
                 if(unitType == null){throw "LEVEL_SPAWN_UNIT unknown unit";}
                 world.levelModel.playerModel.unitsSpawnUnit(unitType);
                 return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
+            case Intent.LEVEL_TURN_SKIP:
+                ask("skip");
+                world.levelModel.levelNextTurn();
+                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             default: return null;
         }
         throw "no return for intent:" + intent;

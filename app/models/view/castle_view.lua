@@ -3,8 +3,8 @@ local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 
 local FACTORY_URL = msg.url("main_scene:/factories#castle_factory")
 local FACTORY_CASTLE_PART = {
-    ROOT = hash("root"),
-    CASTLE = hash("castle")
+    ROOT = hash("/root"),
+    CASTLE = hash("/castle")
 }
 
 ---@class CastleView
@@ -31,8 +31,8 @@ function View:bind_vh()
     self.castle_pos = self.world:castle_idx_to_position(self.castleIdx)
     local parts = collectionfactory.create(FACTORY_URL,self.castle_pos)
     self.vh = {
-        root = parts[FACTORY_CASTLE_PART.ROOT],
-        castle = parts[FACTORY_CASTLE_PART.CASTLE],
+        root = assert(parts[FACTORY_CASTLE_PART.ROOT]),
+        castle = assert(parts[FACTORY_CASTLE_PART.CASTLE]),
         castle_sprite = nil
     }
     ctx:remove()

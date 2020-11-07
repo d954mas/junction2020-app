@@ -2,9 +2,9 @@ local COMMON = require "libs.common"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 
 local FACTORY_URL = msg.url("main_scene:/factories#unit_factory")
-local FACTORY_CASTLE_PART = {
-    ROOT = hash("root"),
-    UNIT = hash("unit")
+local FACTORY_PART = {
+    ROOT = hash("/root"),
+    UNIT = hash("/unit")
 }
 
 ---@class UnitView
@@ -27,18 +27,25 @@ function View:update(dt)
 
 end
 
-function View:bind_vh()
+function View:road_move(road)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-    local road = self.haxe_model:getPos()
     local roadIdx = math.ceil(road.x / 7)
     local roadPartIdx = road.x - (roadIdx)*7
     self.pos = self.world:road_idx_to_position(roadIdx,roadPartIdx)
     self.pos.z = -0.7
-    local parts = collectionfactory.create(FACTORY_URL,self.pos)
+    go.set_position(self.pos,self.vh.root)
+    ctx:remove()
+end
+
+function View:bind_vh()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local parts = collectionfactory.create(FACTORY_URL,vmath.vector3(0,0,0))
+    pprint(parts)
     self.vh = {
-        root = parts[FACTORY_CASTLE_PART.ROOT],
-        unit = parts[FACTORY_CASTLE_PART.UNIT],
+        root = assert(parts[FACTORY_PART.ROOT]),
+        unit = assert(parts[FACTORY_PART.UNIT]),
     }
+    self:road_move(self.haxe_model:getPos())
     ctx:remove()
 end
 

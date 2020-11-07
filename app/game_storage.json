@@ -1,8 +1,8 @@
 {
      "timers": {
-          "serverLastTime": 1604722396585.2,
-          "time": 1604722396585.2,
           "clientDeltaTime": 0,
+          "time": 1604724172963.9,
+          "serverLastTime": 1604724172963.9,
           "timerDelta": 0
      },
      "version": {
@@ -15,39 +15,14 @@
      },
      "user": {
           "verification": "",
-          "name": "name",
           "locale": "en",
+          "name": "name",
           "permisions":           {}
-     },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "cheatsEnabled": true,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
-          "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 2,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 141,
-          "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
-          "device": "sberbox",
-          "platform": "sber",
-          "gameSharedVersion": ""
      },
      "level": {
           "player": {
-               "mana": 100,
                "money": 20,
+               "mana": 15,
                "id": 0
           },
           "units": [
@@ -55,237 +30,12 @@
                     "id": 0,
                     "attackRange": 1,
                     "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 1,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
+                    "roadPartIdx": 3000,
                     "attackLvl": 0,
                     "type": "KNIGHT",
                     "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 1
-               },
-               {
-                    "id": 2,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 3,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 4,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 5,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 6,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 7,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 8,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 9,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 10,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 11,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 12,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 13,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 14,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 15,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 16,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 17,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 18,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 19,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               }
-          ],
-          "unitIdx": 20,
-          "turn": 20,
-          "enemy": {
-               "id": 1
-          },
-          "castles": [
-               {
-                    "idx": 0
-               },
-               {
-                    "idx": 1
-               },
-               {
-                    "idx": 2
                }
           ],
           "roads": [
@@ -377,12 +127,53 @@
                          "y": 0
                     }
                ]
-          ]
+          ],
+          "enemy": {
+               "id": 1
+          },
+          "turn": 3,
+          "castles": [
+               {
+                    "idx": 0
+               },
+               {
+                    "idx": 1
+               },
+               {
+                    "idx": 2
+               }
+          ],
+          "unitIdx": 1
      },
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
+          "cheatsEnabled": true,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdCurrent": "1111",
+          "isDev": true,
+          "firstLaunchTimestamp": 1604618196,
+          "conversationIdAtStart": "1111"
+     },
+     "tutorials":      {},
      "iap": {
           "current_iap": ""
      },
      "time": 1586967396797,
      "serverLastTime": 1586967396797,
-     "tutorials":      {}
+     "stat": {
+          "startGameCounter": 0,
+          "version": 2,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 279,
+          "gameBackendVersion": "",
+          "gameConfigVersion": "",
+          "userLevel": 1,
+          "device": "sberbox",
+          "platform": "sber",
+          "gameSharedVersion": ""
+     }
 }
