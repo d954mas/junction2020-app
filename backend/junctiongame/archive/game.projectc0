@@ -81,7 +81,7 @@ game_binding = /game.input_bindingc
 use_accelerometer = 0
 
 [sprite]
-max_count = 256
+max_count = 1024
 subpixels = 1
 
 [spine]
@@ -171,7 +171,7 @@ include_dirs =
 shared_state = 1
 
 [label]
-max_count = 8
+max_count = 256
 subpixels = 1
 
 [profiler]

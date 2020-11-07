@@ -1,8 +1,8 @@
 {
      "timers": {
           "clientDeltaTime": 0,
-          "time": 1604748487671.8,
-          "serverLastTime": 1604748487671.8,
+          "time": 1604751114324.6,
+          "serverLastTime": 1604751114324.6,
           "timerDelta": 0
      },
      "version": {
@@ -36,7 +36,7 @@
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 872,
+          "intentIdx": 930,
           "gameBackendVersion": "",
           "gameConfigVersion": "",
           "userLevel": 1,
@@ -46,7 +46,7 @@
      },
      "level": {
           "player": {
-               "mana": 100,
+               "mana": 30,
                "money": 20,
                "id": 0
           },
@@ -56,6 +56,17 @@
                     "attackRange": 1,
                     "hp": 50,
                     "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 1,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 7000,
                     "attackLvl": 0,
                     "type": "CASTLE",
                     "hpLvl": 0,
@@ -74,109 +85,54 @@
                     "reward": 0
                },
                {
+                    "id": 4,
+                    "attackRange": 1,
+                    "hp": 3,
+                    "roadPartIdx": 11000,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
                     "id": 6,
-                    "attackRange": 3,
-                    "hp": 1,
-                    "roadPartIdx": 7000,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 11000,
                     "attackLvl": 0,
                     "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 7,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 10000,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
                     "reward": 1
                },
                {
                     "id": 8,
-                    "attackRange": 3,
+                    "attackRange": 1,
                     "hp": 5,
-                    "roadPartIdx": 7000,
+                    "roadPartIdx": 9000,
                     "attackLvl": 0,
                     "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
                     "reward": 1
                },
                {
                     "id": 9,
-                    "attackRange": 1,
-                    "hp": 2,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 10,
                     "attackRange": 3,
                     "hp": 5,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 11,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 12,
-                    "attackRange": 3,
-                    "hp": 5,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 13,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 14,
-                    "attackRange": 3,
-                    "hp": 5,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 15,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 8000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 16,
-                    "attackRange": 3,
-                    "hp": 5,
-                    "roadPartIdx": 11000,
+                    "roadPartIdx": 13000,
                     "attackLvl": 0,
                     "hpLvl": 0,
                     "type": "ARCHER",
@@ -184,8 +140,8 @@
                     "reward": 1
                }
           ],
-          "unitIdx": 18,
-          "turn": 36,
+          "unitIdx": 10,
+          "turn": 6,
           "enemy": {
                "id": 1
           },

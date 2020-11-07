@@ -1,6 +1,7 @@
 local COMMON = require "libs.common"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local ACTIONS = require "libs.actions.actions"
+local TWEEN = require "libs.tween"
 
 local FACTORY_URL = msg.url("main_scene:/factories#unit_factory")
 local FACTORY_PART = {
@@ -54,6 +55,40 @@ function View:road_move(road)
     self.pos.z = -0.7
     go.set_position(self.pos, self.vh.root)
     ctx:remove()
+end
+
+function View:animation_spawn()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local action = ACTIONS.Sequence()
+    local actionHideParallel = ACTIONS.Parallel()
+    go.set( self.vh.sprite,"tint.w",0)
+    go.set( self.vh.attack_icon,"tint.w",0)
+    go.set( self.vh.hp_icon,"tint.w",0)
+    go.set( self.vh.hp_lbl,"tint.w",0)
+    go.set( self.vh.attack_lbl,"tint.w",0)
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.w", from = 0, to = 1, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.attack_icon, property = "tint.w", from = 0, to = 1, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.hp_icon, property = "tint.w", from = 0, to = 1, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.hp_lbl, property = "tint.w", from = 0, to = 1, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.attack_lbl, property = "tint.w", from = 0, to = 1, time = 0.6 })
+    action:add_action(actionHideParallel)
+    ctx:remove()
+    return action;
+end
+
+function View:animation_move(road)
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local roadIdx = math.ceil(road.x / 7)
+    local roadPartIdx = road.x - (roadIdx) * 7
+    local new_pos = self.world:road_idx_to_position(roadIdx, roadPartIdx)
+    new_pos.z = -0.7
+    local pos = self.pos
+    self.pos = new_pos
+    local action = ACTIONS.Sequence()
+    local movement = ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = pos, to = self.pos, time = 1 }
+    action:add_action(movement)
+    ctx:remove()
+    return action
 end
 
 function View:bind_vh()
