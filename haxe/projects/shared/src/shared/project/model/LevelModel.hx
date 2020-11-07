@@ -263,7 +263,9 @@ class LevelModel {
         level.roads.push(roadResToPlayer);
         level.roads.push(roadPlayerToEnemy);
 
-        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(0,0).getId()}); //resources_castle
+        var resourceUnit = unitsSpawnUnitCastle(0,0);
+        resourceUnit.getStruct().roadPartIdx = 0;
+        level.castles.push({idx:level.castles.length, unitId:resourceUnit.getId()}); //resources_castle
         level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(0,0).getId()});//player_castle
         level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(1,0).getId()}); //enemy_castle
 

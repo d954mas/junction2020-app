@@ -1,8 +1,8 @@
 {
      "timers": {
-          "serverLastTime": 1604745213593.8,
-          "time": 1604745213593.8,
           "clientDeltaTime": 0,
+          "time": 1604745600308.7,
+          "serverLastTime": 1604745600308.7,
           "timerDelta": 0
      },
      "version": {
@@ -15,50 +15,36 @@
      },
      "user": {
           "verification": "",
-          "locale": "en",
           "name": "name",
+          "locale": "en",
           "permisions":           {}
-     },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "cheatsEnabled": true,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
-          "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 2,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 546,
-          "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
-          "device": "sberbox",
-          "platform": "sber",
-          "gameSharedVersion": ""
      },
      "level": {
           "player": {
+               "mana": 60,
                "money": 20,
-               "mana": 100,
                "id": 0
           },
           "units": [
                {
+                    "id": 0,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
                     "id": 1,
                     "attackRange": 1,
-                    "hp": 30,
+                    "hp": 42,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
-                    "hpLvl": 0,
                     "type": "CASTLE",
+                    "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 0
                },
@@ -68,8 +54,8 @@
                     "hp": 50,
                     "roadPartIdx": 13000,
                     "attackLvl": 0,
-                    "hpLvl": 0,
                     "type": "CASTLE",
+                    "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 0
                },
@@ -79,7 +65,18 @@
                     "hp": 5,
                     "roadPartIdx": 10000,
                     "attackLvl": 0,
+                    "hpLvl": 0,
                     "type": "ARCHER",
+                    "ownerId": 1,
+                    "reward": 1
+               },
+               {
+                    "id": 6,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 8000,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
                     "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 1
@@ -88,45 +85,31 @@
                     "id": 7,
                     "attackRange": 3,
                     "hp": 5,
-                    "roadPartIdx": 10000,
-                    "attackLvl": 0,
-                    "type": "ARCHER",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 8,
-                    "attackRange": 1,
-                    "hp": 1,
-                    "roadPartIdx": 8000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 9,
-                    "attackRange": 3,
-                    "hp": 5,
-                    "roadPartIdx": 10000,
-                    "attackLvl": 0,
-                    "type": "ARCHER",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 1
-               },
-               {
-                    "id": 10,
-                    "attackRange": 1,
-                    "hp": 5,
                     "roadPartIdx": 11000,
                     "attackLvl": 0,
                     "hpLvl": 0,
-                    "type": "KNIGHT",
+                    "type": "ARCHER",
                     "ownerId": 1,
                     "reward": 1
+               }
+          ],
+          "unitIdx": 8,
+          "turn": 12,
+          "enemy": {
+               "id": 1
+          },
+          "castles": [
+               {
+                    "unitId": 0,
+                    "idx": 0
+               },
+               {
+                    "unitId": 1,
+                    "idx": 1
+               },
+               {
+                    "unitId": 2,
+                    "idx": 2
                }
           ],
           "roads": [
@@ -218,31 +201,37 @@
                          "y": 0
                     }
                ]
-          ],
-          "enemy": {
-               "id": 1
-          },
-          "turn": 21,
-          "castles": [
-               {
-                    "unitId": 0,
-                    "idx": 0
-               },
-               {
-                    "unitId": 1,
-                    "idx": 1
-               },
-               {
-                    "unitId": 2,
-                    "idx": 2
-               }
-          ],
-          "unitIdx": 11
+          ]
      },
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
+          "cheatsEnabled": true,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdCurrent": "1111",
+          "isDev": true,
+          "firstLaunchTimestamp": 1604618196,
+          "conversationIdAtStart": "1111"
+     },
+     "tutorials":      {},
      "iap": {
           "current_iap": ""
      },
      "time": 1586967396797,
      "serverLastTime": 1586967396797,
-     "tutorials":      {}
+     "stat": {
+          "startGameCounter": 0,
+          "version": 2,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 586,
+          "gameBackendVersion": "",
+          "gameConfigVersion": "",
+          "userLevel": 1,
+          "device": "sberbox",
+          "platform": "sber",
+          "gameSharedVersion": ""
+     }
 }

@@ -6421,7 +6421,9 @@ __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(13, 0, "CASTLE"));
   level.roads:push(roadResToPlayer);
   level.roads:push(roadPlayerToEnemy);
-  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(0, 0):getId()}));
+  local resourceUnit = self:unitsSpawnUnitCastle(0, 0);
+  resourceUnit:getStruct().roadPartIdx = 0;
+  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=resourceUnit:getId()}));
   level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(0, 0):getId()}));
   level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(1, 0):getId()}));
   do return level end
