@@ -6371,6 +6371,17 @@ __shared_project_model_LevelModel.prototype.roadsGetByIdx = function(self,idx)
   end;
   do return level.roads[idx] end
 end
+__shared_project_model_LevelModel.prototype.unitsGetUnitById = function(self,id) 
+  local _g_head = self.battleUnitModels.h;
+  while (_g_head ~= nil) do 
+    local val = _g_head.item;
+    _g_head = _g_head.next;
+    if (val:getId() == id) then 
+      do return val end;
+    end;
+  end;
+  do return nil end
+end
 __shared_project_model_LevelModel.prototype.roadsFindPartById = function(self,id) 
   local level = self.world:storageGet().level;
   if (level == nil) then 
@@ -6421,6 +6432,7 @@ __shared_project_model_PlayerModel.prototype.ds= nil;
 __shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType) 
   self.world.levelModel:unitsSpawnUnit(0, unitType, 0);
   self.world.speechBuilder:text(Std.string("spawn ") .. Std.string(unitType));
+  self.world.levelModel:levelNextTurn();
 end
 __shared_project_model_PlayerModel.prototype.modelRestore = function(self) 
 end

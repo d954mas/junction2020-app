@@ -120,6 +120,8 @@ function Processor:process_events(events, data)
             self.world:level_new()
         elseif event.name == "LEVEL_MOVE_TO_NEXT" then
             self.world.level_model:move_to_next()
+        elseif event.name == "LEVEL_UNIT_SPAWN" then
+            self.world.level_model:units_spawn_unit(assert(event.data.id))
         end
     end
 end

@@ -8,62 +8,65 @@ local GUI = require "libs_project.gui.gui"
 local Script = COMMON.new_n28s()
 
 function Script:bind_vh()
-	self.vh = {
-		root = { root = gui.get_node("root") },
-	}
-	self.views = {
-		mana_panel = ManaPanel("mana_panel",WORLD),
-		money_panel = MoneyPanel("money_panel",WORLD),
-		btn_spawn_knight = GUI.ButtonIconTest("btn_spawn_knight"),
-		btn_spawn_archer = GUI.ButtonIconTest("btn_spawn_archer"),
-	}
+    self.vh = {
+        root = gui.get_node("root"),
+        lbl_turn = gui.get_node("lbl_turn"),
+    }
+    self.views = {
+        mana_panel = ManaPanel("mana_panel", WORLD),
+        money_panel = MoneyPanel("money_panel", WORLD),
+        btn_spawn_knight = GUI.ButtonIconTest("btn_spawn_knight"),
+        btn_spawn_archer = GUI.ButtonIconTest("btn_spawn_archer"),
+    }
 end
 
 function Script:init()
-	COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
-	COMMON.input_acquire()
-	self:bind_vh()
-	self:init_gui()
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+    COMMON.input_acquire()
+    self:bind_vh()
+    self:init_gui()
 end
 
 function Script:init_gui()
-	self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana(),true)
-	self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money(),true)
+    self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana(), true)
+    self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money(), true)
 
-	self.scheduler = COMMON.RX.CooperativeScheduler.create()
-	self.subscriptions = COMMON.RX.SubscriptionsStorage()
-	self.subscriptions:add( COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):go(self.scheduler):subscribe(function()
-		self:storage_changed()
-	end))
+    self.scheduler = COMMON.RX.CooperativeScheduler.create()
+    self.subscriptions = COMMON.RX.SubscriptionsStorage()
+    self.subscriptions:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):go(self.scheduler):subscribe(function()
+        self:storage_changed()
+    end))
+    self:storage_changed()
 
-	self.views.btn_spawn_knight:set_input_listener(function ()
-		interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
-	end)
-	self.views.btn_spawn_archer:set_input_listener(function ()
-		interactive_canvas.send_text_query("level.spawn.unit ARCHER")
-	end)
+    self.views.btn_spawn_knight:set_input_listener(function()
+        interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
+    end)
+    self.views.btn_spawn_archer:set_input_listener(function()
+        interactive_canvas.send_text_query("level.spawn.unit ARCHER")
+    end)
 end
 
 function Script:storage_changed()
-	self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
-	self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
+    gui.set_text(self.vh.lbl_turn, "TURN:" .. (HAXE_WRAPPER.level_turn_get() + 1))
+    self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
+    self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
 end
 
 function Script:final()
-	COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
-	COMMON.input_release()
-	self.subscriptions:unsubscribe()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+    COMMON.input_release()
+    self.subscriptions:unsubscribe()
 end
 
 function Script:update(dt)
-	self.scheduler:update(dt)
-	self.views.mana_panel:update(dt)
-	self.views.money_panel:update(dt)
+    self.scheduler:update(dt)
+    self.views.mana_panel:update(dt)
+    self.views.money_panel:update(dt)
 end
 
 function Script:on_input(action_id, action)
-	self.views.btn_spawn_knight:on_input(action_id,action)
-	self.views.btn_spawn_archer:on_input(action_id,action)
+    self.views.btn_spawn_knight:on_input(action_id, action)
+    self.views.btn_spawn_archer:on_input(action_id, action)
 end
 
 COMMON.N28S.register(Script)

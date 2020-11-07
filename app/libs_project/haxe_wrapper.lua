@@ -82,7 +82,11 @@ function M.level_castle_get_by_idx(idx)
 end
 
 function M.level_units_get_by_id(idx)
-	return M.get_world().levelModel:unitsGetByIdx(idx)
+	return M.get_world().levelModel:unitsGetUnitById(idx)
+end
+
+function M.level_turn_get()
+	return M.get_world().storage.level.turn
 end
 
 function M.level_castles_get_array()

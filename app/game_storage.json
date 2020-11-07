@@ -1,8 +1,8 @@
 {
      "timers": {
+          "serverLastTime": 1604722396585.2,
+          "time": 1604722396585.2,
           "clientDeltaTime": 0,
-          "time": 1604721206683.5,
-          "serverLastTime": 1604721206683.5,
           "timerDelta": 0
      },
      "version": {
@@ -36,7 +36,7 @@
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 91,
+          "intentIdx": 141,
           "gameBackendVersion": "",
           "gameConfigVersion": "",
           "userLevel": 1,
@@ -46,7 +46,7 @@
      },
      "level": {
           "player": {
-               "mana": 0,
+               "mana": 100,
                "money": 20,
                "id": 0
           },
@@ -64,11 +64,11 @@
                },
                {
                     "id": 1,
-                    "attackRange": 3,
+                    "attackRange": 1,
                     "hp": 5,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "type": "ARCHER",
+                    "type": "KNIGHT",
                     "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 1
@@ -86,18 +86,194 @@
                },
                {
                     "id": 3,
-                    "attackRange": 3,
+                    "attackRange": 1,
                     "hp": 5,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "type": "ARCHER",
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 4,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 5,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 6,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 7,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 8,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 9,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 10,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 11,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 12,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 13,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 14,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 15,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 16,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 17,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 18,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 19,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "KNIGHT",
                     "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 1
                }
           ],
-          "unitIdx": 4,
-          "turn": 0,
+          "unitIdx": 20,
+          "turn": 20,
           "enemy": {
                "id": 1
           },

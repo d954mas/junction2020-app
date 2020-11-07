@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.project.model.units.BasicUnitModel;
 import shared.project.storage.Storage.BattleUnitStruct;
 import shared.project.configs.UnitConfig;
 import shared.project.enums.UnitType;
@@ -25,6 +26,8 @@ class LevelModel {
         this.battleUnitModels = new List<BattleUnitModel>();
         modelRestore();
     }
+
+
 
     private function addUnit(unit:BattleUnitModel) {
         battleUnitModels.push(unit);
@@ -266,6 +269,14 @@ class LevelModel {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model roadsGetByIdx";}
         return level.roads[idx];
+    }
+    public function unitsGetUnitById(id:Int):Null<BattleUnitModel>{
+        for(model in battleUnitModels){
+            if(model.getId() == id){
+                return model;
+            }
+        }
+        return null;
     }
 
     public function roadsFindPartById(id):LevelRoadPart {
