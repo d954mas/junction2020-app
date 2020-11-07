@@ -1,4 +1,5 @@
 package shared.project.intent_processors;
+import shared.base.event.ModelEventName.EventHelper;
 import shared.project.configs.UnitConfig;
 import shared.project.enums.UnitType;
 import shared.base.enums.ContextName;
@@ -20,6 +21,7 @@ class IntentLevelProcessor extends IntentSubProcessor {
                 return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             case Intent.LEVEL_TURN_SKIP:
                 ask("skip");
+                EventHelper.levelTurnStart(world);
                 world.levelModel.levelNextTurn();
                 return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             default: return null;

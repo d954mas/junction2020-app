@@ -9,6 +9,8 @@ enum abstract ModelEventName(String) {
     var LEVEL_NEW;
     var LEVEL_MOVE_TO_NEXT;
     var LEVEL_NEXT_TURN;
+    var LEVEL_TURN_START;
+    var LEVEL_TURN_END;
     var LEVEL_MONEY_CHANGE;
     var LEVEL_MANA_CHANGE;
     var LEVEL_UNIT_SPAWN;
@@ -53,6 +55,12 @@ class EventHelper {
     }
     public static function levelLost(world:World) {
         world.eventEmit(LEVEL_PLAYER_LOST);
+    }
+    public static function levelTurnStart(world:World) {
+        world.eventEmit(LEVEL_TURN_START);
+    }
+    public static function levelTurnEnd(world:World) {
+        world.eventEmit(LEVEL_TURN_END);
     }
 }
 

@@ -96,6 +96,7 @@ __haxe_crypto_Adler32 = _hx_e()
 __haxe_io_Bytes = _hx_e()
 __haxe_crypto_Base64 = _hx_e()
 __haxe_crypto_BaseCode = _hx_e()
+__haxe_ds_ArraySort = _hx_e()
 __haxe_ds_IntMap = _hx_e()
 __haxe_ds_List = _hx_e()
 __haxe_ds__List_ListNode = _hx_e()
@@ -754,6 +755,24 @@ Lambda.filter = function(it,f)
     end;
   end;
   do return _g end;
+end
+Lambda.count = function(it,pred) 
+  local n = 0;
+  if (pred == nil) then 
+    local _ = it:iterator();
+    while (_:hasNext()) do 
+      _:next();
+      n = n + 1;
+    end;
+  else
+    local x = it:iterator();
+    while (x:hasNext()) do 
+      if (pred(x:next())) then 
+        n = n + 1;
+      end;
+    end;
+  end;
+  do return n end;
 end
 
 Math.new = {}
@@ -2187,6 +2206,138 @@ __haxe_crypto_BaseCode.prototype.decodeBytes = function(self,b)
 end
 
 __haxe_crypto_BaseCode.prototype.__class__ =  __haxe_crypto_BaseCode
+
+__haxe_ds_ArraySort.new = {}
+__haxe_ds_ArraySort.__name__ = true
+__haxe_ds_ArraySort.sort = function(a,cmp) 
+  __haxe_ds_ArraySort.rec(a, cmp, 0, a.length);
+end
+__haxe_ds_ArraySort.rec = function(a,cmp,from,to) 
+  local middle = _hx_bit.arshift(from + to,1);
+  if ((to - from) < 12) then 
+    if (to <= from) then 
+      do return end;
+    end;
+    local _g = from + 1;
+    while (_g < to) do 
+      _g = _g + 1;
+      local j = _g - 1;
+      while (j > from) do 
+        if (cmp(a[j], a[j - 1]) < 0) then 
+          __haxe_ds_ArraySort.swap(a, j - 1, j);
+        else
+          break;
+        end;
+        j = j - 1;
+      end;
+    end;
+    do return end;
+  end;
+  __haxe_ds_ArraySort.rec(a, cmp, from, middle);
+  __haxe_ds_ArraySort.rec(a, cmp, middle, to);
+  __haxe_ds_ArraySort.doMerge(a, cmp, from, middle, to, middle - from, to - middle);
+end
+__haxe_ds_ArraySort.doMerge = function(a,cmp,from,pivot,to,len1,len2) 
+  local first_cut;
+  local second_cut;
+  local len11;
+  local len22;
+  if ((len1 == 0) or (len2 == 0)) then 
+    do return end;
+  end;
+  if ((len1 + len2) == 2) then 
+    if (cmp(a[pivot], a[from]) < 0) then 
+      __haxe_ds_ArraySort.swap(a, pivot, from);
+    end;
+    do return end;
+  end;
+  if (len1 > len2) then 
+    len11 = _hx_bit.arshift(len1,1);
+    first_cut = from + len11;
+    second_cut = __haxe_ds_ArraySort.lower(a, cmp, pivot, to, first_cut);
+    len22 = second_cut - pivot;
+  else
+    len22 = _hx_bit.arshift(len2,1);
+    second_cut = pivot + len22;
+    first_cut = __haxe_ds_ArraySort.upper(a, cmp, from, pivot, second_cut);
+    len11 = first_cut - from;
+  end;
+  __haxe_ds_ArraySort.rotate(a, cmp, first_cut, pivot, second_cut);
+  local new_mid = first_cut + len22;
+  __haxe_ds_ArraySort.doMerge(a, cmp, from, first_cut, new_mid, len11, len22);
+  __haxe_ds_ArraySort.doMerge(a, cmp, new_mid, second_cut, to, len1 - len11, len2 - len22);
+end
+__haxe_ds_ArraySort.rotate = function(a,cmp,from,mid,to) 
+  if ((from == mid) or (mid == to)) then 
+    do return end;
+  end;
+  local n = __haxe_ds_ArraySort.gcd(to - from, mid - from);
+  while (true) do 
+    n = n - 1;
+    if (not ((n + 1) ~= 0)) then 
+      break;
+    end;
+    local val = a[from + n];
+    local shift = mid - from;
+    local p1 = from + n;
+    local p2 = (from + n) + shift;
+    while (p2 ~= (from + n)) do 
+      a[p1] = a[p2];
+      p1 = p2;
+      if ((to - p2) > shift) then 
+        p2 = p2 + shift;
+      else
+        p2 = from + (shift - (to - p2));
+      end;
+    end;
+    a[p1] = val;
+  end;
+end
+__haxe_ds_ArraySort.gcd = function(m,n) 
+  while (n ~= 0) do 
+    local t = _G.math.fmod(m, n);
+    m = n;
+    n = t;
+  end;
+  do return m end;
+end
+__haxe_ds_ArraySort.upper = function(a,cmp,from,to,val) 
+  local len = to - from;
+  local half;
+  local mid;
+  while (len > 0) do 
+    half = _hx_bit.arshift(len,1);
+    mid = from + half;
+    if (cmp(a[val], a[mid]) < 0) then 
+      len = half;
+    else
+      from = mid + 1;
+      len = (len - half) - 1;
+    end;
+  end;
+  do return from end;
+end
+__haxe_ds_ArraySort.lower = function(a,cmp,from,to,val) 
+  local len = to - from;
+  local half;
+  local mid;
+  while (len > 0) do 
+    half = _hx_bit.arshift(len,1);
+    mid = from + half;
+    if (cmp(a[mid], a[val]) < 0) then 
+      from = mid + 1;
+      len = (len - half) - 1;
+    else
+      len = half;
+    end;
+  end;
+  do return from end;
+end
+__haxe_ds_ArraySort.swap = function(a,i,j) 
+  local tmp = a[i];
+  a[i] = a[j];
+  a[j] = tmp;
+end
 
 __haxe_ds_IntMap.new = function() 
   local self = _hx_new(__haxe_ds_IntMap.prototype)
@@ -4433,6 +4584,13 @@ __lua_Boot.isArray = function(o)
     do return false end;
   end;
 end
+__lua_Boot.__cast = function(o,t) 
+  if ((o == nil) or __lua_Boot.__instanceof(o, t)) then 
+    do return o end;
+  else
+    _G.error(Std.string(Std.string(Std.string("Cannot cast ") .. Std.string(Std.string(o))) .. Std.string(" to ")) .. Std.string(Std.string(t)),0);
+  end;
+end
 __lua_Boot.printEnum = function(o,s) 
   if (o.length == 2) then 
     do return o[0] end;
@@ -5238,6 +5396,15 @@ end
 __shared_base_event_EventHelper.levelUnitDied = function(world,id) 
   world:eventEmit("LEVEL_UNIT_DIED", _hx_o({__fields__={id=true},id=id}));
 end
+__shared_base_event_EventHelper.levelLost = function(world) 
+  world:eventEmit("LEVEL_PLAYER_LOST");
+end
+__shared_base_event_EventHelper.levelTurnStart = function(world) 
+  world:eventEmit("LEVEL_TURN_START");
+end
+__shared_base_event_EventHelper.levelTurnEnd = function(world) 
+  world:eventEmit("LEVEL_TURN_END");
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -6027,6 +6194,7 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "level.turn.skip" then 
     self:ask("skip");
+    __shared_base_event_EventHelper.levelTurnStart(self.world);
     self.world.levelModel:levelNextTurn();
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;else
   do return nil end; end;
@@ -6331,6 +6499,19 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
         do return attacker1[0]:canAttack(v) end;
       end end;
     end)(attacker));
+    __haxe_ds_ArraySort.sort(canAttack, (function() 
+      do return function(a,b) 
+        if (not a:canMove() and b:canMove()) then 
+          do return -1 end;
+        else
+          if (a:canMove() and not b:canMove()) then 
+            do return 1 end;
+          else
+            do return 0 end;
+          end;
+        end;
+      end end;
+    end)());
     if (canAttack.length == 0) then 
       if (attacker[0]:canMove()) then 
         local newPos = self:unitNewPosition(attacker[0]);
@@ -6354,8 +6535,11 @@ __shared_project_model_LevelModel.prototype.removeDeadUnits = function(self)
     local unit = dead[_g];
     _g = _g + 1;
     self.ds.level.units:remove(unit);
-    __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
-    self.battleUnitModels:remove(self:unitsGetUnitById(unit.id));
+    local unitModel = self:unitsGetUnitById(unit.id);
+    if (unit.type ~= "CASTLE") then 
+      __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
+      self.battleUnitModels:remove(unitModel);
+    end;
   end;
 end
 __shared_project_model_LevelModel.prototype.unitNewPosition = function(self,unit) 
@@ -6396,6 +6580,42 @@ __shared_project_model_LevelModel.prototype.levelNextTurnRegenMana = function(se
   self.playerModel:manaChange(5, "startTurnRegen");
 end
 __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(self) 
+  local _gthis = self;
+  if (self.ds.level ~= nil) then 
+    local playerDidntLose = Lambda.count(self.ds.level.castles, function(castle) 
+      local unit = _gthis:unitsGetUnitById(castle.unitId);
+      if (unit ~= nil) then 
+        if (unit:getOwnerId() == 0) then 
+          do return unit:getHp() > 0 end;
+        else
+          do return false end;
+        end;
+      else
+        _G.error("no unit levelNextCheckWinLose1",0);
+      end;
+    end) > 0;
+    local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
+      local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
+      if (unit1 ~= nil) then 
+        if (unit1:getOwnerId() > 0) then 
+          do return unit1:getHp() > 0 end;
+        else
+          do return false end;
+        end;
+      else
+        _G.error("no unit levelNextCheckWinLose2",0);
+      end;
+    end) == 0;
+    if (not playerDidntLose) then 
+      __shared_base_event_EventHelper.levelLost(self.world);
+    else
+      if (allEnemiesLost) then 
+        self:levelNextCastle();
+      end;
+    end;
+  else
+    _G.error("no level",0);
+  end;
 end
 __shared_project_model_LevelModel.prototype.levelNextTurn = function(self) 
   local level = self.world:storageGet().level;
@@ -6408,6 +6628,8 @@ __shared_project_model_LevelModel.prototype.levelNextTurn = function(self)
   self:levelNextTurnBattles();
   self:levelNextTurnRegenMoney();
   self:levelNextTurnRegenMana();
+  self:levelNextCheckWinLose();
+  __shared_base_event_EventHelper.levelTurnEnd(self.world);
 end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
   local level = _hx_o({__fields__={turn=true,unitIdx=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
@@ -6450,6 +6672,16 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   if (level == nil) then 
     _G.error("can't move to next castle level storage is null",0);
   end;
+  local _g = 0;
+  local _g1 = level.units;
+  while (_g < _g1.length) do 
+    local unit = _g1[_g];
+    _g = _g + 1;
+    self:unitsGetUnitById(unit.id);
+    if (unit.type ~= "CASTLE") then 
+      __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
+    end;
+  end;
   level.enemy = self:createEnemy();
   local lastRoad = level.roads[level.roads.length - 1];
   local startX = lastRoad[lastRoad.length - 1].x;
@@ -6461,6 +6693,18 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(startX + 5, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 6, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 7, 0, "CASTLE"));
+  local persistCastleUnits = Array.new();
+  local _g2 = 0;
+  local _g3 = level.castles;
+  while (_g2 < _g3.length) do 
+    local castle = _g3[_g2];
+    _g2 = _g2 + 1;
+    local castleUnit = self:unitsGetUnitById(castle.unitId);
+    if (castleUnit ~= nil) then 
+      persistCastleUnits:push((__lua_Boot.__cast(castleUnit , __shared_project_model_units_CastleUnitModel)):getStruct());
+    end;
+  end;
+  level.units = Array.new();
   level.roads:push(roadPlayerToEnemy);
   level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(1, 0):getId()}));
   __shared_base_event_EventHelper.levelMoveToNext(self.world);
@@ -6538,6 +6782,7 @@ __shared_project_model_PlayerModel.prototype = _hx_a();
 __shared_project_model_PlayerModel.prototype.world= nil;
 __shared_project_model_PlayerModel.prototype.ds= nil;
 __shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType) 
+  __shared_base_event_EventHelper.levelTurnStart(self.world);
   self.world.levelModel:unitsSpawnUnit(0, unitType, 0);
   self.world.speechBuilder:text(Std.string("spawn ") .. Std.string(unitType));
   self.world.levelModel:levelNextTurn();
@@ -7487,7 +7732,7 @@ local _hx_static_init = function()
     
     _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=4, 8, 12, 16, 20}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=1, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2

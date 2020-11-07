@@ -127,6 +127,10 @@ function Processor:process_events(events, data)
             self.world.level_model:units_move_unit(assert(event.data.id),assert((event.data.roadId)))
         elseif event.name == "LEVEL_UNIT_DIED" then
             self.world.level_model:units_die_unit(assert(event.data.id))
+        elseif event.name == "LEVEL_TURN_START" then
+            self.world.level_model:animation_turn_start()
+        elseif event.name == "LEVEL_TURN_END" then
+            self.world.level_model:animation_turn_end()
         end
     end
 end

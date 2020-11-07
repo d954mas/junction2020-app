@@ -31,17 +31,39 @@ function Level:initialize(world)
     for i = 0, roads.length - 1 do
         table.insert(self.views.roads, RoadView(i, self.world))
     end
+    self.animation_sequence = ACTIONS.Sequence()
+    self.animation_sequence.drop_empty = false;
 
+    CAMERAS.battle_camera:set_position(vmath.vector3(640 or self.views.castles[#self.views.castles - 1].castle_pos.x, 340, 0))
+end
+
+function Level:animation_turn_start()
     self.threads = {
         die = ACTIONS.Parallel(),
         move = ACTIONS.Parallel(),
         spawn = ACTIONS.Parallel(),
     }
-    self.threads.die.drop_empty = false
-    self.threads.move.drop_empty = false
-    self.threads.spawn.drop_empty = false
+    while (self.animation_sequence.current ~= nil)do
+        self.animation_sequence:update(0.33)
+    end
+end
 
-    CAMERAS.battle_camera:set_position(vmath.vector3(640 or self.views.castles[#self.views.castles - 1].castle_pos.x, 340, 0))
+function Level:animation_turn_end()
+    self.animation_sequence:add_action(function()
+        local threads = self.threads
+        while (#threads.spawn.childs > 0 or #threads.move.childs > 0 or #threads.die.childs > 0) do
+            local dt = coroutine.yield()
+            local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+            threads.spawn:update(dt)
+            if (#threads.spawn.childs == 0) then
+                threads.die:update(dt)
+            end
+            if (#threads.die.childs == 0 and #threads.spawn.childs == 0) then
+                threads.move:update(dt)--hotfix die before move or spawn
+            end
+            ctx:remove()
+        end
+    end)
 end
 
 function Level:unit_died(id)
@@ -56,18 +78,7 @@ function Level:update(dt)
     for _, road in ipairs(self.views.roads) do
         road:update()
     end
-
-
-    self.threads.spawn:update(dt)
-    if(#self.threads.spawn.childs == 0)then
-        self.threads.die:update(dt)
-    end
-    if(#self.threads.die.childs == 0 and #self.threads.spawn.childs == 0) then
-        self.threads.move:update(dt)--hotfix die before move or spawn
-    end
-
-
-
+    self.animation_sequence:update(dt)
 end
 
 function Level:storage_changed()
@@ -82,13 +93,13 @@ function Level:storage_changed()
     end
 end
 
-function Level:units_spawn_unit(id,struct)
-    self.world.thread_sequence:add_action(function()
-        local unit_view = UnitView(id, self.world,struct)
+function Level:units_spawn_unit(id, struct)
+    --self.world.thread_sequence:add_action(function()
+        local unit_view = UnitView(id, self.world, struct)
         local action = unit_view:animation_spawn();
         self.threads.spawn:add_action(action)
         table.insert(self.views.units, unit_view)
-    end)
+   -- end)
 end
 
 function Level:units_view_by_id(id)
@@ -100,24 +111,24 @@ function Level:units_view_by_id(id)
 end
 
 function Level:units_move_unit(id, roadId)
-    self.world.thread_sequence:add_action(function()
+   -- self.world.thread_sequence:add_action(function()
         local unit_view = self:units_view_by_id(id)
         local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
         self.threads.move:add_action(action)
-    end)
+    --end)
 end
 
 function Level:units_die_unit(id)
-    self.world.thread_sequence:add_action(function()
+   -- self.world.thread_sequence:add_action(function()
         local unit = HAXE_WRAPPER.level_units_get_by_id(id)
         local unit_view = self:units_view_by_id(id)
-        if(unit_view)then
+        if (unit_view) then
             local action = unit_view:die()
             self.threads.die:add_action(action)
         else
-            COMMON.w("no unit view for die.Is it castle?","LEVEL")
+            COMMON.w("no unit view for die.Is it castle?", "LEVEL")
         end
-    end)
+   -- end)
 end
 
 function Level:move_to_next()

@@ -1,9 +1,9 @@
 {
      "timers": {
+          "timerDelta": 0,
+          "time": 1604754363900.4,
           "clientDeltaTime": 0,
-          "time": 1604751114324.6,
-          "serverLastTime": 1604751114324.6,
-          "timerDelta": 0
+          "serverLastTime": 1604754363900.4
      },
      "version": {
           "server": "dev",
@@ -19,129 +19,52 @@
           "locale": "en",
           "permisions":           {}
      },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "cheatsEnabled": true,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
-          "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
-     },
-     "timerDelta": 0,
      "stat": {
           "startGameCounter": 0,
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 930,
+          "intentIdx": 1159,
           "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
+          "gameSharedVersion": "",
           "device": "sberbox",
+          "userLevel": 1,
           "platform": "sber",
-          "gameSharedVersion": ""
+          "gameConfigVersion": ""
+     },
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": true,
+          "conversationIdCurrent": "1111"
      },
      "level": {
           "player": {
-               "mana": 30,
+               "mana": 40,
                "money": 20,
                "id": 0
           },
           "units": [
                {
-                    "id": 0,
+                    "id": 14,
                     "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 1,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 2,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 13000,
+                    "hp": 1,
+                    "roadPartIdx": 20000,
                     "attackLvl": 0,
                     "type": "CASTLE",
                     "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 0
-               },
-               {
-                    "id": 4,
-                    "attackRange": 1,
-                    "hp": 3,
-                    "roadPartIdx": 11000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 6,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 11000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 7,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 10000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 8,
-                    "attackRange": 1,
-                    "hp": 5,
-                    "roadPartIdx": 9000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 0,
-                    "reward": 1
-               },
-               {
-                    "id": 9,
-                    "attackRange": 3,
-                    "hp": 5,
-                    "roadPartIdx": 13000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 1
                }
           ],
-          "unitIdx": 10,
-          "turn": 6,
+          "unitIdx": 15,
+          "turn": 8,
           "enemy": {
                "id": 1
           },
@@ -157,6 +80,10 @@
                {
                     "unitId": 2,
                     "idx": 2
+               },
+               {
+                    "unitId": 14,
+                    "idx": 3
                }
           ],
           "roads": [
@@ -245,6 +172,50 @@
                          "type": "CASTLE",
                          "x": 13,
                          "idx": 13000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 14,
+                         "idx": 14000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 15,
+                         "idx": 15000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 16,
+                         "idx": 16000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 17,
+                         "idx": 17000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 18,
+                         "idx": 18000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 19,
+                         "idx": 19000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 20,
+                         "idx": 20000,
                          "y": 0
                     }
                ]

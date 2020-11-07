@@ -20,9 +20,11 @@ class PlayerModel {
     }
 
     public function unitsSpawnUnit(unitType:UnitType) {
+        EventHelper.levelTurnStart(world);
         world.levelModel.unitsSpawnUnit(0, unitType, 0);
         world.speechBuilder.text("spawn " + unitType);
         //spawn это ход игрока
+
         world.levelModel.levelNextTurn();
     }
 
