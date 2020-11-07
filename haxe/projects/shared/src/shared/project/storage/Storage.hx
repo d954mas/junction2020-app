@@ -115,6 +115,8 @@ typedef UnitQueueEntry = {
 
 typedef LevelStruct = {
     turn:Int,
+    ice:Int,
+    turnEnemyAI:Int,
     player:LevelPlayerStruct,
     enemy:LevelEnemyStruct,
     castles:Array<CastleStruct>,

@@ -61,23 +61,28 @@ class PlayerModel {
         return (level.player.money >= value);
     }
 
-    public function castSpell(type:MageType, newTurn:Bool){
-       if(newTurn){EventHelper.levelTurnStart(world);}
+    public function castSpell(type:MageType, newTurn:Bool) {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for castSpell";}
+        if (newTurn) {EventHelper.levelTurnStart(world);}
 
-        EventHelper.levelCastSpellStart(world,type);
+        EventHelper.levelCastSpellStart(world, type);
         var power = mageGetPower(type);
-        if(type == MageType.FIREBALL){
-            for(unit in world.levelModel.battleUnitModels){
-                if(unit.getOwnerId()>0 && unit.getType()!= UnitType.CASTLE){
+        if (type == MageType.FIREBALL) {
+            for (unit in world.levelModel.battleUnitModels) {
+                if (unit.getOwnerId() > 0 && unit.getType() != UnitType.CASTLE) {
                     unit.takeDamage(power);
                     EventHelper.levelUnitAttack(world, -10000, unit.getId());
                 }
             }
             world.levelModel.removeDeadUnits();
+        } else if (type == MageType.ICE) {
+            level.ice = power;
+            world.levelModel.removeDeadUnits();
         }
-        EventHelper.levelCastSpellEnd(world,type);
+        EventHelper.levelCastSpellEnd(world, type);
 
-        if(newTurn){world.levelModel.levelNextTurn();};
+        if (newTurn) {world.levelModel.levelNextTurn();};
     }
 
     public function canSpendMana(value:Int) {
@@ -86,20 +91,21 @@ class PlayerModel {
         return (level.player.mana >= value);
     }
 
-    public function unitGetPrice(type:UnitType){
+    public function unitGetPrice(type:UnitType) {
         var scales = UnitConfig.scalesByUnitType[type];
         if (scales == null) {throw "bad scales";}
         var price = scales.costByLevel[0];
         return price;
     }
 
-    public function mageGetPrice(type:MageType){
+    public function mageGetPrice(type:MageType) {
         var scales = MageConfig.scalesByMageType[type];
         if (scales == null) {throw "bad scales";}
         var price = scales.costByLevel[0];
         return price;
     }
-    public function mageGetPower(type:MageType){
+
+    public function mageGetPower(type:MageType) {
         var scales = MageConfig.scalesByMageType[type];
         if (scales == null) {throw "bad scales";}
         var price = scales.powerByLevel[0];

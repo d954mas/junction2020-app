@@ -27,7 +27,8 @@ class EnemyModel {
     public function turn() {
         var level = world.storageGet().level;
         if (level == null) {throw "enemy can't turn no level";}
-        var step = level.turn % 6;
+        if(level.ice>0){return;}
+        var step = level.turnEnemyAI % 6;
         if (step == 2) {
             var chance = Math.random();
             if (chance < 0.5) {
@@ -47,6 +48,7 @@ class EnemyModel {
                 unitsSpawnUnit(UnitType.KNIGHT);
             }
         }
+        level.turnEnemyAI++;
     }
 
 

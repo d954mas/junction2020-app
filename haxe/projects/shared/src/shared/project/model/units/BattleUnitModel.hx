@@ -11,6 +11,9 @@ class BattleUnitModel implements IBattleUnit {
     private var world:World;
 
     public function canAttack(enemy:IBattleUnit):Bool {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for canMove";}
+        if(getOwnerId()>0 && level.ice>0){return false;}
         return calculateDistance(enemy) <= struct.attackRange && (getOwnerId() != enemy.getOwnerId());
     }
 
@@ -62,6 +65,9 @@ class BattleUnitModel implements IBattleUnit {
     }
 
     public function canMove():Bool {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for canMove";}
+        if(getOwnerId()>0 && level.ice>0){return false;}
         return true;
     }
 

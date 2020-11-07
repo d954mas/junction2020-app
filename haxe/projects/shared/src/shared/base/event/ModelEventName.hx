@@ -26,6 +26,7 @@ enum abstract ModelEventName(String) {
     var LEVEL_CARAVAN_SPAWN;
     var LEVEL_CAST_SPELL_START;
     var LEVEL_CAST_SPELL_END;
+    var LEVEL_SPELL_ICE_END;
 }
 
 class EventHelper {
@@ -71,6 +72,7 @@ class EventHelper {
     public static function levelUnitDied(world:World, id:Int) {
         world.eventEmit(LEVEL_UNIT_DIED, {id:id});
     }
+
     public static function levelUnitDiedMoveToNextCastle(world:World, id:Int) {
         world.eventEmit(LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE, {id:id});
     }
@@ -86,19 +88,25 @@ class EventHelper {
     public static function levelTurnEnd(world:World) {
         world.eventEmit(LEVEL_TURN_END);
     }
+
     public static function levelRestart(world:World) {
         world.eventEmit(LEVEL_RESTART);
     }
+
     public static function levelCastleEnemyDestroy(world:World) {
         world.eventEmit(LEVEL_CASTLE_ENEMY_DESTROY);
     }
 
-    public static function levelCastSpellStart(world:World,type:MageType) {
-        world.eventEmit(LEVEL_CAST_SPELL_START,{type:type});
+    public static function levelCastSpellStart(world:World, type:MageType) {
+        world.eventEmit(LEVEL_CAST_SPELL_START, {type:type});
     }
 
     public static function levelCastSpellEnd(world:World,type:MageType) {
         world.eventEmit(LEVEL_CAST_SPELL_END,{type:type});
+    }
+
+    public static function levelSpellIceEnd(world:World) {
+        world.eventEmit(LEVEL_SPELL_ICE_END);
     }
 }
 

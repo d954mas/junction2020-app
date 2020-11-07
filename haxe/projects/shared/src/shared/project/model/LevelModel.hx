@@ -424,6 +424,14 @@ class LevelModel {
         levelNextTurnRegenMoney();
         levelNextTurnRegenMana();
 
+        if(level.ice>0){
+            level.ice--;
+            if(level.ice == 0){
+                EventHelper.levelSpellIceEnd(world);
+            }
+
+        }
+
         EventHelper.levelTurnEnd(world); //update all animations before turn end
         levelNextCheckWinLose();
 
@@ -435,6 +443,8 @@ class LevelModel {
         var player = createPlayer();
         var enemy = createEnemy();
         var level:LevelStruct = {
+            ice:0,
+            turnEnemyAI:0,
             turn:0,
             lose:false,
             unitIdx:0,
@@ -552,6 +562,11 @@ class LevelModel {
 
         level.units = new Array<BattleUnitStruct>();
         level.units = level.units.concat(persistCastleUnits);
+
+        if(level.ice>0){
+            level.ice = 0;
+            EventHelper.levelSpellIceEnd(world);
+        }
 
         world.levelModel.playerModel.moneyChange(GameConfig.START_MONEY - level.player.money, "reset castle");
         world.levelModel.playerModel.manaChange(GameConfig.START_MANA - level.player.mana, "reset castle");

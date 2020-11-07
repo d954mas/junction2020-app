@@ -5419,6 +5419,9 @@ end
 __shared_base_event_EventHelper.levelCastSpellEnd = function(world,type) 
   world:eventEmit("LEVEL_CAST_SPELL_END", _hx_o({__fields__={type=true},type=type}));
 end
+__shared_base_event_EventHelper.levelSpellIceEnd = function(world) 
+  world:eventEmit("LEVEL_SPELL_ICE_END");
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -6456,7 +6459,10 @@ __shared_project_model_EnemyModel.prototype.turn = function(self)
   if (level == nil) then 
     _G.error("enemy can't turn no level",0);
   end;
-  local step = _G.math.fmod(level.turn, 6);
+  if (level.ice > 0) then 
+    do return end;
+  end;
+  local step = _G.math.fmod(level.turnEnemyAI, 6);
   if (step == 2) then 
     local chance = _G.math.random();
     if (chance < 0.5) then 
@@ -6482,6 +6488,7 @@ __shared_project_model_EnemyModel.prototype.turn = function(self)
       end;
     end;
   end;
+  level.turnEnemyAI = level.turnEnemyAI + 1;
 end
 
 __shared_project_model_EnemyModel.prototype.__class__ =  __shared_project_model_EnemyModel
@@ -6930,13 +6937,19 @@ __shared_project_model_LevelModel.prototype.levelNextTurn = function(self)
   self:levelNextTurnCaravans();
   self:levelNextTurnRegenMoney();
   self:levelNextTurnRegenMana();
+  if (level.ice > 0) then 
+    level.ice = level.ice - 1;
+    if (level.ice == 0) then 
+      __shared_base_event_EventHelper.levelSpellIceEnd(self.world);
+    end;
+  end;
   __shared_base_event_EventHelper.levelTurnEnd(self.world);
   self:levelNextCheckWinLose();
 end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
   self:createPlayer();
   self:createEnemy();
-  local level = _hx_o({__fields__={turn=true,lose=true,unitIdx=true,caravanIdx=true,player=true,enemy=true,caravans=true,castles=true,roads=true,units=true},turn=0,lose=false,unitIdx=0,caravanIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),caravans=Array.new(),castles=Array.new(),roads=Array.new(),units=Array.new()});
+  local level = _hx_o({__fields__={ice=true,turnEnemyAI=true,turn=true,lose=true,unitIdx=true,caravanIdx=true,player=true,enemy=true,caravans=true,castles=true,roads=true,units=true},ice=0,turnEnemyAI=0,turn=0,lose=false,unitIdx=0,caravanIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),caravans=Array.new(),castles=Array.new(),roads=Array.new(),units=Array.new()});
   self.world:storageGet().level = level;
   local roadResToPlayer = Array.new();
   roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
@@ -7018,6 +7031,10 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   persistCastleUnits:push(newUnit:getStruct());
   level.units = Array.new();
   level.units = level.units:concat(persistCastleUnits);
+  if (level.ice > 0) then 
+    level.ice = 0;
+    __shared_base_event_EventHelper.levelSpellIceEnd(self.world);
+  end;
   self.world.levelModel.playerModel:moneyChange(__shared_project_configs_GameConfig.START_MONEY - level.player.money, "reset castle");
   self.world.levelModel.playerModel:manaChange(__shared_project_configs_GameConfig.START_MANA - level.player.mana, "reset castle");
   __shared_base_event_EventHelper.levelCastleEnemyDestroy(self.world);
@@ -7146,6 +7163,10 @@ __shared_project_model_PlayerModel.prototype.canSpendMoney = function(self,value
   do return level.player.money >= value end
 end
 __shared_project_model_PlayerModel.prototype.castSpell = function(self,type,newTurn) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for castSpell",0);
+  end;
   if (newTurn) then 
     __shared_base_event_EventHelper.levelTurnStart(self.world);
   end;
@@ -7162,6 +7183,11 @@ __shared_project_model_PlayerModel.prototype.castSpell = function(self,type,newT
       end;
     end;
     self.world.levelModel:removeDeadUnits();
+  else
+    if (type == "ICE") then 
+      level.ice = power;
+      self.world.levelModel:removeDeadUnits();
+    end;
   end;
   __shared_base_event_EventHelper.levelCastSpellEnd(self.world, type);
   if (newTurn) then 
@@ -7486,6 +7512,13 @@ __shared_project_model_units_BattleUnitModel.prototype = _hx_a();
 __shared_project_model_units_BattleUnitModel.prototype.struct= nil;
 __shared_project_model_units_BattleUnitModel.prototype.world= nil;
 __shared_project_model_units_BattleUnitModel.prototype.canAttack = function(self,enemy) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for canMove",0);
+  end;
+  if ((self:getOwnerId() > 0) and (level.ice > 0)) then 
+    do return false end;
+  end;
   if (self:calculateDistance(enemy) <= self.struct.attackRange) then 
     do return self:getOwnerId() ~= enemy:getOwnerId() end;
   else
@@ -7525,6 +7558,13 @@ __shared_project_model_units_BattleUnitModel.prototype.getPos = function(self)
   do return self.world.levelModel:roadsFindPartById(self.struct.roadPartIdx) end
 end
 __shared_project_model_units_BattleUnitModel.prototype.canMove = function(self) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for canMove",0);
+  end;
+  if ((self:getOwnerId() > 0) and (level.ice > 0)) then 
+    do return false end;
+  end;
   do return true end
 end
 __shared_project_model_units_BattleUnitModel.prototype.move = function(self,roadPartIdx) 
