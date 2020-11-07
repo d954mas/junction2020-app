@@ -1,8 +1,8 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1604778938184.6,
-          "serverLastTime": 1604778938184.6,
+          "time": 1604779865504.7,
+          "serverLastTime": 1604779865504.7,
           "clientDeltaTime": 0
      },
      "version": {
@@ -15,10 +15,41 @@
      },
      "user": {
           "verification": "",
-          "name": "name",
           "locale": "en",
+          "name": "name",
           "permisions":           {}
      },
+     "tutorials":      {},
+     "timerDelta": 0,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 2,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 2631,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "sberbox",
+          "userLevel": 1,
+          "platform": "sber",
+          "gameConfigVersion": ""
+     },
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": true,
+          "conversationIdCurrent": "1111"
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
      "level": {
           "player": {
                "unitLevels": {
@@ -29,135 +60,11 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 30,
+               "mana": 25,
                "id": 0,
-               "money": 20,
-               "unitQueue": [
-                    {
-                         "unitType": "SHIELD",
-                         "ownerId": 0
-                    }
-               ]
-          },
-          "unitIdx": 11,
-          "lose": false,
-          "units": [
-               {
-                    "id": 0,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 0,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 1,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 0,
-                    "reward": 0
-               },
-               {
-                    "id": 2,
-                    "attackRange": 1,
-                    "hp": 50,
-                    "roadPartIdx": 13000,
-                    "attackLvl": 0,
-                    "type": "CASTLE",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 0
-               },
-               {
-                    "id": 5,
-                    "attackRange": 1,
-                    "hp": 2,
-                    "roadPartIdx": 11000,
-                    "attackLvl": 1,
-                    "type": "SPEARMAN",
-                    "hpLvl": 1,
-                    "ownerId": 0,
-                    "reward": 150
-               },
-               {
-                    "id": 6,
-                    "attackRange": 2,
-                    "hp": 4,
-                    "roadPartIdx": 10000,
-                    "attackLvl": 1,
-                    "hpLvl": 1,
-                    "type": "MAGE",
-                    "ownerId": 0,
-                    "reward": 250
-               },
-               {
-                    "id": 7,
-                    "attackRange": 2,
-                    "hp": 2,
-                    "roadPartIdx": 9000,
-                    "attackLvl": 1,
-                    "type": "ARCHER",
-                    "hpLvl": 1,
-                    "ownerId": 0,
-                    "reward": 75
-               },
-               {
-                    "id": 8,
-                    "attackRange": 2,
-                    "hp": 2,
-                    "roadPartIdx": 12000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 75
-               },
-               {
-                    "id": 10,
-                    "attackRange": 1,
-                    "hp": 4,
-                    "roadPartIdx": 8000,
-                    "attackLvl": 1,
-                    "type": "SHIELD",
-                    "hpLvl": 1,
-                    "ownerId": 0,
-                    "reward": 100
-               }
-          ],
-          "enemy": {
-               "unitLevels": {
-                    "MAGE": 1,
-                    "CASTLE": 1,
-                    "SHIELD": 1,
-                    "SPEARMAN": 1,
-                    "KNIGHT": 1,
-                    "ARCHER": 1
-               },
-               "id": 1,
+               "money": 150,
                "unitQueue":                []
           },
-          "turn": 6,
-          "castles": [
-               {
-                    "unitId": 0,
-                    "idx": 0
-               },
-               {
-                    "unitId": 1,
-                    "idx": 1
-               },
-               {
-                    "unitId": 2,
-                    "idx": 2
-               }
-          ],
           "roads": [
                [
                     {
@@ -247,37 +154,92 @@
                          "y": 0
                     }
                ]
-          ]
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 2,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 2571,
-          "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
-          "userLevel": 1,
-          "platform": "sber",
-          "gameConfigVersion": ""
-     },
-     "tutorials":      {},
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": true,
-          "conversationIdCurrent": "1111"
+          ],
+          "units": [
+               {
+                    "id": 0,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 1,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 7000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 2,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 13000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 1,
+                    "reward": 0
+               },
+               {
+                    "id": 5,
+                    "attackRange": 1,
+                    "hp": 2,
+                    "roadPartIdx": 9000,
+                    "attackLvl": 1,
+                    "hpLvl": 1,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 50
+               },
+               {
+                    "id": 6,
+                    "attackRange": 2,
+                    "hp": 4,
+                    "roadPartIdx": 12000,
+                    "attackLvl": 0,
+                    "type": "MAGE",
+                    "hpLvl": 0,
+                    "ownerId": 1,
+                    "reward": 250
+               }
+          ],
+          "unitIdx": 7,
+          "turn": 5,
+          "enemy": {
+               "unitLevels": {
+                    "MAGE": 1,
+                    "CASTLE": 1,
+                    "SHIELD": 1,
+                    "SPEARMAN": 1,
+                    "KNIGHT": 1,
+                    "ARCHER": 1
+               },
+               "unitQueue":                [],
+               "id": 1
+          },
+          "castles": [
+               {
+                    "unitId": 0,
+                    "idx": 0
+               },
+               {
+                    "unitId": 1,
+                    "idx": 1
+               },
+               {
+                    "unitId": 2,
+                    "idx": 2
+               }
+          ],
+          "lose": false
      }
 }

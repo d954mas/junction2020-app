@@ -19,6 +19,7 @@ class GameConfig {
     public static final PLATFORM:Platform = Platform.GOOGLE;
     //Как станет понятнее, прокачивается или нет можно поправить
     public static final MAX_MANA:Int = 100;
+    public static final START_MONEY:Int = 200;
 #end
 }
 

@@ -6215,7 +6215,18 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     else
       amount = Std.parseInt(data.amount);
     end;
-    self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount);
+    local scales = __shared_project_configs_UnitConfig.scalesByUnitType:get(unitType);
+    if (scales == nil) then 
+      _G.error("bad scales",0);
+    end;
+    local price = scales.costByLevel[0];
+    local cost = amount * price;
+    if (self.world.levelModel.playerModel:canSpendMoney(cost)) then 
+      self.world.levelModel.playerModel:moneyChange(-cost, "spawn unit");
+      self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount);
+    else
+      self:ask(Std.string("not enought money.Need ") .. Std.string(price));
+    end;
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "level.turn.skip" then 
     self:ask("skip");
@@ -6571,7 +6582,7 @@ __shared_project_model_LevelModel.prototype.createPlayer = function(self)
     _g = _g + 1;
     unitLevels[Std.string(type)] = 1;
   end;
-  do return _hx_o({__fields__={id=true,unitLevels=true,unitQueue=true,mana=true,money=true},id=0,unitLevels=unitLevels,unitQueue=Array.new(),mana=0,money=20}) end
+  do return _hx_o({__fields__={id=true,unitLevels=true,unitQueue=true,mana=true,money=true},id=0,unitLevels=unitLevels,unitQueue=Array.new(),mana=0,money=__shared_project_configs_GameConfig.START_MONEY}) end
 end
 __shared_project_model_LevelModel.prototype.createEnemy = function(self) 
   local unitLevels = _hx_e();
@@ -6655,6 +6666,9 @@ __shared_project_model_LevelModel.prototype.removeDeadUnits = function(self)
     local unitModel = self:unitsGetUnitById(unit.id);
     if (unit.type ~= "CASTLE") then 
       __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
+      if (unitModel:getOwnerId() > 0) then 
+        self.world.levelModel.playerModel:moneyChange(unitModel:getReward(), "kill enemy");
+      end;
       self.battleUnitModels:remove(unitModel);
     end;
   end;
@@ -6714,7 +6728,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=293,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=297,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -6862,6 +6876,8 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   persistCastleUnits:push(newUnit:getStruct());
   level.units = Array.new();
   level.units = level.units:concat(persistCastleUnits);
+  self.world.levelModel.playerModel:moneyChange(__shared_project_configs_GameConfig.START_MONEY - level.player.money, "reset castle");
+  self.world.levelModel.playerModel:manaChange(0 - level.player.mana, "reset castle");
   __shared_base_event_EventHelper.levelCastleEnemyDestroy(self.world);
   __shared_base_event_EventHelper.levelMoveToNext(self.world);
 end
@@ -6970,6 +6986,13 @@ __shared_project_model_PlayerModel.prototype.moneyChange = function(self,value,t
   local level1 = level.player;
   level1.money = level1.money + value;
   __shared_base_event_EventHelper.levelMoneyChange(self.world, value, tag);
+end
+__shared_project_model_PlayerModel.prototype.canSpendMoney = function(self,value) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:moneyChange",0);
+  end;
+  do return level.player.money >= value end
 end
 __shared_project_model_PlayerModel.prototype.manaChange = function(self,value,tag) 
   local level = self.world:storageGet().level;
@@ -7890,6 +7913,8 @@ local _hx_static_init = function()
   __shared_project_configs_GameConfig.PLATFORM = "google";
   
   __shared_project_configs_GameConfig.MAX_MANA = 100;
+  
+  __shared_project_configs_GameConfig.START_MONEY = 200;
   
   __shared_project_configs_UnitConfig.scalesByUnitType = (function() 
     local _hx_2

@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.project.configs.GameConfig;
 import shared.base.enums.ContextName;
 import shared.project.model.units.CastleUnitModel;
 import shared.project.model.units.CastleUnitModel;
@@ -164,7 +165,7 @@ class LevelModel {
             unitLevels: unitLevels,
             unitQueue:new Array<UnitQueueEntry>(),
             mana:0,
-            money:20,
+            money:GameConfig.START_MONEY,
         }
     }
 
@@ -235,6 +236,9 @@ class LevelModel {
                 // ds.level.castles.remove(castle);
             } else {
                 EventHelper.levelUnitDied(world, unit.id);
+                if(unitModel.getOwnerId()>0){
+                    world.levelModel.playerModel.moneyChange(unitModel.getReward(),"kill enemy");
+                }
                 battleUnitModels.remove(unitModel);
             }
 
@@ -470,6 +474,9 @@ class LevelModel {
 
         level.units = new Array<BattleUnitStruct>();
         level.units = level.units.concat(persistCastleUnits);
+
+        world.levelModel.playerModel.moneyChange(GameConfig.START_MONEY - level.player.money, "reset castle");
+        world.levelModel.playerModel.manaChange(0 - level.player.mana, "reset castle");
 
         EventHelper.levelCastleEnemyDestroy(world);
         EventHelper.levelMoveToNext(world);

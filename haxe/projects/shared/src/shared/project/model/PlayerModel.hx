@@ -43,6 +43,13 @@ class PlayerModel {
         EventHelper.levelMoneyChange(world, value, tag);
     }
 
+    public function canSpendMoney(value:Int) {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for playerModel:moneyChange";}
+        return (level.player.money >= value);
+    }
+
+
     public function manaChange(value:Int, tag:String) {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model for playerModel:manaChange";}
