@@ -1,9 +1,9 @@
 {
      "timers": {
-          "timerDelta": 0,
-          "time": 1604717976762.8,
           "clientDeltaTime": 0,
-          "serverLastTime": 1604717976762.8
+          "time": 1604721206683.5,
+          "serverLastTime": 1604721206683.5,
+          "timerDelta": 0
      },
      "version": {
           "server": "dev",
@@ -19,38 +19,99 @@
           "locale": "en",
           "permisions":           {}
      },
-     "tutorials":      {},
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
+          "cheatsEnabled": true,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdCurrent": "1111",
+          "isDev": true,
+          "firstLaunchTimestamp": 1604618196,
+          "conversationIdAtStart": "1111"
+     },
      "timerDelta": 0,
      "stat": {
           "startGameCounter": 0,
           "version": 2,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 80,
+          "intentIdx": 91,
           "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
+          "gameConfigVersion": "",
           "userLevel": 1,
+          "device": "sberbox",
           "platform": "sber",
-          "gameConfigVersion": ""
+          "gameSharedVersion": ""
      },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "9db17f45-8a15-448c-8c01-c6e8e7b746ec",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": true,
-          "conversationIdCurrent": "1111"
-     },
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
      "level": {
+          "player": {
+               "mana": 0,
+               "money": 20,
+               "id": 0
+          },
+          "units": [
+               {
+                    "id": 0,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 1,
+                    "attackRange": 3,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "ARCHER",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 2,
+                    "attackRange": 1,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 1
+               },
+               {
+                    "id": 3,
+                    "attackRange": 3,
+                    "hp": 5,
+                    "roadPartIdx": 0,
+                    "attackLvl": 0,
+                    "type": "ARCHER",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 1
+               }
+          ],
+          "unitIdx": 4,
+          "turn": 0,
+          "enemy": {
+               "id": 1
+          },
+          "castles": [
+               {
+                    "idx": 0
+               },
+               {
+                    "idx": 1
+               },
+               {
+                    "idx": 2
+               }
+          ],
           "roads": [
                [
                     {
@@ -140,27 +201,12 @@
                          "y": 0
                     }
                ]
-          ],
-          "units":           [],
-          "enemy": {
-               "id": 1
-          },
-          "turn": 0,
-          "castles": [
-               {
-                    "idx": 0
-               },
-               {
-                    "idx": 1
-               },
-               {
-                    "idx": 2
-               }
-          ],
-          "player": {
-               "mana": 0,
-               "money": 20,
-               "id": 0
-          }
-     }
+          ]
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "tutorials":      {}
 }

@@ -19,8 +19,11 @@ class PlayerModel {
         modelRestore();
     }
 
-    public function unitsSpawnUnit(unitType:UnitType){
+    public function unitsSpawnUnit(unitType:UnitType) {
+        world.levelModel.unitsSpawnUnit(0, unitType, 0);
         world.speechBuilder.text("spawn " + unitType);
+        //spawn это ход игрока
+        world.levelModel.levelNextTurn();
     }
 
     public function modelRestore():Void {

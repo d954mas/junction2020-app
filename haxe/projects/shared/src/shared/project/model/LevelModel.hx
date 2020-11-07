@@ -1,4 +1,7 @@
 package shared.project.model;
+import shared.project.storage.Storage.BattleUnitStruct;
+import shared.project.configs.UnitConfig;
+import shared.project.enums.UnitType;
 import shared.project.model.units.BattleUnitModel;
 import Array;
 import shared.project.enums.GameEnums.RoadType;
@@ -23,19 +26,52 @@ class LevelModel {
         modelRestore();
     }
 
-    public function addUnit(unit:BattleUnitModel) {
-
+    private function addUnit(unit:BattleUnitModel) {
+        battleUnitModels.push(unit);
+        EventHelper.levelUnitSpawn(world, unit.getId());
     }
 
     public function modelRestore():Void {
-        if (ds.level != null ) {
+        if (ds.level != null) {
             //lua плохо реагирует на пустой массив
             if (Reflect.hasField(ds.level.units, "length")) {
                 for (unit in ds.level.units) {
-                    battleUnitModels.add(new BattleUnitModel(unit));
+                    battleUnitModels.add(new BattleUnitModel(unit,world));
                 }
             }
         }
+    }
+
+    public function unitsSpawnUnit(ownerId:Int, type:UnitType, unitLevel:Int) {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level in unitsSpawnUnit";}
+        var scales = UnitConfig.scalesByUnitType[type];
+        if(scales == null) {throw "no scales in unitsSpawnUnit";}
+        var unit:BattleUnitStruct = {
+            roadPartIdx:-1,
+            id:level.unitIdx,
+            hpLvl:unitLevel,
+            hp:scales.hpByLevel[unitLevel],
+            ownerId:ownerId,
+            type:type,
+            attackLvl:unitLevel,
+            attackRange:scales.attackRange,
+            reward:scales.rewardByLevel[unitLevel]
+        }
+        level.unitIdx++;
+
+        //ADD CHECK THAT NO UNITS IN SPAWN POINT
+
+        var road = level.roads[level.roads.length - 2];
+        //PLAYER
+        if (ownerId == 0) {
+            unit.roadPartIdx = road[0].idx;
+        } else { //ENEMY
+            unit.roadPartIdx = road[road.length - 1].idx;
+        }
+
+        level.units.push(unit);
+        addUnit(new BattleUnitModel(unit,world));
     }
 
     private function createPlayer():LevelPlayerStruct {
@@ -64,7 +100,7 @@ class LevelModel {
                     var newPos:LevelRoadPart;
                     if (attacker.getOwnerId() > 0) {
                         newPos = unitNewPosition(attacker);
-                        attacker.move(newPos);
+                        attacker.move(newPos.idx);
                     }
                 }
             } else {
@@ -86,7 +122,7 @@ class LevelModel {
 
     @:nullSafety(Off)
     private function removeDeadUnits() {
-        var dead = Lambda.filter(ds.level.units, function (u) {return u.hp == 0;});
+        var dead = Lambda.filter(ds.level.units, function(u) {return u.hp == 0;});
         for (unit in dead) {
             ds.level.units.remove(unit);
         }
@@ -125,7 +161,7 @@ class LevelModel {
 
     private function levelNextCheckWinLose() {}
 
-    private function levelNextTurn() {
+    public function levelNextTurn() {
         var level = world.storageGet().level;
         if (level == null) { throw "no level in levelNextTurn";}
         EventHelper.levelNextTurn(world);
@@ -146,6 +182,7 @@ class LevelModel {
         var enemy = createEnemy();
         var level:LevelStruct = {
             turn:0,
+            unitIdx:0,
             player:createPlayer(),
             enemy:createEnemy(),
             castles:new Array<CastleStruct>(),
@@ -219,16 +256,38 @@ class LevelModel {
     }
 
 
-    function castlesGetByIdx(idx:Int):CastleStruct {
+    public function castlesGetByIdx(idx:Int):CastleStruct {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model castlesGetByIdx";}
         return level.castles[idx];
     }
 
-    function roadsGetByIdx(idx:Int):Array<LevelRoadPart> {
+    public function roadsGetByIdx(idx:Int):Array<LevelRoadPart> {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model roadsGetByIdx";}
         return level.roads[idx];
+    }
+
+    public function roadsFindPartById(id):LevelRoadPart {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model roadsFindPartById";}
+        var roadX = Math.floor(id / 10);
+        var roadIdx = Math.floor(roadX / 7);
+        var road = roadsGetByIdx(roadIdx);
+        for (roadPart in road) {
+            if (roadPart.idx == id) {
+                return roadPart;
+            }
+        }
+        //check all roads if not find
+        for (road in level.roads) {
+            for (roadPart in road) {
+                if (roadPart.idx == id) {
+                    return roadPart;
+                }
+            }
+        }
+        throw "no road with id:" + id;
     }
 
 }

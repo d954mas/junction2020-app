@@ -7,6 +7,6 @@ interface IBattleUnit {
     function isAlive():Bool;
     function getPos():LevelRoadPart;
     function canMove():Bool;
-    function move(newPost:LevelRoadPart):Void;
+    function move(roadPartIdx:Int):Void;
     function getOwnerId():Int;
 }

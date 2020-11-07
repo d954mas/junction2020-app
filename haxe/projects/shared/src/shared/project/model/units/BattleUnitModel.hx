@@ -7,6 +7,7 @@ import shared.project.storage.Storage.BattleUnitStruct;
 
 class BattleUnitModel implements IBattleUnit {
     private var struct:BattleUnitStruct;
+    private var world:World;
     public function canAttack(enemy:IBattleUnit):Bool {
         return calculateDistance(enemy) <= struct.attackRange && (getOwnerId() != enemy.getOwnerId());
     }
@@ -23,8 +24,9 @@ class BattleUnitModel implements IBattleUnit {
         return baseDmg;
     }
 
-    public function new(struct:BattleUnitStruct) {
+    public function new(struct:BattleUnitStruct,world:World) {
         this.struct = struct;
+        this.world = world;
     }
 
     function calculateDistance(other:IBattleUnit):Int {
@@ -53,18 +55,21 @@ class BattleUnitModel implements IBattleUnit {
     }
 
     public function getPos():LevelRoadPart {
-        return struct.roadPart;
+        return world.levelModel.roadsFindPartById(struct.roadPartIdx);
     }
 
     public function canMove():Bool {
         return true;
     }
 
-    public function move(newPos:LevelRoadPart):Void {
-        struct.roadPart = newPos;
+    public function move(roadPartIdx:Int):Void {
+        struct.roadPartIdx = roadPartIdx;
     }
 
     public function getOwnerId() {
         return struct.ownerId;
+    }
+    public function getId() {
+        return struct.id;
     }
 }

@@ -2248,6 +2248,14 @@ __haxe_ds_List.prototype.add = function(self,item)
   self.q = x;
   self.length = self.length + 1;
 end
+__haxe_ds_List.prototype.push = function(self,item) 
+  local x = __haxe_ds__List_ListNode.new(item, self.h);
+  self.h = x;
+  if (self.q == nil) then 
+    self.q = x;
+  end;
+  self.length = self.length + 1;
+end
 __haxe_ds_List.prototype.remove = function(self,v) 
   local prev = nil;
   local l = self.h;
@@ -5201,6 +5209,9 @@ end
 __shared_base_event_EventHelper.levelManaChange = function(world,count,tag) 
   world:eventEmit("LEVEL_MANA_CHANGE", _hx_o({__fields__={count=true,tag=true},count=count,tag=tag}));
 end
+__shared_base_event_EventHelper.levelUnitSpawn = function(world,id) 
+  world:eventEmit("LEVEL_UNIT_SPAWN", _hx_o({__fields__={id=true},id=id}));
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -6094,9 +6105,6 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.fallback" then 
     self:ask(self.i18n:tr("conv/fallback"));
-    if (self.world:storageGet().level ~= nil) then 
-      self.world.levelModel:levelNextCastle();
-    end;
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.keep_working" then 
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
@@ -6155,6 +6163,8 @@ __shared_project_model_LevelModel.prototype.ds= nil;
 __shared_project_model_LevelModel.prototype.playerModel= nil;
 __shared_project_model_LevelModel.prototype.battleUnitModels= nil;
 __shared_project_model_LevelModel.prototype.addUnit = function(self,unit) 
+  self.battleUnitModels:push(unit);
+  __shared_base_event_EventHelper.levelUnitSpawn(self.world, unit:getId());
 end
 __shared_project_model_LevelModel.prototype.modelRestore = function(self) 
   if (self.ds.level ~= nil) then 
@@ -6172,10 +6182,30 @@ __shared_project_model_LevelModel.prototype.modelRestore = function(self)
       while (_g < _g1.length) do 
         local unit = _g1[_g];
         _g = _g + 1;
-        self.battleUnitModels:add(__shared_project_model_units_BattleUnitModel.new(unit));
+        self.battleUnitModels:add(__shared_project_model_units_BattleUnitModel.new(unit, self.world));
       end;
     end;
   end;
+end
+__shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,ownerId,type,unitLevel) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level in unitsSpawnUnit",0);
+  end;
+  local scales = __shared_project_configs_UnitConfig.scalesByUnitType:get(type);
+  if (scales == nil) then 
+    _G.error("no scales in unitsSpawnUnit",0);
+  end;
+  local unit = _hx_o({__fields__={roadPartIdx=true,id=true,hpLvl=true,hp=true,ownerId=true,type=true,attackLvl=true,attackRange=true,reward=true},roadPartIdx=-1,id=level.unitIdx,hpLvl=unitLevel,hp=scales.hpByLevel[unitLevel],ownerId=ownerId,type=type,attackLvl=unitLevel,attackRange=scales.attackRange,reward=scales.rewardByLevel[unitLevel]});
+  level.unitIdx = level.unitIdx + 1;
+  local road = level.roads[level.roads.length - 2];
+  if (ownerId == 0) then 
+    unit.roadPartIdx = _hx_funcToField(road[0].idx);
+  else
+    unit.roadPartIdx = _hx_funcToField(road[road.length - 1].idx);
+  end;
+  level.units:push(unit);
+  self:addUnit(__shared_project_model_units_BattleUnitModel.new(unit, self.world));
 end
 __shared_project_model_LevelModel.prototype.createPlayer = function(self) 
   do return _hx_o({__fields__={id=true,mana=true,money=true},id=0,mana=0,money=20}) end
@@ -6202,7 +6232,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
         local newPos;
         if (attacker[0]:getOwnerId() > 0) then 
           newPos = self:unitNewPosition(attacker[0]);
-          attacker[0]:move(newPos);
+          attacker[0]:move(newPos.idx);
         end;
       end;
     else
@@ -6275,7 +6305,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurn = function(self)
   self:levelNextTurnRegenMana();
 end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
-  local level = _hx_o({__fields__={turn=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
+  local level = _hx_o({__fields__={turn=true,unitIdx=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
@@ -6341,6 +6371,36 @@ __shared_project_model_LevelModel.prototype.roadsGetByIdx = function(self,idx)
   end;
   do return level.roads[idx] end
 end
+__shared_project_model_LevelModel.prototype.roadsFindPartById = function(self,id) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model roadsFindPartById",0);
+  end;
+  local road = self:roadsGetByIdx(_G.math.floor(_G.math.floor(id / 10) / 7));
+  local _g = 0;
+  while (_g < road.length) do 
+    local roadPart = road[_g];
+    _g = _g + 1;
+    if (roadPart.idx == id) then 
+      do return roadPart end;
+    end;
+  end;
+  local _g1 = 0;
+  local _g2 = level.roads;
+  while (_g1 < _g2.length) do 
+    local road1 = _g2[_g1];
+    _g1 = _g1 + 1;
+    local _g11 = 0;
+    while (_g11 < road1.length) do 
+      local roadPart1 = road1[_g11];
+      _g11 = _g11 + 1;
+      if (roadPart1.idx == id) then 
+        do return roadPart1 end;
+      end;
+    end;
+  end;
+  _G.error(Std.string("no road with id:") .. Std.string(id),0);
+end
 
 __shared_project_model_LevelModel.prototype.__class__ =  __shared_project_model_LevelModel
 
@@ -6359,6 +6419,7 @@ __shared_project_model_PlayerModel.prototype = _hx_a();
 __shared_project_model_PlayerModel.prototype.world= nil;
 __shared_project_model_PlayerModel.prototype.ds= nil;
 __shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType) 
+  self.world.levelModel:unitsSpawnUnit(0, unitType, 0);
   self.world.speechBuilder:text(Std.string("spawn ") .. Std.string(unitType));
 end
 __shared_project_model_PlayerModel.prototype.modelRestore = function(self) 
@@ -6654,18 +6715,20 @@ __shared_project_model_World.prototype.__class__ =  __shared_project_model_World
 __shared_project_model_World.__super__ = __shared_base_model_WorldBaseModel
 setmetatable(__shared_project_model_World.prototype,{__index=__shared_base_model_WorldBaseModel.prototype})
 
-__shared_project_model_units_BattleUnitModel.new = function(struct) 
+__shared_project_model_units_BattleUnitModel.new = function(struct,world) 
   local self = _hx_new(__shared_project_model_units_BattleUnitModel.prototype)
-  __shared_project_model_units_BattleUnitModel.super(self,struct)
+  __shared_project_model_units_BattleUnitModel.super(self,struct,world)
   return self
 end
-__shared_project_model_units_BattleUnitModel.super = function(self,struct) 
+__shared_project_model_units_BattleUnitModel.super = function(self,struct,world) 
   self.struct = struct;
+  self.world = world;
 end
 __shared_project_model_units_BattleUnitModel.__name__ = true
 __shared_project_model_units_BattleUnitModel.__interfaces__ = {__shared_project_model_IBattleUnit}
 __shared_project_model_units_BattleUnitModel.prototype = _hx_a();
 __shared_project_model_units_BattleUnitModel.prototype.struct= nil;
+__shared_project_model_units_BattleUnitModel.prototype.world= nil;
 __shared_project_model_units_BattleUnitModel.prototype.canAttack = function(self,enemy) 
   if (self:calculateDistance(enemy) <= self.struct.attackRange) then 
     do return self:getOwnerId() ~= enemy:getOwnerId() end;
@@ -6695,16 +6758,19 @@ __shared_project_model_units_BattleUnitModel.prototype.getScales = function(self
   do return __shared_project_configs_UnitConfig.scalesByUnitType:get(self.struct.type) end
 end
 __shared_project_model_units_BattleUnitModel.prototype.getPos = function(self) 
-  do return self.struct.roadPart end
+  do return self.world.levelModel:roadsFindPartById(self.struct.roadPartIdx) end
 end
 __shared_project_model_units_BattleUnitModel.prototype.canMove = function(self) 
   do return true end
 end
-__shared_project_model_units_BattleUnitModel.prototype.move = function(self,newPos) 
-  self.struct.roadPart = newPos;
+__shared_project_model_units_BattleUnitModel.prototype.move = function(self,roadPartIdx) 
+  self.struct.roadPartIdx = roadPartIdx;
 end
 __shared_project_model_units_BattleUnitModel.prototype.getOwnerId = function(self) 
   do return self.struct.ownerId end
+end
+__shared_project_model_units_BattleUnitModel.prototype.getId = function(self) 
+  do return self.struct.id end
 end
 
 __shared_project_model_units_BattleUnitModel.prototype.__class__ =  __shared_project_model_units_BattleUnitModel

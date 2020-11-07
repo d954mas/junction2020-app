@@ -10,6 +10,7 @@ enum abstract ModelEventName(String) {
     var LEVEL_NEXT_TURN;
     var LEVEL_MONEY_CHANGE;
     var LEVEL_MANA_CHANGE;
+    var LEVEL_UNIT_SPAWN;
 }
 
 class EventHelper {
@@ -31,6 +32,9 @@ class EventHelper {
     }
     public static function levelManaChange(world:World,count:Int,tag:String):Void {
         world.eventEmit(LEVEL_MANA_CHANGE,{count:count,tag:tag});
+    }
+    public static function levelUnitSpawn(world:World,id:Int):Void {
+        world.eventEmit(LEVEL_UNIT_SPAWN,{id:id});
     }
 }
 

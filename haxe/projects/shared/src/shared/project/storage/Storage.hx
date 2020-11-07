@@ -113,7 +113,8 @@ typedef LevelStruct = {
     enemy:LevelEnemyStruct,
     castles:Array<CastleStruct>,
     roads:Array<Array<LevelRoadPart>>,
-    units:Array<BattleUnitStruct>
+    units:Array<BattleUnitStruct>,
+    unitIdx:Int,
 }
 
 typedef StorageStruct = {
@@ -137,7 +138,8 @@ typedef ClientStruct = {
 }
 
 typedef BasicUnitStruct = {
-    var roadPart:LevelRoadPart;
+    var roadPartIdx:Int;
+    var id:Int;
 }
 
 typedef BattleUnitStruct = {
