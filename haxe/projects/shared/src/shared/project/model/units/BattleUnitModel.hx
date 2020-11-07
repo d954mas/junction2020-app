@@ -88,6 +88,10 @@ class BattleUnitModel implements IBattleUnit {
     public function getHp() {
         return struct.hp;
     }
+    public function getMaxHp() {
+        @:nullSafety(Off) var baseDmg = getScales().hpByLevel[struct.attackLvl];
+        return baseDmg;
+    }
 
     public function getAttack() {
         var scales = getScales();

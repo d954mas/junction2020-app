@@ -198,9 +198,9 @@ class LevelModel {
             ds.level.units.remove(unit);
             var unitModel = unitsGetUnitById(unit.id);
             if (unit.type == UnitType.CASTLE) {
-               // var castle = Lambda.find(ds.level.castles, function (v) {return v.unitId == unit.id;});
-               // ds.level.castles.remove(castle);
-            }else{
+                // var castle = Lambda.find(ds.level.castles, function (v) {return v.unitId == unit.id;});
+                // ds.level.castles.remove(castle);
+            } else {
                 EventHelper.levelUnitDied(world, unit.id);
                 battleUnitModels.remove(unitModel);
             }
@@ -250,15 +250,19 @@ class LevelModel {
                 var unit = unitsGetUnitById(castle.unitId);
                 if (unit != null)
                     return (unit.getOwnerId() == 0 && unit.getHp() > 0);
-                else throw "no unit levelNextCheckWinLose1";
+                else throw "no unit levelNextCheckWinLose1 with id:" + castle.unitId;
             }
             ) > 0;
+            trace("enemies");
             var allEnemiesLost = Lambda.count(ds.level.castles,
             function(castle) {
+                trace("castle:" + castle.idx);
                 var unit = unitsGetUnitById(castle.unitId);
-                if (unit != null)
+                if (unit != null) {
+                    trace(unit.getOwnerId() + " " + unit.getHp());
                     return (unit.getOwnerId() > 0 && unit.getHp() > 0);
-                else throw "no unit levelNextCheckWinLose2";
+                }
+                else throw "no unit levelNextCheckWinLose2 with id:" + castle.unitId;
             }
             ) == 0;
             if (!playerDidntLose) {
@@ -351,12 +355,12 @@ class LevelModel {
             throw "can't move to next castle level storage is null";
         }
         //remove all enemies
-        for(unit in level.units){
+        for (unit in level.units) {
             var unitModel = unitsGetUnitById(unit.id);
             if (unit.type == UnitType.CASTLE) {
                 // var castle = Lambda.find(ds.level.castles, function (v) {return v.unitId == unit.id;});
                 // ds.level.castles.remove(castle);
-            }else{
+            } else {
                 EventHelper.levelUnitDiedMoveToNextCastle(world, unit.id);
             }
         }
@@ -375,7 +379,20 @@ class LevelModel {
         roadPlayerToEnemy.push(createRoadPart(startX + 5, 0, RoadType.BASE));
         roadPlayerToEnemy.push(createRoadPart(startX + 6, 0, RoadType.BASE));
         roadPlayerToEnemy.push(createRoadPart(startX + 7, 0, RoadType.CASTLE));
+        level.roads.push(roadPlayerToEnemy);
+
         var persistCastleUnits = new Array<BattleUnitStruct>();
+
+        var newUserCastle = level.castles.pop();
+        //var unitOld = Lambda.find(ds.level.units, function (v) {return v.id == newUserCastle.unitId;});
+        // ds.level.units.remove(unitOld)
+
+
+        //change enemy castle to user castls
+        var newUserCastleUnit = unitsSpawnUnitCastle(0, 0);
+        var newUserCastleStruct = {idx:level.castles.length, unitId:newUserCastleUnit.getId()}
+        level.castles.push(newUserCastleStruct);
+
 
         for (castle in level.castles) {
             var castleUnit = unitsGetUnitById(castle.unitId);
@@ -384,11 +401,16 @@ class LevelModel {
             }
         }
 
-        level.units = new Array<BattleUnitStruct>();
-        //level.units = level.units.concat(persistCastleUnits);
-        level.roads.push(roadPlayerToEnemy);
+        persistCastleUnits.push(newUserCastleUnit.getStruct());
 
-        level.castles.push({idx:level.castles.length, unitId:unitsSpawnUnitCastle(1, 0).getId()}); //enemy_castle
+        var newUnit = unitsSpawnUnitCastle(1, 0);
+        level.castles.push({idx:level.castles.length, unitId:newUnit.getId()}); //new enemy_castle
+
+        persistCastleUnits.push(newUnit.getStruct());
+
+        level.units = new Array<BattleUnitStruct>();
+        level.units = level.units.concat(persistCastleUnits);
+
 
         EventHelper.levelMoveToNext(world);
     }
