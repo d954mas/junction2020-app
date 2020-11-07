@@ -164,10 +164,8 @@ class LevelModel {
         var deadModels = Lambda.filter(battleUnitModels, function(u) {return !u.isAlive();});
         for (unit in dead) {
             ds.level.units.remove(unit);
-        }
-        for (unit in deadModels) {
-            EventHelper.levelUnitDied(world, unit.getId());
-            battleUnitModels.remove(unit);
+            EventHelper.levelUnitDied(world, unit.id);
+            battleUnitModels.remove(unitsGetUnitById(unit.id));
         }
     }
 
