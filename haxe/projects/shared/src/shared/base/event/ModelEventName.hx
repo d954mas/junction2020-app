@@ -17,6 +17,7 @@ enum abstract ModelEventName(String) {
     var LEVEL_UNIT_MOVE;
     var LEVEL_UNIT_ATTACK;
     var LEVEL_UNIT_DIED;
+    var LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE;
     var LEVEL_PLAYER_LOST;
 }
 
@@ -34,31 +35,42 @@ class EventHelper {
         world.eventEmit(LEVEL_NEXT_TURN);
     }
 
-    public static function levelMoneyChange(world:World,count:Int,tag:String):Void {
-        world.eventEmit(LEVEL_MONEY_CHANGE,{count:count,tag:tag});
+    public static function levelMoneyChange(world:World, count:Int, tag:String):Void {
+        world.eventEmit(LEVEL_MONEY_CHANGE, {count:count, tag:tag});
     }
-    public static function levelManaChange(world:World,count:Int,tag:String):Void {
-        world.eventEmit(LEVEL_MANA_CHANGE,{count:count,tag:tag});
+
+    public static function levelManaChange(world:World, count:Int, tag:String):Void {
+        world.eventEmit(LEVEL_MANA_CHANGE, {count:count, tag:tag});
     }
-    public static function levelUnitSpawn(world:World,id:Int,struct:BattleUnitStruct):Void {
+
+    public static function levelUnitSpawn(world:World, id:Int, struct:BattleUnitStruct):Void {
         var struct = Reflect.copy(struct);//copy struct. Unit view use it for default values
-        world.eventEmit(LEVEL_UNIT_SPAWN,{id:id,struct:struct});
+        world.eventEmit(LEVEL_UNIT_SPAWN, {id:id, struct:struct});
     }
-    public static function levelUnitMove(world:World,id:Int,roadId:Int):Void {
-        world.eventEmit(LEVEL_UNIT_MOVE,{id:id,roadId:roadId});
+
+    public static function levelUnitMove(world:World, id:Int, roadId:Int):Void {
+        world.eventEmit(LEVEL_UNIT_MOVE, {id:id, roadId:roadId});
     }
+
     public static function levelUnitAttack(world:World, attackerId:Int, defenderId:Int):Void {
         world.eventEmit(LEVEL_UNIT_ATTACK, {attackerId:attackerId, defenderId:defenderId});
     }
+
     public static function levelUnitDied(world:World, id:Int) {
         world.eventEmit(LEVEL_UNIT_DIED, {id:id});
     }
+    public static function levelUnitDiedMoveToNextCastle(world:World, id:Int) {
+        world.eventEmit(LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE, {id:id});
+    }
+
     public static function levelLost(world:World) {
         world.eventEmit(LEVEL_PLAYER_LOST);
     }
+
     public static function levelTurnStart(world:World) {
         world.eventEmit(LEVEL_TURN_START);
     }
+
     public static function levelTurnEnd(world:World) {
         world.eventEmit(LEVEL_TURN_END);
     }

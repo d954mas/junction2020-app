@@ -344,7 +344,7 @@ class LevelModel {
                 // var castle = Lambda.find(ds.level.castles, function (v) {return v.unitId == unit.id;});
                 // ds.level.castles.remove(castle);
             }else{
-                EventHelper.levelUnitDied(world, unit.id);
+                EventHelper.levelUnitDiedMoveToNextCastle(world, unit.id);
             }
         }
 

@@ -40,6 +40,7 @@ end
 function Level:animation_turn_start()
     self.threads = {
         die = ACTIONS.Parallel(),
+        dieMoveToNextCastle = ACTIONS.Parallel(),
         move = ACTIONS.Parallel(),
         spawn = ACTIONS.Parallel(),
     }
@@ -51,15 +52,19 @@ end
 function Level:animation_turn_end()
     self.animation_sequence:add_action(function()
         local threads = self.threads
-        while (#threads.spawn.childs > 0 or #threads.move.childs > 0 or #threads.die.childs > 0) do
+        while (#threads.spawn.childs > 0 or #threads.move.childs > 0 or #threads.die.childs > 0 or #threads.dieMoveToNextCastle.childs > 0) do
             local dt = coroutine.yield()
             local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
             threads.spawn:update(dt)
             if (#threads.spawn.childs == 0) then
+                threads.move:update(dt)
+            end
+            if (#threads.move.childs == 0 and #threads.spawn.childs == 0) then
                 threads.die:update(dt)
             end
-            if (#threads.die.childs == 0 and #threads.spawn.childs == 0) then
-                threads.move:update(dt)--hotfix die before move or spawn
+
+            if (#threads.die.childs == 0 and #threads.spawn.childs == 0 and #threads.move.childs == 0) then
+                threads.dieMoveToNextCastle:update(dt)
             end
             ctx:remove()
         end
@@ -125,6 +130,18 @@ function Level:units_die_unit(id)
         if (unit_view) then
             local action = unit_view:die()
             self.threads.die:add_action(action)
+        else
+            COMMON.w("no unit view for die.Is it castle?", "LEVEL")
+        end
+   -- end)
+end
+function Level:units_die_unit_move_to_next_castle(id)
+   -- self.world.thread_sequence:add_action(function()
+        local unit = HAXE_WRAPPER.level_units_get_by_id(id)
+        local unit_view = self:units_view_by_id(id)
+        if (unit_view) then
+            local action = unit_view:die()
+            self.threads.dieMoveToNextCastle:add_action(action)
         else
             COMMON.w("no unit view for die.Is it castle?", "LEVEL")
         end

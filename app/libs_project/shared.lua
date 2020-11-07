@@ -5396,6 +5396,9 @@ end
 __shared_base_event_EventHelper.levelUnitDied = function(world,id) 
   world:eventEmit("LEVEL_UNIT_DIED", _hx_o({__fields__={id=true},id=id}));
 end
+__shared_base_event_EventHelper.levelUnitDiedMoveToNextCastle = function(world,id) 
+  world:eventEmit("LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE", _hx_o({__fields__={id=true},id=id}));
+end
 __shared_base_event_EventHelper.levelLost = function(world) 
   world:eventEmit("LEVEL_PLAYER_LOST");
 end
@@ -6471,13 +6474,29 @@ __shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,owner
   local unit = _hx_o({__fields__={roadPartIdx=true,id=true,hpLvl=true,hp=true,ownerId=true,type=true,attackLvl=true,attackRange=true,reward=true},roadPartIdx=-1,id=level.unitIdx,hpLvl=unitLevel,hp=scales.hpByLevel[unitLevel],ownerId=ownerId,type=type,attackLvl=unitLevel,attackRange=scales.attackRange,reward=scales.rewardByLevel[unitLevel]});
   level.unitIdx = level.unitIdx + 1;
   local road = level.roads[level.roads.length - 1];
+  local roadPartIdx;
   if (ownerId == 0) then 
-    unit.roadPartIdx = _hx_funcToField(road[0].idx);
+    roadPartIdx = road[0].idx;
   else
-    unit.roadPartIdx = _hx_funcToField(road[road.length - 1].idx);
+    roadPartIdx = road[road.length - 1].idx;
   end;
-  level.units:push(unit);
-  self:addUnit(__shared_project_model_units_BattleUnitModel.new(unit, self.world));
+  if (self:canMoveToPart(roadPartIdx)) then 
+    unit.roadPartIdx = roadPartIdx;
+    level.units:push(unit);
+    self:addUnit(__shared_project_model_units_BattleUnitModel.new(unit, self.world));
+    do return true end;
+  else
+    do return false end;
+  end;
+end
+__shared_project_model_LevelModel.prototype.canMoveToPart = function(self,partIdx) 
+  do return Lambda.count(self.ds.level.units, function(v) 
+    if (v.type ~= "CASTLE") then 
+      do return v.roadPartIdx == partIdx end;
+    else
+      do return false end;
+    end;
+  end) == 0 end
 end
 __shared_project_model_LevelModel.prototype.createPlayer = function(self) 
   do return _hx_o({__fields__={id=true,mana=true,money=true},id=0,mana=0,money=20}) end
@@ -6501,10 +6520,10 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
     end)(attacker));
     __haxe_ds_ArraySort.sort(canAttack, (function() 
       do return function(a,b) 
-        if (not a:canMove() and b:canMove()) then 
+        if (a:canMove() and not b:canMove()) then 
           do return -1 end;
         else
-          if (a:canMove() and not b:canMove()) then 
+          if (not a:canMove() and b:canMove()) then 
             do return 1 end;
           else
             do return 0 end;
@@ -6515,7 +6534,9 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
     if (canAttack.length == 0) then 
       if (attacker[0]:canMove()) then 
         local newPos = self:unitNewPosition(attacker[0]);
-        attacker[0]:move(newPos.idx);
+        if (self:canMoveToPart(newPos.idx)) then 
+          attacker[0]:move(newPos.idx);
+        end;
       end;
     else
       attacker[0]:attack(canAttack[0]);
@@ -6679,7 +6700,7 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
     _g = _g + 1;
     self:unitsGetUnitById(unit.id);
     if (unit.type ~= "CASTLE") then 
-      __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
+      __shared_base_event_EventHelper.levelUnitDiedMoveToNextCastle(self.world, unit.id);
     end;
   end;
   level.enemy = self:createEnemy();
@@ -7732,7 +7753,7 @@ local _hx_static_init = function()
     
     _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=4, 8, 12, 16, 20}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=1, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2
