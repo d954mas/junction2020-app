@@ -94,6 +94,7 @@ typedef LevelPlayerStruct = {
     > LevelPlayerOrAiStruct,
     var money:Int;
     var mana:Int;
+    var caravanLevel:Int;
 }
 
 typedef LevelEnemyStruct = {
@@ -121,6 +122,7 @@ typedef LevelStruct = {
     units:Array<BattleUnitStruct>,
     caravans:Array<ResourceUnitStruct>,
     unitIdx:Int,
+    caravanIdx:Int,
     lose:Bool
 }
 

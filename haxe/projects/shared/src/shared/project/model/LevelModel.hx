@@ -71,6 +71,7 @@ class LevelModel {
 
                 }
             }
+            trace("DBG_CAR: " + Std.string(ds.level.caravans));
             if (Reflect.hasField(ds.level.caravans, "length")) {
                 for (caravan in ds.level.caravans) {
                     resourceUnitModels.add(new ResourceUnitModel(caravan, world));
@@ -146,20 +147,22 @@ class LevelModel {
     }
 
     @:nullSafety(Off)
-    public function spawnCaravan(level:Int) {
+    public function spawnCaravan(level:Int):Bool {
         if (ds.level.caravans.length < UnitConfig.caravanCount) {
             var caravan = {
                 roadPartIdx:getUnloadPos().idx,
                 ownerId:0,
-                id: ds.level.caravans.length,
+                id: ds.level.caravanIdx,
                 resources:0,
                 resourceLvl:level
             }
+            ds.level.caravanIdx++;
             ds.level.caravans.push(caravan);
             var model = new ResourceUnitModel(caravan, world);
             addCaravan(model);
+            return true;
         }
-
+        return false;
     }
 
     private function addCaravan(model:ResourceUnitModel) {
@@ -217,6 +220,7 @@ class LevelModel {
         return {
             id: 0,
             unitLevels: unitLevels,
+            caravanLevel:1,
             unitQueue:new Array<UnitQueueEntry>(),
             mana:GameConfig.START_MANA,
             money:GameConfig.START_MONEY,
@@ -434,6 +438,7 @@ class LevelModel {
             turn:0,
             lose:false,
             unitIdx:0,
+            caravanIdx:0,
             player:createPlayer(),
             enemy:createEnemy(),
             caravans:new Array<ResourceUnitStruct>(),
