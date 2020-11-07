@@ -202,6 +202,10 @@ function Level:move_to_next()
             time = time - dt
         end
         CAMERAS.battle_camera:set_position(vmath.vector3(new_x, current_y, 0))
+        local bg_pos = math.floor((new_x-640)/2048)
+        local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+        go.set_position(vmath.vector3(0 + 2048*bg_pos,30,-1),"/bg")
+        ctx:remove()
     end)
 end
 --endregion

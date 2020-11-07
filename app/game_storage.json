@@ -1,9 +1,9 @@
 {
      "timers": {
-          "timerDelta": 0,
-          "time": 1604785208535.7,
-          "serverLastTime": 1604785208535.7,
-          "clientDeltaTime": 0
+          "clientDeltaTime": 0,
+          "time": 1604786559453.2,
+          "serverLastTime": 1604786559453.2,
+          "timerDelta": 0
      },
      "version": {
           "server": "dev",
@@ -15,34 +15,34 @@
      },
      "user": {
           "verification": "",
-          "name": "name",
           "locale": "en",
+          "name": "name",
           "permisions":           {}
      },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": false,
-          "conversationIdCurrent": "1111"
-     },
-     "timerDelta": 0,
      "stat": {
           "startGameCounter": 0,
           "version": 3,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 33,
+          "intentIdx": 90,
           "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
+          "gameConfigVersion": "",
           "userLevel": 1,
+          "device": "sberbox",
           "platform": "sber",
-          "gameConfigVersion": ""
+          "gameSharedVersion": ""
+     },
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
+          "cheatsEnabled": false,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdCurrent": "1111",
+          "isDev": true,
+          "firstLaunchTimestamp": 1604618196,
+          "conversationIdAtStart": "1111"
      },
      "level": {
           "lose": false,
@@ -147,6 +147,402 @@
                          "idx": 13000,
                          "y": 0
                     }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 14,
+                         "idx": 14000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 15,
+                         "idx": 15000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 16,
+                         "idx": 16000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 17,
+                         "idx": 17000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 18,
+                         "idx": 18000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 19,
+                         "idx": 19000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 20,
+                         "idx": 20000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 21,
+                         "idx": 21000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 22,
+                         "idx": 22000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 23,
+                         "idx": 23000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 24,
+                         "idx": 24000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 25,
+                         "idx": 25000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 26,
+                         "idx": 26000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 27,
+                         "idx": 27000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 28,
+                         "idx": 28000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 29,
+                         "idx": 29000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 30,
+                         "idx": 30000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 31,
+                         "idx": 31000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 32,
+                         "idx": 32000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 33,
+                         "idx": 33000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 34,
+                         "idx": 34000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 35,
+                         "idx": 35000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 36,
+                         "idx": 36000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 37,
+                         "idx": 37000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 38,
+                         "idx": 38000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 39,
+                         "idx": 39000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 40,
+                         "idx": 40000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 41,
+                         "idx": 41000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 42,
+                         "idx": 42000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 43,
+                         "idx": 43000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 44,
+                         "idx": 44000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 45,
+                         "idx": 45000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 46,
+                         "idx": 46000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 47,
+                         "idx": 47000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 48,
+                         "idx": 48000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 49,
+                         "idx": 49000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 50,
+                         "idx": 50000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 51,
+                         "idx": 51000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 52,
+                         "idx": 52000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 53,
+                         "idx": 53000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 54,
+                         "idx": 54000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 55,
+                         "idx": 55000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 56,
+                         "idx": 56000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 57,
+                         "idx": 57000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 58,
+                         "idx": 58000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 59,
+                         "idx": 59000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 60,
+                         "idx": 60000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 61,
+                         "idx": 61000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 62,
+                         "idx": 62000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 63,
+                         "idx": 63000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 64,
+                         "idx": 64000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 65,
+                         "idx": 65000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 66,
+                         "idx": 66000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 67,
+                         "idx": 67000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 68,
+                         "idx": 68000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 69,
+                         "idx": 69000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 70,
+                         "idx": 70000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 71,
+                         "idx": 71000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 72,
+                         "idx": 72000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 73,
+                         "idx": 73000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 74,
+                         "idx": 74000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 75,
+                         "idx": 75000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 76,
+                         "idx": 76000,
+                         "y": 0
+                    }
                ]
           ],
           "units": [
@@ -156,8 +552,8 @@
                     "hp": 50,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 0,
                     "reward": 0
                },
@@ -167,32 +563,183 @@
                     "hp": 50,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 3,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 14000,
+                    "attackLvl": 0,
                     "type": "CASTLE",
                     "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 0
                },
                {
-                    "id": 2,
+                    "id": 6,
                     "attackRange": 1,
                     "hp": 50,
-                    "roadPartIdx": 13000,
+                    "roadPartIdx": 21000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 8,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 28000,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 10,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 35000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 13,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 42000,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 15,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 49000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 17,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 56000,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 20,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 63000,
+                    "attackLvl": 0,
+                    "hpLvl": 0,
+                    "type": "CASTLE",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 22,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 70000,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 22,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 70000,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 23,
+                    "attackRange": 1,
+                    "hp": 50,
+                    "roadPartIdx": 76000,
                     "attackLvl": 0,
                     "type": "CASTLE",
                     "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 0
+               }
+          ],
+          "unitIdx": 24,
+          "turn": 9,
+          "castles": [
+               {
+                    "unitId": 0,
+                    "idx": 0
                },
                {
-                    "id": 3,
-                    "attackRange": 1,
-                    "hp": 2,
-                    "roadPartIdx": 12000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 50
+                    "unitId": 1,
+                    "idx": 1
+               },
+               {
+                    "unitId": 3,
+                    "idx": 2
+               },
+               {
+                    "unitId": 6,
+                    "idx": 3
+               },
+               {
+                    "unitId": 8,
+                    "idx": 4
+               },
+               {
+                    "unitId": 10,
+                    "idx": 5
+               },
+               {
+                    "unitId": 13,
+                    "idx": 6
+               },
+               {
+                    "unitId": 15,
+                    "idx": 7
+               },
+               {
+                    "unitId": 17,
+                    "idx": 8
+               },
+               {
+                    "unitId": 20,
+                    "idx": 9
+               },
+               {
+                    "unitId": 22,
+                    "idx": 10
+               },
+               {
+                    "unitId": 23,
+                    "idx": 11
                }
           ],
           "player": {
@@ -204,27 +751,11 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 20,
+               "mana": 100,
                "id": 0,
-               "money": 160,
+               "money": 150,
                "unitQueue":                []
-          },
-          "turn": 2,
-          "castles": [
-               {
-                    "unitId": 0,
-                    "idx": 0
-               },
-               {
-                    "unitId": 1,
-                    "idx": 1
-               },
-               {
-                    "unitId": 2,
-                    "idx": 2
-               }
-          ],
-          "unitIdx": 4
+          }
      },
      "iap": {
           "current_iap": ""

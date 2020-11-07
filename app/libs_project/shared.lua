@@ -6857,7 +6857,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
         _G.error(Std.string("no unit levelNextCheckWinLose1 with id:") .. Std.string(castle.unitId),0);
       end;
     end) > 0;
-    local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
+    Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
         __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=369,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
@@ -6869,15 +6869,13 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
       else
         _G.error(Std.string("no unit levelNextCheckWinLose2 with id:") .. Std.string(castle1.unitId),0);
       end;
-    end) == 0;
+    end);
     if (playerLose) then 
       self.ds.level.lose = true;
       self.world:contextChange("lose_modal");
       __shared_base_event_EventHelper.levelLost(self.world);
     else
-      if (allEnemiesLost) then 
-        self:levelNextCastle();
-      end;
+      self:levelNextCastle();
     end;
   else
     _G.error("no level",0);
