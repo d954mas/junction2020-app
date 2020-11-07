@@ -34,7 +34,7 @@ class LevelModel {
 
     private function addUnit(unit:BattleUnitModel) {
         battleUnitModels.push(unit);
-        EventHelper.levelUnitSpawn(world, unit.getId(),unit.getStruct());
+        EventHelper.levelUnitSpawn(world, unit.getId(), unit.getStruct());
     }
 
     private function addUnitCastle(unit:BattleUnitModel) {
@@ -108,19 +108,29 @@ class LevelModel {
             reward:scales.rewardByLevel[unitLevel]
         }
         level.unitIdx++;
-
         //ADD CHECK THAT NO UNITS IN SPAWN POINT
 
         var road = level.roads[level.roads.length - 1];
         //PLAYER
+        var roadPartIdx:Int;
         if (ownerId == 0) {
-            unit.roadPartIdx = road[0].idx;
+            roadPartIdx = road[0].idx;
         } else { //ENEMY
-            unit.roadPartIdx = road[road.length - 1].idx;
+            roadPartIdx = road[road.length - 1].idx;
         }
 
-        level.units.push(unit);
-        addUnit(new BattleUnitModel(unit, world));
+        if (canMoveToPart(roadPartIdx)) {
+            unit.roadPartIdx = roadPartIdx;
+            level.units.push(unit);
+            addUnit(new BattleUnitModel(unit, world));
+            return true;
+        }
+        else return false;
+    }
+
+    private function canMoveToPart(partIdx:Int) {
+        @:nullSafety(Off)
+        return Lambda.count(ds.level.units, function(v) {return v.type != UnitType.CASTLE && v.roadPartIdx == partIdx;}) == 0;
     }
 
     private function createPlayer():LevelPlayerStruct {
@@ -145,8 +155,8 @@ class LevelModel {
         for (attacker in battleUnitModels) {
             var canAttack = Lambda.filter(battleUnitModels, function(v) {return attacker.canAttack(v);});
             haxe.ds.ArraySort.sort(canAttack, function(a, b) {
-                if (!a.canMove() && b.canMove()) return -1;
-                else if (a.canMove() && !b.canMove()) return 1;
+                if (a.canMove() && !b.canMove()) return -1;
+                else if (!a.canMove() && b.canMove()) return 1;
                 else return 0;
             });
             if (canAttack.length == 0) {
@@ -154,7 +164,9 @@ class LevelModel {
                     var newPos:LevelRoadPart;
                     //if (attacker.getOwnerId() > 0) { //Не понял и закомментировал. Почему ходит только враг
                     newPos = unitNewPosition(attacker);
-                    attacker.move(newPos.idx);
+                    if (canMoveToPart(newPos.idx)) {
+                        attacker.move(newPos.idx);
+                    }
                     // }
                 }
             } else {
