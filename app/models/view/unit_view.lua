@@ -66,4 +66,9 @@ function View:bind_vh()
     ctx:remove()
 end
 
+function View:hide() 
+    --msg.post(self.vh.root, "disable")
+    --go.delete(self.vh.root, true)
+end
+
 return View

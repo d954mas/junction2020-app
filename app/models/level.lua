@@ -31,8 +31,17 @@ function Level:initialize(world)
     for i = 0, roads.length - 1 do
         table.insert(self.views.roads, RoadView(i, self.world))
     end
+    self.subscription = COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.UNIT_DIED):subscribe(function(data)
+        COMMON.i("DBG_DATA", "DBG")
+        self:unit_died(data.id)
+    end)
 
     CAMERAS.battle_camera:set_position(vmath.vector3(640 or self.views.castles[#self.views.castles - 1].castle_pos.x, 340, 0))
+end
+
+function Level:unit_died(id)
+    local unit_view = self:units_view_by_id(id)
+    unit_view:hide()
 end
 
 function Level:update(dt)
