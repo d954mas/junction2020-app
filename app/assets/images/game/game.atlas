@@ -7,14 +7,6 @@ images {
   sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
-  image: "/assets/images/game/castle_1.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_4
-}
-images {
-  image: "/assets/images/game/road_1.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_4
-}
-images {
   image: "/assets/images/game/unit_archer.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
@@ -36,6 +28,18 @@ images {
 }
 images {
   image: "/assets/images/game/icon_heart.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/images/game/road.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/images/game/castle_enemy.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/images/game/castle_player.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0

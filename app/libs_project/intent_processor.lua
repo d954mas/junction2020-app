@@ -130,9 +130,11 @@ function Processor:process_events(events, data)
         elseif event.name == "LEVEL_UNIT_DIED" then
             self.world.level_model:units_die_unit(assert(event.data.id))
         elseif event.name == "LEVEL_UNIT_ATTACK" then
-            self.world.level_model:units_attack_unit(assert(event.data.attackerId),assert(event.data.defenderId))
+            self.world.level_model:units_attack_unit(assert(event.data.attackerId), assert(event.data.defenderId))
         elseif event.name == "LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE" then
             self.world.level_model:units_die_unit_move_to_next_castle(assert(event.data.id))
+        elseif event.name == "LEVEL_CASTLE_ENEMY_DESTROY" then
+            self.world.level_model:castle_enemy_destroy()
         elseif event.name == "LEVEL_TURN_START" then
             self.world.level_model:animation_turn_start()
         elseif event.name == "LEVEL_TURN_END" then
@@ -144,10 +146,14 @@ function Processor:process_events(events, data)
             self:show_scene(SM.SCENES.LOSE_MODAL)
         elseif event.name == "LEVEL_RESTART" then
             self.world.thread_sequence:add_action(function()
-                while (SM.co) do coroutine.yield() end
+                while (SM.co) do
+                    coroutine.yield()
+                end
                 self.world:level_restart()
                 SM:reload_scene()
-                while (SM.co) do coroutine.yield() end
+                while (SM.co) do
+                    coroutine.yield()
+                end
             end)
         end
     end

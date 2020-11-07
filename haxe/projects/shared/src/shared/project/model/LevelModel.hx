@@ -484,7 +484,7 @@ class LevelModel {
         level.units = new Array<BattleUnitStruct>();
         level.units = level.units.concat(persistCastleUnits);
 
-
+        EventHelper.levelCastleEnemyDestroy(world);
         EventHelper.levelMoveToNext(world);
     }
 
