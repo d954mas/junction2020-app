@@ -33,12 +33,12 @@ class LevelModel {
 
 
     private function addUnit(unit:BattleUnitModel) {
-        battleUnitModels.push(unit);
+        battleUnitModels.add(unit);
         EventHelper.levelUnitSpawn(world, unit.getId(), unit.getStruct());
     }
 
     private function addUnitCastle(unit:BattleUnitModel) {
-        battleUnitModels.push(unit);
+        battleUnitModels.add(unit);
         //EventHelper.levelUnitSpawn(world, unit.getId());
     }
 
@@ -152,26 +152,39 @@ class LevelModel {
     }
 
     private function levelNextTurnBattles() {
+        var madeTurn:Map<BattleUnitModel, Bool> = new Map<BattleUnitModel, Bool>();
         for (attacker in battleUnitModels) {
             var canAttack = Lambda.filter(battleUnitModels, function(v) {return attacker.canAttack(v);});
             haxe.ds.ArraySort.sort(canAttack, function(a, b) {
                 if (a.canMove() && !b.canMove()) return -1;
                 else if (!a.canMove() && b.canMove()) return 1;
+/*                    else if (a.getHp() < b.getHp()) return -1;
+                    else if (a.getHp() > b.getHp()) return 1;*/
                 else return 0;
             });
             if (canAttack.length == 0) {
                 if (attacker.canMove()) {
-                    var newPos:LevelRoadPart;
-                    //if (attacker.getOwnerId() > 0) { //Не понял и закомментировал. Почему ходит только враг
-                    newPos = unitNewPosition(attacker);
-                    if (canMoveToPart(newPos.idx)) {
-                        attacker.move(newPos.idx);
+                    if (madeTurn[attacker] == null) {
+                        var newPos:LevelRoadPart;
+                        //if (attacker.getOwnerId() > 0) { //Не понял и закомментировал. Почему ходит только враг
+                        newPos = unitNewPosition(attacker);
+                        if (canMoveToPart(newPos.idx)) {
+                            attacker.move(newPos.idx);
+                            madeTurn[attacker] = true;
+                        }
                     }
                     // }
                 }
             } else {
                 var defender = canAttack[0];
-                attacker.attack(defender);
+                if (madeTurn[attacker] == null) {
+                    attacker.attack(defender);
+                    madeTurn[attacker] = true;
+                    if (madeTurn[defender] == null && defender.canAttack(attacker)) {
+                        defender.attack(attacker);
+                        madeTurn[defender] = true;
+                    }
+                }
             }
         }
         removeDeadUnits();
