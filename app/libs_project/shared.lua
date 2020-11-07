@@ -6034,8 +6034,20 @@ __shared_project_configs_UnitConfig.unitTypeGetById = function(id)
     if (id == "KNIGHT") then 
       do return "KNIGHT" end;
     else
-      if (id == "CASTLE") then 
-        do return "CASTLE" end;
+      if (id == "SHIELD") then 
+        do return "SHIELD" end;
+      else
+        if (id == "SPEARMAN") then 
+          do return "SPEARMAN" end;
+        else
+          if (id == "MAGE") then 
+            do return "MAGE" end;
+          else
+            if (id == "CASTLE") then 
+              do return "CASTLE" end;
+            end;
+          end;
+        end;
       end;
     end;
   end;
@@ -6382,10 +6394,28 @@ __shared_project_model_EnemyModel.prototype.turn = function(self)
   end;
   local step = _G.math.fmod(level.turn, 6);
   if (step == 2) then 
-    self:unitsSpawnUnit("KNIGHT");
+    local chance = _G.math.random();
+    if (chance < 0.5) then 
+      self:unitsSpawnUnit("KNIGHT");
+    else
+      if (chance < 0.8) then 
+        self:unitsSpawnUnit("SHIELD");
+      else
+        self:unitsSpawnUnit("SPEARMAN");
+      end;
+    end;
   else
     if (step == 5) then 
-      self:unitsSpawnUnit("ARCHER");
+      local chance1 = _G.math.random();
+      if (chance1 < 0.5) then 
+        self:unitsSpawnUnit("ARCHER");
+      else
+        if (chance1 < 0.8) then 
+          self:unitsSpawnUnit("MAGE");
+        else
+          self:unitsSpawnUnit("KNIGHT");
+        end;
+      end;
     end;
   end;
 end
@@ -7866,11 +7896,17 @@ local _hx_static_init = function()
     
     local _g = __haxe_ds_StringMap.new();
     
-    _g:set("ARCHER", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=2, 4, 6, 8, 10}, 5),attackRange=3,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
+    _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5),rewardByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5)}));
     
-    _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=4, 8, 12, 16, 20}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
+    _g:set("ARCHER", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=2,costByLevel=_hx_tab_array({[0]=125, 125, 125, 125, 125}, 5),rewardByLevel=_hx_tab_array({[0]=75, 75, 75, 75, 75}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("SHIELD", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=4, 4, 4, 4, 4}, 5),attackByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=200, 200, 200, 200, 200}, 5),rewardByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5)}));
+    
+    _g:set("SPEARMAN", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=3, 3, 3, 3, 3}, 5),attackByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=250, 250, 250, 250, 250}, 5),rewardByLevel=_hx_tab_array({[0]=150, 150, 150, 150, 150}, 5)}));
+    
+    _g:set("MAGE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=4, 4, 4, 4, 4}, 5),attackByLevel=_hx_tab_array({[0]=3, 3, 3, 3, 3}, 5),attackRange=2,costByLevel=_hx_tab_array({[0]=400, 400, 400, 400, 400}, 5),rewardByLevel=_hx_tab_array({[0]=250, 250, 250, 250, 250}, 5)}));
+    
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2
@@ -7884,7 +7920,7 @@ local _hx_static_init = function()
   
   __shared_project_enums_Intents.commandCloseOrder = Array.new();
   
-  __shared_project_enums__UnitType_UnitType_Impl_.ALL_TYPES = _hx_tab_array({[0]="ARCHER", "KNIGHT", "CASTLE"}, 3);
+  __shared_project_enums__UnitType_UnitType_Impl_.ALL_TYPES = _hx_tab_array({[0]="KNIGHT", "ARCHER", "SHIELD", "SPEARMAN", "MAGE", "CASTLE"}, 6);
   
   __shared_project_utils_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
   
