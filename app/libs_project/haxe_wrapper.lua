@@ -77,6 +77,12 @@ function M.game_config_speech_platform_get()
 end
 
 
+--чтобы получить значения по умолчанию для нового юнита
+function M.level_units_create_battle_unit_model(struct)
+	local model = SHARED.shared.project.model.units.BattleUnitModel.new(struct,M.get_world())
+	return model
+end
+
 function M.level_castle_get_by_idx(idx)
 	return M.get_world().levelModel:castlesGetByIdx(idx)
 end

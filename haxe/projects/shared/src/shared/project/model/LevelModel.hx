@@ -33,7 +33,7 @@ class LevelModel {
 
     private function addUnit(unit:BattleUnitModel) {
         battleUnitModels.push(unit);
-        EventHelper.levelUnitSpawn(world, unit.getId());
+        EventHelper.levelUnitSpawn(world, unit.getId(),unit.getStruct());
     }
     private function addUnitCastle(unit:BattleUnitModel) {
         battleUnitModels.push(unit);

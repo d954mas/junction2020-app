@@ -1,5 +1,6 @@
 package shared.base.event;
 
+import shared.project.storage.Storage.BattleUnitStruct;
 import shared.project.model.World;
 enum abstract ModelEventName(String) {
     var TUTORIAL_STARTED;
@@ -36,8 +37,9 @@ class EventHelper {
     public static function levelManaChange(world:World,count:Int,tag:String):Void {
         world.eventEmit(LEVEL_MANA_CHANGE,{count:count,tag:tag});
     }
-    public static function levelUnitSpawn(world:World,id:Int):Void {
-        world.eventEmit(LEVEL_UNIT_SPAWN,{id:id});
+    public static function levelUnitSpawn(world:World,id:Int,struct:BattleUnitStruct):Void {
+        var struct = Reflect.copy(struct);//copy struct. Unit view use it for default values
+        world.eventEmit(LEVEL_UNIT_SPAWN,{id:id,struct:struct});
     }
     public static function levelUnitMove(world:World,id:Int,roadId:Int):Void {
         world.eventEmit(LEVEL_UNIT_MOVE,{id:id,roadId:roadId});

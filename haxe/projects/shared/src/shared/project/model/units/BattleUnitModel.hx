@@ -82,6 +82,9 @@ class BattleUnitModel implements IBattleUnit {
         return struct.id;
     }
 
+    public function getStruct() {
+        return struct;
+    }
     public function getHp() {
         return struct.hp;
     }

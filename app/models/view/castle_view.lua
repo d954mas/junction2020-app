@@ -23,8 +23,12 @@ end
 function View:on_storage_changed()
     self.haxe_model = HAXE_WRAPPER.level_castle_get_by_idx(self.castleIdx)
     self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
-    label.set_text(self.vh.attack_lbl,self.unit_model:getAttack())
-    label.set_text(self.vh.hp_lbl,self.unit_model:getHp())
+    if(self.unit_model)then
+        label.set_text(self.vh.attack_lbl,self.unit_model:getAttack())
+        label.set_text(self.vh.hp_lbl,self.unit_model:getHp()) 
+    else
+        label.set_text(self.vh.hp_lbl,0)
+    end    
 end
 
 function View:update(dt)

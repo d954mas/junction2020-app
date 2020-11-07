@@ -16,19 +16,30 @@ local FACTORY_PART = {
 local View = COMMON.class("UnitView")
 
 ---@param world World
-function View:initialize(id, world)
+function View:initialize(id, world, struct)
     self.world = world
     self.unit_id = id
+    self.struct = struct
+    self.haxe_unit_initial = HAXE_WRAPPER.level_units_create_battle_unit_model(self.struct)
     self.haxe_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id) or self.haxe_model --get new model data or prev(if in was killed)
     self:bind_vh()
+    self:init_values()
     self:on_storage_changed()
+end
+
+function View:init_values()
+    label.set_text(self.vh.attack_lbl,self.haxe_unit_initial:getAttack())
+    label.set_text(self.vh.hp_lbl,self.haxe_unit_initial:getHp())
 end
 
 
 function View:on_storage_changed()
     self.haxe_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id) or self.haxe_model --get new model data or prev(if in was killed)
-    label.set_text(self.vh.attack_lbl,self.haxe_model:getAttack())
-    label.set_text(self.vh.hp_lbl,self.haxe_model:getHp())
+    if(self.haxe_model ~= nil)then
+        label.set_text(self.vh.attack_lbl,self.haxe_model:getAttack())
+        label.set_text(self.vh.hp_lbl,self.haxe_model:getHp())
+    end
+
 end
 
 function View:update(dt)
@@ -70,10 +81,10 @@ function View:bind_vh()
     self.vh.attack_icon = msg.url(attack_icon_root.socket, attack_icon_root.path, "sprite")
 
     self.vh.sprite = msg.url(self.vh.unit.socket, self.vh.unit.path, "sprite")
-    self:road_move(self.haxe_model:getPos())
+    self:road_move(self.haxe_unit_initial:getPos())
 
     --set sprite
-    local name = "unit_" .. self.haxe_model:getType():lower() .. (self.haxe_model:getOwnerId() == 0 and "" or "_enemy")
+    local name = "unit_" .. self.haxe_unit_initial:getType():lower() .. (self.haxe_unit_initial:getOwnerId() == 0 and "" or "_enemy")
     sprite.play_flipbook(self.vh.sprite, name)
 
     ctx:remove()

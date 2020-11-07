@@ -11,7 +11,7 @@ class CastleUnitModel extends BattleUnitModel {
         return false;
     }
 
-    public function getStruct() {
+    override public function getStruct() {
         return struct;
     }
 

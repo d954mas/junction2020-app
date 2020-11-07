@@ -67,9 +67,9 @@ function Level:storage_changed()
     end
 end
 
-function Level:units_spawn_unit(id)
+function Level:units_spawn_unit(id,struct)
     self.world.thread_sequence:add_action(function()
-        local unit_view = UnitView(id, self.world)
+        local unit_view = UnitView(id, self.world,struct)
         table.insert(self.views.units, unit_view)
     end)
 end
@@ -91,9 +91,14 @@ end
 
 function Level:units_die_unit(id)
     self.world.thread_sequence:add_action(function()
+        local unit = HAXE_WRAPPER.level_units_get_by_id(id)
         local unit_view = self:units_view_by_id(id)
-        local action = unit_view:die()
-        self.threads.die:add_action(action)
+        if(unit_view)then
+            local action = unit_view:die()
+            self.threads.die:add_action(action)
+        else
+            COMMON.w("no unit view for die.Is it castle?","LEVEL")
+        end
     end)
 end
 

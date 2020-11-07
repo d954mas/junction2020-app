@@ -941,6 +941,20 @@ Reflect.isFunction = function(f)
     do return false end;
   end;
 end
+Reflect.copy = function(o) 
+  if (o == nil) then 
+    do return nil end;
+  end;
+  local o2 = _hx_e();
+  local _g = 0;
+  local _g1 = Reflect.fields(o);
+  while (_g < _g1.length) do 
+    local f = _g1[_g];
+    _g = _g + 1;
+    o2[f] = Reflect.field(o, f);
+  end;
+  do return o2 end;
+end
 
 String.new = function(string) 
   local self = _hx_new(String.prototype)
@@ -5212,8 +5226,8 @@ end
 __shared_base_event_EventHelper.levelManaChange = function(world,count,tag) 
   world:eventEmit("LEVEL_MANA_CHANGE", _hx_o({__fields__={count=true,tag=true},count=count,tag=tag}));
 end
-__shared_base_event_EventHelper.levelUnitSpawn = function(world,id) 
-  world:eventEmit("LEVEL_UNIT_SPAWN", _hx_o({__fields__={id=true},id=id}));
+__shared_base_event_EventHelper.levelUnitSpawn = function(world,id,struct) 
+  world:eventEmit("LEVEL_UNIT_SPAWN", _hx_o({__fields__={id=true,struct=true},id=id,struct=Reflect.copy(struct)}));
 end
 __shared_base_event_EventHelper.levelUnitMove = function(world,id,roadId) 
   world:eventEmit("LEVEL_UNIT_MOVE", _hx_o({__fields__={id=true,roadId=true},id=id,roadId=roadId}));
@@ -6224,7 +6238,7 @@ __shared_project_model_LevelModel.prototype.enemyModel= nil;
 __shared_project_model_LevelModel.prototype.battleUnitModels= nil;
 __shared_project_model_LevelModel.prototype.addUnit = function(self,unit) 
   self.battleUnitModels:push(unit);
-  __shared_base_event_EventHelper.levelUnitSpawn(self.world, unit:getId());
+  __shared_base_event_EventHelper.levelUnitSpawn(self.world, unit:getId(), unit:getStruct());
 end
 __shared_project_model_LevelModel.prototype.addUnitCastle = function(self,unit) 
   self.battleUnitModels:push(unit);
@@ -6332,7 +6346,7 @@ __shared_project_model_LevelModel.prototype.removeDeadUnits = function(self)
   local dead = Lambda.filter(self.ds.level.units, function(u) 
     do return u.hp == 0 end;
   end);
-  local deadModels = Lambda.filter(self.battleUnitModels, function(u1) 
+  Lambda.filter(self.battleUnitModels, function(u1) 
     do return not u1:isAlive() end;
   end);
   local _g = 0;
@@ -6340,13 +6354,8 @@ __shared_project_model_LevelModel.prototype.removeDeadUnits = function(self)
     local unit = dead[_g];
     _g = _g + 1;
     self.ds.level.units:remove(unit);
-  end;
-  local _g1 = 0;
-  while (_g1 < deadModels.length) do 
-    local unit1 = deadModels[_g1];
-    _g1 = _g1 + 1;
-    __shared_base_event_EventHelper.levelUnitDied(self.world, unit1:getId());
-    self.battleUnitModels:remove(unit1);
+    __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
+    self.battleUnitModels:remove(self:unitsGetUnitById(unit.id));
   end;
 end
 __shared_project_model_LevelModel.prototype.unitNewPosition = function(self,unit) 
@@ -6895,6 +6904,9 @@ __shared_project_model_units_BattleUnitModel.prototype.getType = function(self)
 end
 __shared_project_model_units_BattleUnitModel.prototype.getId = function(self) 
   do return self.struct.id end
+end
+__shared_project_model_units_BattleUnitModel.prototype.getStruct = function(self) 
+  do return self.struct end
 end
 __shared_project_model_units_BattleUnitModel.prototype.getHp = function(self) 
   do return self.struct.hp end
