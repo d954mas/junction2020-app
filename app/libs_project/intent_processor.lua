@@ -118,13 +118,15 @@ function Processor:process_events(events, data)
         elseif event.name == "TUTORIAL_PART_CHANGED" then
             self.world.tutorials:process_tutorial_part_changed(event.data)
         elseif event.name == "LEVEL_NEW" then
-            self.world:level_new()
+            self.world.thread_sequence:add_action(function()
+                self.world:level_new()
+            end)
         elseif event.name == "LEVEL_MOVE_TO_NEXT" then
             self.world.level_model:move_to_next()
         elseif event.name == "LEVEL_UNIT_SPAWN" then
-            self.world.level_model:units_spawn_unit(assert(event.data.id),assert(event.data.struct))
+            self.world.level_model:units_spawn_unit(assert(event.data.id), assert(event.data.struct))
         elseif event.name == "LEVEL_UNIT_MOVE" then
-            self.world.level_model:units_move_unit(assert(event.data.id),assert((event.data.roadId)))
+            self.world.level_model:units_move_unit(assert(event.data.id), assert((event.data.roadId)))
         elseif event.name == "LEVEL_UNIT_DIED" then
             self.world.level_model:units_die_unit(assert(event.data.id))
         elseif event.name == "LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE" then
@@ -133,6 +135,18 @@ function Processor:process_events(events, data)
             self.world.level_model:animation_turn_start()
         elseif event.name == "LEVEL_TURN_END" then
             self.world.level_model:animation_turn_end()
+        elseif event.name == "LEVEL_PLAYER_LOST" then
+            self.world.thread_sequence:add_action(function()
+                COMMON.COROUTINES.coroutine_wait(0.33)
+            end)
+            self:show_scene(SM.SCENES.LOSE_MODAL)
+        elseif event.name == "LEVEL_RESTART" then
+            self.world.thread_sequence:add_action(function()
+                while (SM.co) do coroutine.yield() end
+                self.world:level_restart()
+                SM:reload_scene()
+                while (SM.co) do coroutine.yield() end
+            end)
         end
     end
 end

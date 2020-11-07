@@ -44,7 +44,7 @@ function Level:animation_turn_start()
         move = ACTIONS.Parallel(),
         spawn = ACTIONS.Parallel(),
     }
-    while (self.animation_sequence.current ~= nil)do
+    while (self.animation_sequence.current ~= nil) do
         self.animation_sequence:update(0.33)
     end
 end
@@ -67,6 +67,11 @@ function Level:animation_turn_end()
                 threads.dieMoveToNextCastle:update(dt)
             end
             ctx:remove()
+        end
+    end)
+    self.world.thread_sequence:add_action(function()
+        while (self.animation_sequence.current ~= nil) do
+            coroutine.yield()
         end
     end)
 end
@@ -100,11 +105,11 @@ end
 
 function Level:units_spawn_unit(id, struct)
     --self.world.thread_sequence:add_action(function()
-        local unit_view = UnitView(id, self.world, struct)
-        local action = unit_view:animation_spawn();
-        self.threads.spawn:add_action(action)
-        table.insert(self.views.units, unit_view)
-   -- end)
+    local unit_view = UnitView(id, self.world, struct)
+    local action = unit_view:animation_spawn();
+    self.threads.spawn:add_action(action)
+    table.insert(self.views.units, unit_view)
+    -- end)
 end
 
 function Level:units_view_by_id(id)
@@ -116,36 +121,36 @@ function Level:units_view_by_id(id)
 end
 
 function Level:units_move_unit(id, roadId)
-   -- self.world.thread_sequence:add_action(function()
-        local unit_view = self:units_view_by_id(id)
-        local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
-        self.threads.move:add_action(action)
+    -- self.world.thread_sequence:add_action(function()
+    local unit_view = self:units_view_by_id(id)
+    local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
+    self.threads.move:add_action(action)
     --end)
 end
 
 function Level:units_die_unit(id)
-   -- self.world.thread_sequence:add_action(function()
-        local unit = HAXE_WRAPPER.level_units_get_by_id(id)
-        local unit_view = self:units_view_by_id(id)
-        if (unit_view) then
-            local action = unit_view:die()
-            self.threads.die:add_action(action)
-        else
-            COMMON.w("no unit view for die.Is it castle?", "LEVEL")
-        end
-   -- end)
+    -- self.world.thread_sequence:add_action(function()
+    local unit = HAXE_WRAPPER.level_units_get_by_id(id)
+    local unit_view = self:units_view_by_id(id)
+    if (unit_view) then
+        local action = unit_view:die()
+        self.threads.die:add_action(action)
+    else
+        COMMON.w("no unit view for die.Is it castle?", "LEVEL")
+    end
+    -- end)
 end
 function Level:units_die_unit_move_to_next_castle(id)
-   -- self.world.thread_sequence:add_action(function()
-        local unit = HAXE_WRAPPER.level_units_get_by_id(id)
-        local unit_view = self:units_view_by_id(id)
-        if (unit_view) then
-            local action = unit_view:die()
-            self.threads.dieMoveToNextCastle:add_action(action)
-        else
-            COMMON.w("no unit view for die.Is it castle?", "LEVEL")
-        end
-   -- end)
+    -- self.world.thread_sequence:add_action(function()
+    local unit = HAXE_WRAPPER.level_units_get_by_id(id)
+    local unit_view = self:units_view_by_id(id)
+    if (unit_view) then
+        local action = unit_view:die()
+        self.threads.dieMoveToNextCastle:add_action(action)
+    else
+        COMMON.w("no unit view for die.Is it castle?", "LEVEL")
+    end
+    -- end)
 end
 
 function Level:move_to_next()

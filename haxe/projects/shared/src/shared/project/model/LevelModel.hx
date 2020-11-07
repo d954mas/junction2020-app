@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.base.enums.ContextName;
 import shared.project.model.units.CastleUnitModel;
 import shared.project.model.units.CastleUnitModel;
 import shared.project.model.units.BasicUnitModel;
@@ -32,6 +33,16 @@ class LevelModel {
         modelRestore();
     }
 
+    public function restart() {
+        var storage = world.storageGet();
+        if (storage.level != null) {
+            EventHelper.levelRestart(world);
+        }
+        storage.level = null;
+        if (storage.level == null) {
+            createLevel();
+        }
+    }
 
     private function addUnit(unit:BattleUnitModel) {
         battleUnitModels.add(unit);
@@ -267,18 +278,16 @@ class LevelModel {
 
     private function levelNextCheckWinLose() {
         if (ds.level != null) {
-            var playerDidntLose = Lambda.count(ds.level.castles,
+            var playerLose = Lambda.count(ds.level.castles,
             function(castle) {
                 var unit = unitsGetUnitById(castle.unitId);
                 if (unit != null)
-                    return (unit.getOwnerId() == 0 && unit.getHp() > 0);
+                    return (unit.getOwnerId() == 0 && unit.getHp() == 0);
                 else throw "no unit levelNextCheckWinLose1 with id:" + castle.unitId;
             }
             ) > 0;
-            trace("enemies");
             var allEnemiesLost = Lambda.count(ds.level.castles,
             function(castle) {
-                trace("castle:" + castle.idx);
                 var unit = unitsGetUnitById(castle.unitId);
                 if (unit != null) {
                     trace(unit.getOwnerId() + " " + unit.getHp());
@@ -287,7 +296,9 @@ class LevelModel {
                 else throw "no unit levelNextCheckWinLose2 with id:" + castle.unitId;
             }
             ) == 0;
-            if (!playerDidntLose) {
+            if (playerLose) {
+                ds.level.lose = true;
+                world.contextChange(ContextName.LOSE_MODAL);
                 EventHelper.levelLost(world);
             }
             else if (allEnemiesLost) {
@@ -321,6 +332,8 @@ class LevelModel {
     public function levelNextTurn() {
         var level = world.storageGet().level;
         if (level == null) { throw "no level in levelNextTurn";}
+        if (level.lose) {return;}
+        if (level.lose) { throw "can't make turn we lose";}
         EventHelper.levelNextTurn(world);
         level.turn++;
         enemyModel.turn();
@@ -331,9 +344,10 @@ class LevelModel {
         levelNextTurnRegenMoney();
         levelNextTurnRegenMana();
 
+        EventHelper.levelTurnEnd(world); //update all animations before turn end
         levelNextCheckWinLose();
 
-        EventHelper.levelTurnEnd(world);
+
         //add
     }
 
@@ -342,6 +356,7 @@ class LevelModel {
         var enemy = createEnemy();
         var level:LevelStruct = {
             turn:0,
+            lose:false,
             unitIdx:0,
             player:createPlayer(),
             enemy:createEnemy(),

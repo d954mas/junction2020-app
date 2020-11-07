@@ -29,6 +29,10 @@ function World:level_new()
 	self.level_model = Level(self)
 end
 
+function World:level_restart()
+	self.level_model = nil
+end
+
 function World:update(dt)
 	if(self.level_model)then
 		self.level_model:update(dt)

@@ -120,6 +120,7 @@ typedef LevelStruct = {
     roads:Array<Array<LevelRoadPart>>,
     units:Array<BattleUnitStruct>,
     unitIdx:Int,
+    lose:Bool
 }
 
 typedef StorageStruct = {

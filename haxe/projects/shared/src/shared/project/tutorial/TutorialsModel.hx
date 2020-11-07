@@ -100,6 +100,7 @@ class TutorialsModel {
                 tutorial.checkOnGameRestart();
             }
         }
+
     }
 
 

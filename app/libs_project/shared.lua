@@ -158,6 +158,7 @@ __shared_project_analytics_events_predefined_TutorialEvent = _hx_e()
 __shared_project_configs_GameConfig = _hx_e()
 __shared_project_configs_UnitConfig = _hx_e()
 __shared_project_enums_Intents = _hx_e()
+__shared_project_enums__UnitType_UnitType_Impl_ = _hx_e()
 __shared_project_intent_processors_IntentSubProcessor = _hx_e()
 __shared_project_intent_processors_IntentCheatsProcessor = _hx_e()
 __shared_project_intent_processors_IntentLevelProcessor = _hx_e()
@@ -5400,6 +5401,9 @@ end
 __shared_base_event_EventHelper.levelTurnEnd = function(world) 
   world:eventEmit("LEVEL_TURN_END");
 end
+__shared_base_event_EventHelper.levelRestart = function(world) 
+  world:eventEmit("LEVEL_RESTART");
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -6048,6 +6052,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("actions.iap.buy", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.spawn.unit", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.turn.skip", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("lose.modal.restart", _hx_tab_array({[0]="lose_modal"}, 1));
   __shared_project_enums_Intents.intentContexts:set("debug.toggle", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.enable", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.disable", _hx_tab_array({[0]="dev"}, 1));
@@ -6058,6 +6063,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("tutorial.no", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("tutorial.yes", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("lose.modal.restart", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.spawn.unit", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.turn.skip", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("debug.toggle", true);
@@ -6092,6 +6098,9 @@ __shared_project_enums_Intents.worldHaveModalContext = function(world)
   end;
   do return false end;
 end
+
+__shared_project_enums__UnitType_UnitType_Impl_.new = {}
+__shared_project_enums__UnitType_UnitType_Impl_.__name__ = true
 
 __shared_project_intent_processors_IntentSubProcessor.new = function(world,shared1,i18n) 
   local self = _hx_new(__shared_project_intent_processors_IntentSubProcessor.prototype)
@@ -6210,7 +6219,13 @@ end
 __shared_project_intent_processors_IntentModalProcessor.__name__ = true
 __shared_project_intent_processors_IntentModalProcessor.prototype = _hx_a();
 __shared_project_intent_processors_IntentModalProcessor.prototype.processIntent = function(self,intent,data) 
-  do return nil end
+  if (intent == "lose.modal.restart") then 
+    self:ask("restart");
+    self.world.levelModel:restart();
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  else
+    do return nil end;
+  end;
 end
 
 __shared_project_intent_processors_IntentModalProcessor.prototype.__class__ =  __shared_project_intent_processors_IntentModalProcessor
@@ -6399,6 +6414,16 @@ __shared_project_model_LevelModel.prototype.ds= nil;
 __shared_project_model_LevelModel.prototype.playerModel= nil;
 __shared_project_model_LevelModel.prototype.enemyModel= nil;
 __shared_project_model_LevelModel.prototype.battleUnitModels= nil;
+__shared_project_model_LevelModel.prototype.restart = function(self) 
+  local storage = self.world:storageGet();
+  if (storage.level ~= nil) then 
+    __shared_base_event_EventHelper.levelRestart(self.world);
+  end;
+  storage.level = nil;
+  if (storage.level == nil) then 
+    self:createLevel();
+  end;
+end
 __shared_project_model_LevelModel.prototype.addUnit = function(self,unit) 
   self.battleUnitModels:add(unit);
   __shared_base_event_EventHelper.levelUnitSpawn(self.world, unit:getId(), unit:getStruct());
@@ -6429,6 +6454,14 @@ __shared_project_model_LevelModel.prototype.modelRestore = function(self)
         end;
       end;
     end;
+  end;
+end
+__shared_project_model_LevelModel.prototype.enqueueUnits = function(self,ownerId,type,amount) 
+  local counter = amount;
+  local owner = self:getPlayerById(ownerId);
+  while (counter > 0) do 
+    owner.unitQueue:push(_hx_o({__fields__={ownerId=true,unitType=true},ownerId=ownerId,unitType=type}));
+    counter = counter - 1;
   end;
 end
 __shared_project_model_LevelModel.prototype.unitsSpawnUnitCastle = function(self,ownerId,unitLevel) 
@@ -6491,10 +6524,26 @@ __shared_project_model_LevelModel.prototype.canMoveToPart = function(self,partId
   end) == 0 end
 end
 __shared_project_model_LevelModel.prototype.createPlayer = function(self) 
-  do return _hx_o({__fields__={id=true,mana=true,money=true},id=0,mana=0,money=20}) end
+  local unitLevels = _hx_e();
+  local _g = 0;
+  local _g1 = __shared_project_enums__UnitType_UnitType_Impl_.ALL_TYPES;
+  while (_g < _g1.length) do 
+    local type = _g1[_g];
+    _g = _g + 1;
+    unitLevels[Std.string(type)] = 1;
+  end;
+  do return _hx_o({__fields__={id=true,unitLevels=true,unitQueue=true,mana=true,money=true},id=0,unitLevels=unitLevels,unitQueue=Array.new(),mana=0,money=20}) end
 end
 __shared_project_model_LevelModel.prototype.createEnemy = function(self) 
-  do return _hx_o({__fields__={id=true},id=1}) end
+  local unitLevels = _hx_e();
+  local _g = 0;
+  local _g1 = __shared_project_enums__UnitType_UnitType_Impl_.ALL_TYPES;
+  while (_g < _g1.length) do 
+    local type = _g1[_g];
+    _g = _g + 1;
+    unitLevels[Std.string(type)] = 1;
+  end;
+  do return _hx_o({__fields__={id=true,unitLevels=true,unitQueue=true},id=1,unitLevels=unitLevels,unitQueue=Array.new()}) end
 end
 __shared_project_model_LevelModel.prototype.createRoadPart = function(self,x,y,type) 
   do return _hx_o({__fields__={x=true,y=true,type=true,idx=true},x=x,y=y,type=type,idx=(x * 1000) + y}) end
@@ -6611,11 +6660,11 @@ end
 __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(self) 
   local _gthis = self;
   if (self.ds.level ~= nil) then 
-    local playerDidntLose = Lambda.count(self.ds.level.castles, function(castle) 
+    local playerLose = Lambda.count(self.ds.level.castles, function(castle) 
       local unit = _gthis:unitsGetUnitById(castle.unitId);
       if (unit ~= nil) then 
         if (unit:getOwnerId() == 0) then 
-          do return unit:getHp() > 0 end;
+          do return unit:getHp() == 0 end;
         else
           do return false end;
         end;
@@ -6623,12 +6672,10 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
         _G.error(Std.string("no unit levelNextCheckWinLose1 with id:") .. Std.string(castle.unitId),0);
       end;
     end) > 0;
-    __haxe_Log.trace("enemies", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=256,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
-      __haxe_Log.trace(Std.string("castle:") .. Std.string(castle1.idx), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=259,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=262,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=293,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -6638,7 +6685,9 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
         _G.error(Std.string("no unit levelNextCheckWinLose2 with id:") .. Std.string(castle1.unitId),0);
       end;
     end) == 0;
-    if (not playerDidntLose) then 
+    if (playerLose) then 
+      self.ds.level.lose = true;
+      self.world:contextChange("lose_modal");
       __shared_base_event_EventHelper.levelLost(self.world);
     else
       if (allEnemiesLost) then 
@@ -6649,22 +6698,50 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     _G.error("no level",0);
   end;
 end
+__shared_project_model_LevelModel.prototype.levelNextTurnQueue = function(self) 
+  local level = self.ds.level;
+  if (level ~= nil) then 
+    local playerQueue = level.player.unitQueue;
+    local enemyQueue = level.enemy.unitQueue;
+    if (playerQueue.length > 0) then 
+      local entry = playerQueue[playerQueue.length - 1];
+      if (self:unitsSpawnUnit(entry.ownerId, entry.unitType, Reflect.field(level.player.unitLevels, Std.string(entry.unitType)))) then 
+        playerQueue:pop();
+      end;
+    end;
+    if (enemyQueue.length > 0) then 
+      local entry1 = enemyQueue[enemyQueue.length - 1];
+      if (self:unitsSpawnUnit(entry1.ownerId, entry1.unitType, Reflect.field(level.enemy.unitLevels, Std.string(entry1.unitType)))) then 
+        enemyQueue:pop();
+      end;
+    end;
+  end;
+end
 __shared_project_model_LevelModel.prototype.levelNextTurn = function(self) 
   local level = self.world:storageGet().level;
   if (level == nil) then 
     _G.error("no level in levelNextTurn",0);
   end;
+  if (level.lose) then 
+    do return end;
+  end;
+  if (level.lose) then 
+    _G.error("can't make turn we lose",0);
+  end;
   __shared_base_event_EventHelper.levelNextTurn(self.world);
   level.turn = level.turn + 1;
   self.enemyModel:turn();
+  self:levelNextTurnQueue();
   self:levelNextTurnBattles();
   self:levelNextTurnRegenMoney();
   self:levelNextTurnRegenMana();
-  self:levelNextCheckWinLose();
   __shared_base_event_EventHelper.levelTurnEnd(self.world);
+  self:levelNextCheckWinLose();
 end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
-  local level = _hx_o({__fields__={turn=true,unitIdx=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
+  self:createPlayer();
+  self:createEnemy();
+  local level = _hx_o({__fields__={turn=true,lose=true,unitIdx=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,lose=false,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
   self.world:storageGet().level = level;
   local roadResToPlayer = Array.new();
   roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
@@ -6772,6 +6849,17 @@ __shared_project_model_LevelModel.prototype.unitsGetUnitById = function(self,id)
     end;
   end;
   do return nil end
+end
+__shared_project_model_LevelModel.prototype.getPlayerById = function(self,id) 
+  if (self.ds.level ~= nil) then 
+    if (id == 0) then 
+      do return self.ds.level.player end;
+    else
+      do return self.ds.level.enemy end;
+    end;
+  else
+    _G.error("no level",0);
+  end;
 end
 __shared_project_model_LevelModel.prototype.roadsFindPartById = function(self,id) 
   local level = self.world:storageGet().level;
@@ -6913,9 +7001,7 @@ __shared_project_model_World.prototype.restore = function(self)
 end
 __shared_project_model_World.prototype.onGameLoaded = function(self) 
   self.storage.level = nil;
-  if (self.storage.level == nil) then 
-    self.levelModel:createLevel();
-  end;
+  self.levelModel:restart();
 end
 __shared_project_model_World.prototype.outputConversationStart = function(self) 
   local _g = 0;
@@ -6979,7 +7065,7 @@ __shared_project_model_World.prototype.canProcessIntent = function(self,name,dat
   end;
   local list = __shared_project_enums_Intents.intentContexts:get(name);
   if (list == nil) then 
-    __haxe_Log.trace(Std.string("unknown intent ") .. Std.string(name), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/World.hx",lineNumber=121,className="shared.project.model.World",methodName="canProcessIntent"}));
+    __haxe_Log.trace(Std.string("unknown intent ") .. Std.string(name), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/World.hx",lineNumber=119,className="shared.project.model.World",methodName="canProcessIntent"}));
     if (throwExeption) then 
       _G.error(Std.string("unknown intent ") .. Std.string(name),0);
     end;
@@ -7787,6 +7873,8 @@ local _hx_static_init = function()
   __shared_project_enums_Intents.modalContexts = __haxe_ds_StringMap.new();
   
   __shared_project_enums_Intents.commandCloseOrder = Array.new();
+  
+  __shared_project_enums__UnitType_UnitType_Impl_.ALL_TYPES = _hx_tab_array({[0]="ARCHER", "KNIGHT", "CASTLE"}, 3);
   
   __shared_project_utils_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
   

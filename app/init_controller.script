@@ -18,6 +18,7 @@ COMMON.empty_ne("defos")
 local Script = COMMON.new_n28s()
 
 local scenes = {
+    require "scenes.modal.lose_modal.lose_modal",
     require "scenes.main.main_scene"
 }
 
