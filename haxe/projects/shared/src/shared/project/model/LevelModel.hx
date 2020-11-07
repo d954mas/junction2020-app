@@ -7,6 +7,7 @@ import shared.project.configs.UnitConfig;
 import shared.project.enums.UnitType;
 import shared.project.model.units.BattleUnitModel;
 import Array;
+import haxe.DynamicAccess;
 import shared.project.enums.GameEnums.RoadType;
 import shared.project.storage.Storage;
 import shared.project.storage.Storage.LevelPlayerStruct;
@@ -55,6 +56,15 @@ class LevelModel {
 
                 }
             }
+        }
+    }
+
+    public function enqueueUnits(ownerId:Int, type:UnitType, amount:Int) {
+        var counter = amount;
+        var owner = getPlayerById(ownerId);
+        while (counter > 0) {
+            owner.unitQueue.push({ownerId:ownerId, unitType:type});
+            counter--;
         }
     }
 
@@ -134,16 +144,28 @@ class LevelModel {
     }
 
     private function createPlayer():LevelPlayerStruct {
+        var unitLevels:DynamicAccess<Int> = new DynamicAccess<Int>();
+        for (type in UnitType.ALL_TYPES) {
+            unitLevels[Std.string(type)] = 1;
+        }
         return {
             id: 0,
+            unitLevels: unitLevels,
+            unitQueue:new Array<UnitQueueEntry>(),
             mana:0,
             money:20,
         }
     }
 
     private function createEnemy():LevelEnemyStruct {
+        var unitLevels:DynamicAccess<Int> = new DynamicAccess<Int>();
+        for (type in UnitType.ALL_TYPES) {
+            unitLevels[Std.string(type)] = 1;
+        }
         return {
             id: 1,
+            unitLevels:unitLevels,
+            unitQueue:new Array<UnitQueueEntry>(),
         }
     }
 
@@ -274,12 +296,35 @@ class LevelModel {
         } else throw "no level";
     }
 
+    private function levelNextTurnQueue() {
+        var level = ds.level;
+        if (level != null) {
+            var playerQueue = level.player.unitQueue;
+            var enemyQueue = level.enemy.unitQueue;
+            if (playerQueue.length > 0) {
+                var entry:UnitQueueEntry = playerQueue[playerQueue.length - 1];
+                @:nullSafety(Off) var success = unitsSpawnUnit(entry.ownerId, entry.unitType, level.player.unitLevels[Std.string(entry.unitType)]);
+                if (success) {
+                    playerQueue.pop();
+                }
+            }
+            if (enemyQueue.length > 0) {
+                var entry:UnitQueueEntry = enemyQueue[enemyQueue.length - 1];
+                @:nullSafety(Off) var success = unitsSpawnUnit(entry.ownerId, entry.unitType, level.enemy.unitLevels[Std.string(entry.unitType)]);
+                if (success) {
+                    enemyQueue.pop();
+                }
+            }
+        }
+    }
+
     public function levelNextTurn() {
         var level = world.storageGet().level;
         if (level == null) { throw "no level in levelNextTurn";}
         EventHelper.levelNextTurn(world);
         level.turn++;
         enemyModel.turn();
+        levelNextTurnQueue();
         levelNextTurnBattles();
         levelNextTurnCaravans();
 
@@ -435,6 +480,13 @@ class LevelModel {
             }
         }
         return null;
+    }
+
+    public function getPlayerById(id:Int):LevelPlayerOrAiStruct {
+        if (ds.level != null) {
+            if (id == 0) return ds.level.player;
+            else return ds.level.enemy;
+        } else throw "no level";
     }
 
     public function roadsFindPartById(id):LevelRoadPart {

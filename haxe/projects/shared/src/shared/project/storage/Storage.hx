@@ -86,6 +86,8 @@ typedef UtilsStruct = {
 
 typedef LevelPlayerOrAiStruct = {
     var id:Int;
+    var unitLevels:DynamicAccess<Int>;
+    var unitQueue:Array<UnitQueueEntry>;
 }
 
 typedef LevelPlayerStruct = {
@@ -103,6 +105,11 @@ typedef LevelRoadPart = {
     var x:Int;
     var y:Int;
     var type:RoadType;
+}
+
+typedef UnitQueueEntry = {
+    ownerId:Int,
+    unitType:UnitType,
 }
 
 typedef LevelStruct = {
