@@ -126,7 +126,7 @@ function Processor:process_events(events, data)
         elseif event.name == "LEVEL_UNIT_MOVE" then
             self.world.level_model:units_move_unit(assert(event.data.id),assert((event.data.roadId)))
         elseif event.name == "LEVEL_UNIT_DIED" then
-            COMMON.EVENT_BUS:event(COMMON.EVENTS.UNIT_DIED, event.data)
+            self.world.level_model:units_die_unit(assert(event.data.id))
         end
     end
 end

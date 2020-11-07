@@ -31,10 +31,11 @@ function Level:initialize(world)
     for i = 0, roads.length - 1 do
         table.insert(self.views.roads, RoadView(i, self.world))
     end
-    self.subscription = COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.UNIT_DIED):subscribe(function(data)
-        COMMON.i("DBG_DATA", "DBG")
-        self:unit_died(data.id)
-    end)
+
+    self.threads = {
+        die = ACTIONS.Parallel()
+    }
+    self.threads.die.drop_empty = false
 
     CAMERAS.battle_camera:set_position(vmath.vector3(640 or self.views.castles[#self.views.castles - 1].castle_pos.x, 340, 0))
 end
@@ -51,6 +52,7 @@ function Level:update(dt)
     for _, road in ipairs(self.views.roads) do
         road:update()
     end
+    self.threads.die:update(dt)
 end
 
 function Level:storage_changed()
@@ -73,15 +75,25 @@ function Level:units_spawn_unit(id)
 end
 
 function Level:units_view_by_id(id)
-    for _, view in ipairs(self.views.units)do
-        if(view.unit_id == id) then return view end
+    for _, view in ipairs(self.views.units) do
+        if (view.unit_id == id) then
+            return view
+        end
     end
 end
 
-function Level:units_move_unit(id,roadId)
+function Level:units_move_unit(id, roadId)
     self.world.thread_sequence:add_action(function()
         local unit_view = self:units_view_by_id(id)
         unit_view:road_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
+    end)
+end
+
+function Level:units_die_unit(id)
+    self.world.thread_sequence:add_action(function()
+        local unit_view = self:units_view_by_id(id)
+        local action = unit_view:die()
+        self.threads.die:add_action(action)
     end)
 end
 

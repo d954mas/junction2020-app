@@ -1,12 +1,15 @@
 local COMMON = require "libs.common"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
+local ACTIONS = require "libs.actions.actions"
 
 local FACTORY_URL = msg.url("main_scene:/factories#unit_factory")
 local FACTORY_PART = {
     ROOT = hash("/root"),
     UNIT = hash("/unit"),
+    HP_ICON = hash("/hp_icon"),
     HP_TEXT = hash("/hp_text"),
-    ATTACK_TEXT = hash("/attack_text")
+    ATTACK_TEXT = hash("/attack_text"),
+    ATTACK_ICON = hash("/attack_icon")
 }
 
 ---@class UnitView
@@ -50,12 +53,22 @@ function View:bind_vh()
         unit = msg.url(assert(parts[FACTORY_PART.UNIT])),
         sprite = nil,
         hp_lbl = nil,
-        attack_lbl = nil
+        hp_icon = nil,
+        attack_icon = nil,
+        attack_lbl = nil,
     }
+    self.vh.sprite = msg.url(self.vh.unit.socket,self.vh.unit.path,"sprite")
+
     local hp_text_root = msg.url(parts[FACTORY_PART.HP_TEXT])
     local attack_text_root = msg.url(parts[FACTORY_PART.ATTACK_TEXT])
     self.vh.hp_lbl = msg.url(hp_text_root.socket, hp_text_root.path, "label")
     self.vh.attack_lbl = msg.url(attack_text_root.socket, attack_text_root.path, "label")
+
+    local hp_icon_root = msg.url(parts[FACTORY_PART.HP_ICON])
+    local attack_icon_root = msg.url(parts[FACTORY_PART.ATTACK_ICON])
+    self.vh.hp_icon = msg.url(hp_icon_root.socket, hp_icon_root.path, "sprite")
+    self.vh.attack_icon = msg.url(attack_icon_root.socket, attack_icon_root.path, "sprite")
+
     self.vh.sprite = msg.url(self.vh.unit.socket, self.vh.unit.path, "sprite")
     self:road_move(self.haxe_model:getPos())
 
@@ -66,9 +79,23 @@ function View:bind_vh()
     ctx:remove()
 end
 
-function View:hide() 
-    --msg.post(self.vh.root, "disable")
-    --go.delete(self.vh.root, true)
+function View:die()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local action = ACTIONS.Sequence()
+    local actionHideParallel = ACTIONS.Parallel()
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.w", from = 1, to = 0, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.attack_icon, property = "tint.w", from = 1, to = 0, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.hp_icon, property = "tint.w", from = 1, to = 0, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.hp_lbl, property = "tint.w", from = 1, to = 0, time = 0.6 })
+    actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.attack_lbl, property = "tint.w", from = 1, to = 0, time = 0.6 })
+    action:add_action(actionHideParallel)
+    action:add_action(function ()
+        local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+        go.delete(self.vh.root,true)
+        ctx:remove()
+    end)
+    ctx:remove()
+    return action;
 end
 
 return View
