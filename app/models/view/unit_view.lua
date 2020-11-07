@@ -29,16 +29,15 @@ function View:initialize(id, world, struct)
 end
 
 function View:init_values()
-    label.set_text(self.vh.attack_lbl,self.haxe_unit_initial:getAttack())
-    label.set_text(self.vh.hp_lbl,self.haxe_unit_initial:getHp())
+    label.set_text(self.vh.attack_lbl, self.haxe_unit_initial:getAttack())
+    label.set_text(self.vh.hp_lbl, self.haxe_unit_initial:getHp())
 end
-
 
 function View:on_storage_changed()
     self.haxe_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id) or self.haxe_model --get new model data or prev(if in was killed)
-    if(self.haxe_model ~= nil)then
-        label.set_text(self.vh.attack_lbl,self.haxe_model:getAttack())
-        label.set_text(self.vh.hp_lbl,self.haxe_model:getHp())
+    if (self.haxe_model ~= nil) then
+        label.set_text(self.vh.attack_lbl, self.haxe_model:getAttack())
+       -- label.set_text(self.vh.hp_lbl, self.haxe_model:getHp())
     end
 
 end
@@ -61,11 +60,11 @@ function View:animation_spawn()
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()
     local actionHideParallel = ACTIONS.Parallel()
-    go.set( self.vh.sprite,"tint.w",0)
-    go.set( self.vh.attack_icon,"tint.w",0)
-    go.set( self.vh.hp_icon,"tint.w",0)
-    go.set( self.vh.hp_lbl,"tint.w",0)
-    go.set( self.vh.attack_lbl,"tint.w",0)
+    go.set(self.vh.sprite, "tint.w", 0)
+    go.set(self.vh.attack_icon, "tint.w", 0)
+    go.set(self.vh.hp_icon, "tint.w", 0)
+    go.set(self.vh.hp_lbl, "tint.w", 0)
+    go.set(self.vh.attack_lbl, "tint.w", 0)
     actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.w", from = 0, to = 1, time = 0.6 })
     actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.attack_icon, property = "tint.w", from = 0, to = 1, time = 0.6 })
     actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.hp_icon, property = "tint.w", from = 0, to = 1, time = 0.6 })
@@ -83,10 +82,39 @@ function View:animation_move(road)
     local new_pos = self.world:road_idx_to_position(roadIdx, roadPartIdx)
     new_pos.z = -0.7
     local pos = self.pos
-    self.pos = new_pos
+  --  self.pos = new_pos
     local action = ACTIONS.Sequence()
-    local movement = ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = pos, to = self.pos, time = 1 }
+    local movement = ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = pos, to = new_pos, time = 1 }
     action:add_action(movement)
+    action:add_action(function ()
+        self.pos = new_pos
+    end)
+    ctx:remove()
+    return action
+end
+
+function View:animation_attack()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local new_pos = vmath.vector3(self.pos)
+    new_pos.x = new_pos.x + (self.haxe_unit_initial:getOwnerId() == 0 and 15 or -15)
+    local action = ACTIONS.Sequence()
+    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = self.pos, to = new_pos, time = 0.2 })
+    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.linear, v3 = true, from = new_pos, to = self.pos, time = 0.1 })
+    ctx:remove()
+    return action
+end
+
+function View:animation_take_damage()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local action = ACTIONS.Sequence()
+    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "flash.x", easing = TWEEN.easing.inBack, from = 0, to = 0.66, time = 0.33 })
+    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "flash.x", easing = TWEEN.easing.linear, from = 0.66, to = 0, time = 0.2 })
+    action:add_action(function ()
+        self.haxe_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id) or self.haxe_model --get new model data or prev(if in was killed)
+        if (self.haxe_model ~= nil) then
+            label.set_text(self.vh.hp_lbl, self.haxe_model:getHp())
+        end
+    end)
     ctx:remove()
     return action
 end
@@ -103,7 +131,7 @@ function View:bind_vh()
         attack_icon = nil,
         attack_lbl = nil,
     }
-    self.vh.sprite = msg.url(self.vh.unit.socket,self.vh.unit.path,"sprite")
+    self.vh.sprite = msg.url(self.vh.unit.socket, self.vh.unit.path, "sprite")
 
     local hp_text_root = msg.url(parts[FACTORY_PART.HP_TEXT])
     local attack_text_root = msg.url(parts[FACTORY_PART.ATTACK_TEXT])
@@ -135,9 +163,9 @@ function View:die()
     actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.hp_lbl, property = "tint.w", from = 1, to = 0, time = 0.6 })
     actionHideParallel:add_action(ACTIONS.Tween { object = self.vh.attack_lbl, property = "tint.w", from = 1, to = 0, time = 0.6 })
     action:add_action(actionHideParallel)
-    action:add_action(function ()
+    action:add_action(function()
         local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-        go.delete(self.vh.root,true)
+        go.delete(self.vh.root, true)
         ctx:remove()
     end)
     ctx:remove()

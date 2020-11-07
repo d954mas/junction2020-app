@@ -6194,7 +6194,13 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     if (unitType == nil) then 
       _G.error("LEVEL_SPAWN_UNIT unknown unit",0);
     end;
-    self.world.levelModel.playerModel:unitsSpawnUnit(unitType);
+    local amount;
+    if (data.amount == nil) then 
+      amount = 1;
+    else
+      amount = Std.parseInt(data.amount);
+    end;
+    self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount);
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "level.turn.skip" then 
     self:ask("skip");
@@ -6704,15 +6710,15 @@ __shared_project_model_LevelModel.prototype.levelNextTurnQueue = function(self)
     local playerQueue = level.player.unitQueue;
     local enemyQueue = level.enemy.unitQueue;
     if (playerQueue.length > 0) then 
-      local entry = playerQueue[playerQueue.length - 1];
+      local entry = playerQueue[0];
       if (self:unitsSpawnUnit(entry.ownerId, entry.unitType, Reflect.field(level.player.unitLevels, Std.string(entry.unitType)))) then 
-        playerQueue:pop();
+        playerQueue:shift();
       end;
     end;
     if (enemyQueue.length > 0) then 
-      local entry1 = enemyQueue[enemyQueue.length - 1];
+      local entry1 = enemyQueue[0];
       if (self:unitsSpawnUnit(entry1.ownerId, entry1.unitType, Reflect.field(level.enemy.unitLevels, Std.string(entry1.unitType)))) then 
-        enemyQueue:pop();
+        enemyQueue:shift();
       end;
     end;
   end;
@@ -6908,10 +6914,10 @@ __shared_project_model_PlayerModel.__name__ = true
 __shared_project_model_PlayerModel.prototype = _hx_a();
 __shared_project_model_PlayerModel.prototype.world= nil;
 __shared_project_model_PlayerModel.prototype.ds= nil;
-__shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType) 
+__shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType,amount) 
   __shared_base_event_EventHelper.levelTurnStart(self.world);
-  self.world.levelModel:unitsSpawnUnit(0, unitType, 0);
-  self.world.speechBuilder:text(Std.string("spawn ") .. Std.string(unitType));
+  self.world.levelModel:enqueueUnits(0, unitType, amount);
+  self.world.speechBuilder:text(Std.string("enqueued ") .. Std.string(unitType));
   self.world.levelModel:levelNextTurn();
 end
 __shared_project_model_PlayerModel.prototype.modelRestore = function(self) 
@@ -7860,7 +7866,7 @@ local _hx_static_init = function()
     
     _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=4, 8, 12, 16, 20}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=1, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2
