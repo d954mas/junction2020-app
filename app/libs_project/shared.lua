@@ -6077,6 +6077,14 @@ __shared_project_configs_MageConfig.mageTypeGetById = function(id)
   else
     if (id == "ICE") then 
       do return "ICE" end;
+    else
+      if (id == "CARAVAN") then 
+        do return "CARAVAN" end;
+      else
+        if (id == "MANA") then 
+          do return "MANA" end;
+        end;
+      end;
     end;
   end;
   do return nil end;
@@ -6648,7 +6656,7 @@ __shared_project_model_LevelModel.prototype.getUnloadPos = function(self)
   do return road[road.length - 1] end
 end
 __shared_project_model_LevelModel.prototype.spawnCaravan = function(self,level) 
-  if (self.ds.level.caravans.length < __shared_project_configs_UnitConfig.caravanCount) then 
+  if (self.ds.level.caravans.length < self.playerModel:caravanGetMax()) then 
     local caravan = _hx_o({__fields__={roadPartIdx=true,ownerId=true,id=true,resources=true,resourceLvl=true},roadPartIdx=self:getUnloadPos().idx,ownerId=0,id=self.ds.level.caravanIdx,resources=0,resourceLvl=level});
     self.ds.level.caravanIdx = self.ds.level.caravanIdx + 1;
     self.ds.level.caravans:push(caravan);
@@ -6856,7 +6864,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurnRegenMoney = function(s
   self.playerModel:moneyChange(__shared_project_configs_GameConfig.MONEY_REGEN, "startTurnRegen");
 end
 __shared_project_model_LevelModel.prototype.levelNextTurnRegenMana = function(self) 
-  self.playerModel:manaChange(__shared_project_configs_GameConfig.MANA_REGEN, "startTurnRegen");
+  self.playerModel:manaChange(self.playerModel:mageGetManaRegen(), "startTurnRegen");
 end
 __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(self) 
   local _gthis = self;
@@ -6949,8 +6957,13 @@ end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
   self:createPlayer();
   self:createEnemy();
-  local level = _hx_o({__fields__={ice=true,turnEnemyAI=true,turn=true,lose=true,unitIdx=true,caravanIdx=true,player=true,enemy=true,caravans=true,castles=true,roads=true,units=true},ice=0,turnEnemyAI=0,turn=0,lose=false,unitIdx=0,caravanIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),caravans=Array.new(),castles=Array.new(),roads=Array.new(),units=Array.new()});
-  self.world:storageGet().level = level;
+  local level = self:createPlayer();
+  local level1 = self:createEnemy();
+  local level2 = Array.new();
+  local level3 = Array.new();
+  local level4 = Array.new();
+  local level5 = _hx_o({__fields__={ice=true,mageLevels=true,turnEnemyAI=true,turn=true,lose=true,unitIdx=true,caravanIdx=true,player=true,enemy=true,caravans=true,castles=true,roads=true,units=true},ice=0,mageLevels=_hx_o({__fields__={FIREBALL=true,CARAVAN=true,MANA=true,ICE=true},FIREBALL=0,CARAVAN=0,MANA=0,ICE=0}),turnEnemyAI=0,turn=0,lose=false,unitIdx=0,caravanIdx=0,player=level,enemy=level1,caravans=level2,castles=level3,roads=level4,units=Array.new()});
+  self.world:storageGet().level = level5;
   local roadResToPlayer = Array.new();
   roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
   roadResToPlayer:push(self:createRoadPart(1, 0, "BASE"));
@@ -6967,14 +6980,14 @@ __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(11, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(12, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(13, 0, "CASTLE"));
-  level.roads:push(roadResToPlayer);
-  level.roads:push(roadPlayerToEnemy);
+  level5.roads:push(roadResToPlayer);
+  level5.roads:push(roadPlayerToEnemy);
   local resourceUnit = self:unitsSpawnUnitCastle(0, 0);
   resourceUnit:getStruct().roadPartIdx = 0;
-  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=resourceUnit:getId()}));
-  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(0, 0):getId()}));
-  level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=self:unitsSpawnUnitCastle(1, 0):getId()}));
-  do return level end
+  level5.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level5.castles.length,unitId=resourceUnit:getId()}));
+  level5.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level5.castles.length,unitId=self:unitsSpawnUnitCastle(0, 0):getId()}));
+  level5.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level5.castles.length,unitId=self:unitsSpawnUnitCastle(1, 0):getId()}));
+  do return level5 end
 end
 __shared_project_model_LevelModel.prototype.createLevel = function(self) 
   if (self.world:storageGet().level == nil) then 
@@ -7187,6 +7200,14 @@ __shared_project_model_PlayerModel.prototype.castSpell = function(self,type,newT
     if (type == "ICE") then 
       level.ice = power;
       self.world.levelModel:removeDeadUnits();
+    else
+      if (type == "CARAVAN") then 
+        level.mageLevels.CARAVAN = Reflect.field(level.mageLevels, "CARAVAN") + 1;
+      else
+        if (type == "MANA") then 
+          level.mageLevels.MANA = Reflect.field(level.mageLevels, "MANA") + 1;
+        end;
+      end;
     end;
   end;
   __shared_base_event_EventHelper.levelCastSpellEnd(self.world, type);
@@ -7209,18 +7230,49 @@ __shared_project_model_PlayerModel.prototype.unitGetPrice = function(self,type)
   do return scales.costByLevel[0] end
 end
 __shared_project_model_PlayerModel.prototype.mageGetPrice = function(self,type) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:mageGetPrice",0);
+  end;
+  local mageLevel = Reflect.field(level.mageLevels, Std.string(type));
   local scales = __shared_project_configs_MageConfig.scalesByMageType:get(type);
   if (scales == nil) then 
     _G.error("bad scales",0);
   end;
-  do return scales.costByLevel[0] end
+  do return scales.costByLevel[mageLevel] end
 end
 __shared_project_model_PlayerModel.prototype.mageGetPower = function(self,type) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:mageGetPrice",0);
+  end;
+  local mageLevel = Reflect.field(level.mageLevels, Std.string(type));
   local scales = __shared_project_configs_MageConfig.scalesByMageType:get(type);
   if (scales == nil) then 
     _G.error("bad scales",0);
   end;
-  do return scales.powerByLevel[0] end
+  do return scales.powerByLevel[mageLevel] end
+end
+__shared_project_model_PlayerModel.prototype.mageGetPower2 = function(self,type) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level model for playerModel:mageGetPrice",0);
+  end;
+  local mageLevel = Reflect.field(level.mageLevels, Std.string(type));
+  local scales = __shared_project_configs_MageConfig.scalesByMageType:get(type);
+  if (scales == nil) then 
+    _G.error("bad scales",0);
+  end;
+  do return scales.power2ByLevel[mageLevel] end
+end
+__shared_project_model_PlayerModel.prototype.mageGetMaxMana = function(self) 
+  do return self:mageGetPower2("MANA") end
+end
+__shared_project_model_PlayerModel.prototype.caravanGetMax = function(self) 
+  do return self:mageGetPower("CARAVAN") end
+end
+__shared_project_model_PlayerModel.prototype.mageGetManaRegen = function(self) 
+  do return self:mageGetPower("MANA") end
 end
 __shared_project_model_PlayerModel.prototype.manaChange = function(self,value,tag) 
   local level = self.world:storageGet().level;
@@ -7233,8 +7285,8 @@ __shared_project_model_PlayerModel.prototype.manaChange = function(self,value,ta
   if ((level.player.mana + value) < 0) then 
     _G.error("not enought mana",0);
   end;
-  if ((level.player.mana + value) > __shared_project_configs_GameConfig.MAX_MANA) then 
-    value = __shared_project_configs_GameConfig.MAX_MANA - level.player.mana;
+  if ((level.player.mana + value) > self:mageGetMaxMana()) then 
+    value = self:mageGetMaxMana() - level.player.mana;
   end;
   if (value == 0) then 
     do return end;
@@ -8217,9 +8269,7 @@ local _hx_static_init = function()
   
   __shared_project_configs_GameConfig.PLATFORM = "google";
   
-  __shared_project_configs_GameConfig.MAX_MANA = 500;
-  
-  __shared_project_configs_GameConfig.START_MANA = 100;
+  __shared_project_configs_GameConfig.START_MANA = 60;
   
   __shared_project_configs_GameConfig.START_MONEY = 150;
   
@@ -8248,8 +8298,6 @@ local _hx_static_init = function()
     return _hx_2
   end )();
   
-  __shared_project_configs_UnitConfig.caravanCount = 2;
-  
   __shared_project_configs_UnitConfig.resourceScale = _hx_tab_array({[0]=10, 20, 40, 50, 60}, 5);
   
   __shared_project_configs_MageConfig.scalesByMageType = (function() 
@@ -8257,9 +8305,13 @@ local _hx_static_init = function()
     
     local _g = __haxe_ds_StringMap.new();
     
-    _g:set("FIREBALL", _hx_o({__fields__={costByLevel=true,powerByLevel=true},costByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5)}));
+    _g:set("FIREBALL", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
-    _g:set("ICE", _hx_o({__fields__={costByLevel=true,powerByLevel=true},costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5)}));
+    _g:set("ICE", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    
+    _g:set("CARAVAN", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100, 999}, 6),powerByLevel=_hx_tab_array({[0]=1, 2, 3, 4}, 4),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    
+    _g:set("MANA", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 125, 150, 200, 999}, 5),powerByLevel=_hx_tab_array({[0]=15, 20, 30, 40, 2}, 5),power2ByLevel=_hx_tab_array({[0]=100, 125, 150, 200, 250}, 5)}));
     
     _hx_3 = _g;
     return _hx_3

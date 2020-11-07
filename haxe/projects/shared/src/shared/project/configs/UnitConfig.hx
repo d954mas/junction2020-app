@@ -55,7 +55,6 @@ class UnitConfig {
     }
     ];
 
-    public static var caravanCount = 2;
     public static var resourceScale = [10, 20, 40, 50, 60];
 
     public static function unitTypeGetById(id:String):Null<UnitType> {
@@ -74,6 +73,7 @@ class UnitConfig {
 typedef MageScales = {
 var costByLevel:Array<Int>;
 var powerByLevel:Array<Int>;
+var power2ByLevel:Array<Int>;
 };
 
 class MageConfig {
@@ -81,17 +81,30 @@ class MageConfig {
         MageType.FIREBALL => {
         costByLevel: [50, 50, 50, 50, 50],
         powerByLevel: [2, 2, 2, 2, 2],
+        power2ByLevel: [0, 0, 0, 0, 0],
     },
         MageType.ICE => {
         costByLevel: [100, 100, 100, 100, 100],
         powerByLevel: [2, 2, 2, 2, 2],
-
+        power2ByLevel: [0, 0, 0, 0, 0],
+    },
+        MageType.CARAVAN => {
+        costByLevel: [100, 100, 100, 100, 100, 999],
+        powerByLevel: [1, 2, 3, 4],
+        power2ByLevel: [0, 0, 0, 0, 0],
+    },
+        MageType.MANA => {
+        costByLevel: [100, 125, 150, 200, 999],
+        powerByLevel: [15, 20, 30, 40, 2],
+        power2ByLevel: [100, 125, 150, 200, 250],
     },
     ];
 
     public static function mageTypeGetById(id:String):Null<MageType> {
         if (id == Std.string(MageType.FIREBALL)) {return MageType.FIREBALL;}
         else if (id == Std.string(MageType.ICE)) {return MageType.ICE;}
+        else if (id == Std.string(MageType.CARAVAN)) {return MageType.CARAVAN;}
+        else if (id == Std.string(MageType.MANA)) {return MageType.MANA;}
 
 
         return null;

@@ -13,5 +13,7 @@ enum abstract UnitType(String) {
 enum abstract MageType(String) {
     var FIREBALL;
     var ICE;
-    public static var ALL_TYPES = [FIREBALL, ICE];
+    var CARAVAN;
+    var MANA;
+    public static var ALL_TYPES = [FIREBALL, ICE,CARAVAN,MANA];
 }

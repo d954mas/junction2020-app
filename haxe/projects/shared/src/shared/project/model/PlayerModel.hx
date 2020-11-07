@@ -61,6 +61,7 @@ class PlayerModel {
         return (level.player.money >= value);
     }
 
+    @:nullSafety(Off)
     public function castSpell(type:MageType, newTurn:Bool) {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model for castSpell";}
@@ -79,6 +80,10 @@ class PlayerModel {
         } else if (type == MageType.ICE) {
             level.ice = power;
             world.levelModel.removeDeadUnits();
+        } else if (type == MageType.CARAVAN) {
+            level.mageLevels.set(Std.string(MageType.CARAVAN), level.mageLevels.get(Std.string(MageType.CARAVAN))+1);
+        } else if (type == MageType.MANA) {
+            level.mageLevels.set(Std.string(MageType.MANA), level.mageLevels.get(Std.string(MageType.MANA)) + 1);
         }
         EventHelper.levelCastSpellEnd(world, type);
 
@@ -97,19 +102,47 @@ class PlayerModel {
         var price = scales.costByLevel[0];
         return price;
     }
-
+    @:nullSafety(Off)
     public function mageGetPrice(type:MageType) {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for playerModel:mageGetPrice";}
+        var mageLevel = level.mageLevels.get(Std.string(type));
         var scales = MageConfig.scalesByMageType[type];
         if (scales == null) {throw "bad scales";}
-        var price = scales.costByLevel[0];
+        var price = scales.costByLevel[mageLevel];
+        return price;
+    }
+    @:nullSafety(Off)
+    public function mageGetPower(type:MageType) {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for playerModel:mageGetPrice";}
+        var mageLevel = level.mageLevels.get(Std.string(type));
+        var scales = MageConfig.scalesByMageType[type];
+        if (scales == null) {throw "bad scales";}
+        var price = scales.powerByLevel[mageLevel];
+        return price;
+    }
+    @:nullSafety(Off)
+    public function mageGetPower2(type:MageType) {
+        var level = world.storageGet().level;
+        if (level == null) {throw "no level model for playerModel:mageGetPrice";}
+        var mageLevel = level.mageLevels.get(Std.string(type));
+        var scales = MageConfig.scalesByMageType[type];
+        if (scales == null) {throw "bad scales";}
+        var price = scales.power2ByLevel[mageLevel];
         return price;
     }
 
-    public function mageGetPower(type:MageType) {
-        var scales = MageConfig.scalesByMageType[type];
-        if (scales == null) {throw "bad scales";}
-        var price = scales.powerByLevel[0];
-        return price;
+    public function mageGetMaxMana() {
+        return mageGetPower2(MageType.MANA);
+    }
+
+    public function caravanGetMax() {
+        return mageGetPower(MageType.CARAVAN);
+    }
+
+    public function mageGetManaRegen() {
+        return mageGetPower(MageType.MANA);
     }
 
 
@@ -118,8 +151,8 @@ class PlayerModel {
         if (level == null) {throw "no level model for playerModel:manaChange";}
         if (value == 0) {return;}
         if (level.player.mana + value < 0) {throw "not enought mana";}
-        if (level.player.mana + value > GameConfig.MAX_MANA) {
-            value = GameConfig.MAX_MANA - level.player.mana;
+        if (level.player.mana + value > mageGetMaxMana()) {
+            value = mageGetMaxMana() - level.player.mana;
         }
         if (value == 0) {return;}
         level.player.mana += value;

@@ -72,7 +72,7 @@ function M.game_config_speech_platform_get()
     return SHARED.shared.project.configs.GameConfig.PLATFORM
 end
 function M.game_config_mana_man()
-    return SHARED.shared.project.configs.GameConfig.MAX_MANA
+    return M.get_world().levelModel.playerModel:mageGetMaxMana()
 end
 
 

@@ -20,6 +20,8 @@ function Script:bind_vh()
 
         price_cast_fireball = gui.get_node("btn_cast_fireball/lbl_price"),
         price_cast_ice = gui.get_node("btn_cast_ice/lbl_price"),
+        price_cast_mana = gui.get_node("btn_cast_mana/lbl_price"),
+        price_cast_caravan = gui.get_node("btn_cast_caravan/lbl_price"),
     }
     self.views = {
         mana_panel = ManaPanel("mana_panel", WORLD),
@@ -33,6 +35,8 @@ function Script:bind_vh()
 
         btn_cast_fireball = GUI.ButtonScale("btn_cast_fireball"),
         btn_cast_ice = GUI.ButtonScale("btn_cast_ice"),
+        btn_cast_mana = GUI.ButtonScale("btn_cast_mana"),
+        btn_cast_caravan = GUI.ButtonScale("btn_cast_caravan"),
     }
 end
 
@@ -81,6 +85,14 @@ function Script:init_gui()
         interactive_canvas.send_text_query("level.cast ICE")
     end)
 
+    self.views.btn_cast_mana:set_input_listener(function()
+        interactive_canvas.send_text_query("level.cast MANA")
+    end)
+
+    self.views.btn_cast_caravan:set_input_listener(function()
+        interactive_canvas.send_text_query("level.cast CARAVAN")
+    end)
+
     gui.set_text(self.vh.price_archer, HAXE_WRAPPER.level_player_unit_get_price("ARCHER"))
     gui.set_text(self.vh.price_knight, HAXE_WRAPPER.level_player_unit_get_price("KNIGHT"))
     gui.set_text(self.vh.price_spearman, HAXE_WRAPPER.level_player_unit_get_price("SPEARMAN"))
@@ -89,12 +101,19 @@ function Script:init_gui()
 
     gui.set_text(self.vh.price_cast_fireball, HAXE_WRAPPER.level_player_mage_get_price("FIREBALL"))
     gui.set_text(self.vh.price_cast_ice, HAXE_WRAPPER.level_player_mage_get_price("ICE"))
+    gui.set_text(self.vh.price_cast_mana, HAXE_WRAPPER.level_player_mage_get_price("MANA"))
+    gui.set_text(self.vh.price_cast_caravan, HAXE_WRAPPER.level_player_mage_get_price("CARAVAN"))
 end
 
 function Script:storage_changed()
     gui.set_text(self.vh.lbl_turn, "TURN:" .. (HAXE_WRAPPER.level_turn_get() + 1))
     self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
     self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
+
+    gui.set_text(self.vh.price_cast_fireball, HAXE_WRAPPER.level_player_mage_get_price("FIREBALL"))
+    gui.set_text(self.vh.price_cast_ice, HAXE_WRAPPER.level_player_mage_get_price("ICE"))
+    gui.set_text(self.vh.price_cast_mana, HAXE_WRAPPER.level_player_mage_get_price("MANA"))
+    gui.set_text(self.vh.price_cast_caravan, HAXE_WRAPPER.level_player_mage_get_price("CARAVAN"))
 end
 
 function Script:final()
@@ -118,6 +137,8 @@ function Script:on_input(action_id, action)
 
     self.views.btn_cast_fireball:on_input(action_id, action)
     self.views.btn_cast_ice:on_input(action_id, action)
+    self.views.btn_cast_caravan:on_input(action_id, action)
+    self.views.btn_cast_mana:on_input(action_id, action)
 
     self.views.btn_skip:on_input(action_id, action)
 end

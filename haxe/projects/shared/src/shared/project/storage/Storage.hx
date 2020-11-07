@@ -9,92 +9,91 @@ import shared.project.timers.BaseTimer.TimerStatus;
 import shared.project.tutorial.tutorials.TutorialBase;
 
 typedef VersionStorageStruct = {
-    var version:String;
-    var time:Int;
-    var server:String;
+var version:String;
+var time:Int;
+var server:String;
 }
 
 typedef StatStorageStruct = {
-    var startGameCounter:Int;
-    var version:Int;
-    var intentIdx:Int;
-    var platform:String;
-    var device:String;
-    var dayAfterInstall:Int;
-    var gameConfigVersion:String;
-    var gameLocaleVersion:String;
-    var gameSharedVersion:String;
-    var gameBackendVersion:String;
-    var userLevel:Int;
+var startGameCounter:Int;
+var version:Int;
+var intentIdx:Int;
+var platform:String;
+var device:String;
+var dayAfterInstall:Int;
+var gameConfigVersion:String;
+var gameLocaleVersion:String;
+var gameSharedVersion:String;
+var gameBackendVersion:String;
+var userLevel:Int;
 }
 
 typedef UserStorageStruct = {
-    var name:String;
-    var locale:String;
-    var permissions:Array<String>;
-    var verification:String;
+var name:String;
+var locale:String;
+var permissions:Array<String>;
+var verification:String;
     @:optional var lastSeen:String;
 }
 
 
 typedef IapStorageStruct = {
-    var current_iap:String;
-    var skuGoogle:Null<Dynamic>;
+var current_iap:String;
+var skuGoogle:Null<Dynamic>;
 }
 
 
 typedef TimerStorageStruct = {
-    var startTime:Float; //-1 if disabled
-    var endTime:Float; //-1 if disabled
-    var timeLeft:Float; //-1 if disabled
-    var status:TimerStatus; //-1 if disabled
+var startTime:Float; //-1 if disabled
+var endTime:Float; //-1 if disabled
+var timeLeft:Float; //-1 if disabled
+var status:TimerStatus; //-1 if disabled
 }
 
 typedef TimersStorageStruct = {
-    var serverLastTime:Float; //time of last responce in server.Set when restore storage.Also set when intent processing done
-    var clientDeltaTime:Float; //0 in server. In client it calc like, serverTime - clientTime
-    var time:Float; //client system time + clientDeltaTime. Update when process intent in server. Or every frame in client
-    var timerDelta:Float; //delta from prev update timer
+var serverLastTime:Float; //time of last responce in server.Set when restore storage.Also set when intent processing done
+var clientDeltaTime:Float; //0 in server. In client it calc like, serverTime - clientTime
+var time:Float; //client system time + clientDeltaTime. Update when process intent in server. Or every frame in client
+var timerDelta:Float; //delta from prev update timer
 }
 
 typedef ProfileStorageStruct = {
-    var cheatsEnabled:Bool;
-    var uuid:String;
-    var tag:String;//Чтобы различать наши стейты=)
-    var isDev:Bool;
-    var dtdId:String;
+var cheatsEnabled:Bool;
+var uuid:String;
+var tag:String;//Чтобы различать наши стейты=)
+var isDev:Bool;
+var dtdId:String;
     //нужно чтобы запретить одновременную игру с нескольких аккаунтов.
-    var conversationIdAtStart:String;
-    var conversationIdCurrent:String;
-    var currentVersion:String;
-    var firstLaunchTimestamp:Null<Int>;
+var conversationIdAtStart:String;
+var conversationIdCurrent:String;
+var currentVersion:String;
+var firstLaunchTimestamp:Null<Int>;
 }
 
 typedef ContinuousMatchConfigExpectedPhraseStruct = {
-    var phrase:String;
+var phrase:String;
 }
 typedef ContinuousMatchConfigStruct = {
-    var expected_phrases:Array<ContinuousMatchConfigExpectedPhraseStruct>;
-    var duration_seconds:Int;
+var expected_phrases:Array<ContinuousMatchConfigExpectedPhraseStruct>;
+var duration_seconds:Int;
 }
 
 typedef UtilsStruct = {
-    var auto_listening:Bool;
+var auto_listening:Bool;
 }
 
 
-
 typedef LevelPlayerOrAiStruct = {
-    var id:Int;
-    var unitLevels:DynamicAccess<Int>;
-    var unitQueue:Array<UnitQueueEntry>;
+var id:Int;
+var unitLevels:DynamicAccess<Int>;
+var unitQueue:Array<UnitQueueEntry>;
 }
 
 typedef LevelPlayerStruct = {
     > LevelPlayerOrAiStruct,
-    var money:Int;
-    var mana:Int;
-    var caravanLevel:Int;
+var money:Int;
+var mana:Int;
+var caravanLevel:Int;
 }
 
 typedef LevelEnemyStruct = {
@@ -102,10 +101,10 @@ typedef LevelEnemyStruct = {
 }
 
 typedef LevelRoadPart = {
-    var idx:Int;//idx of road.Increased fir every new road
-    var x:Int;
-    var y:Int;
-    var type:RoadType;
+var idx:Int;//idx of road.Increased fir every new road
+var x:Int;
+var y:Int;
+var type:RoadType;
 }
 
 typedef UnitQueueEntry = {
@@ -125,33 +124,34 @@ typedef LevelStruct = {
     caravans:Array<ResourceUnitStruct>,
     unitIdx:Int,
     caravanIdx:Int,
-    lose:Bool
+    lose:Bool,
+    mageLevels:DynamicAccess<Int>
 }
 
 typedef StorageStruct = {
-    var user:UserStorageStruct;
-    var version:VersionStorageStruct;
-    var stat:StatStorageStruct;
-    var profile:ProfileStorageStruct;
-    var iap:IapStorageStruct ;
-    var serverStruct:ServerStruct;
+var user:UserStorageStruct;
+var version:VersionStorageStruct;
+var stat:StatStorageStruct;
+var profile:ProfileStorageStruct;
+var iap:IapStorageStruct ;
+var serverStruct:ServerStruct;
     @:optional var continuousMatchConfig:ContinuousMatchConfigStruct;
     @:optional var clientStruct:ClientStruct;
-    var timers:TimersStorageStruct;
-    var tutorials:DynamicAccess<TutorialTypedef>;
-    var utils:UtilsStruct;
+var timers:TimersStorageStruct;
+var tutorials:DynamicAccess<TutorialTypedef>;
+var utils:UtilsStruct;
     @:optional var level:LevelStruct;
 }
 
 typedef ClientStruct = {
-    var timerDeltaClient:Float;
-    var time:Float;
+var timerDeltaClient:Float;
+var time:Float;
 }
 
 typedef BasicUnitStruct = {
-    var roadPartIdx:Int;
-    var ownerId:Int;
-    var id:Int;
+var roadPartIdx:Int;
+var ownerId:Int;
+var id:Int;
 }
 
 typedef CastleUnitStruct = {
@@ -159,24 +159,24 @@ typedef CastleUnitStruct = {
 }
 
 typedef CastleStruct = {
-    var idx:Int;
-    var unitId:Int;
+var idx:Int;
+var unitId:Int;
 }
 
 typedef ResourceUnitStruct = {
     > BasicUnitStruct,
-    var resources:Int;
-    var resourceLvl:Int;
+var resources:Int;
+var resourceLvl:Int;
 }
 
 typedef BattleUnitStruct = {
     >BasicUnitStruct,
-    var hpLvl:Int;
-    var hp:Int;
-    var type:UnitType;
-    var attackLvl:Int;
-    var attackRange:Int;
-    var reward:Int;
+var hpLvl:Int;
+var hp:Int;
+var type:UnitType;
+var attackLvl:Int;
+var attackRange:Int;
+var reward:Int;
 }
 
 //region server struct

@@ -148,7 +148,7 @@ class LevelModel {
 
     @:nullSafety(Off)
     public function spawnCaravan(level:Int):Bool {
-        if (ds.level.caravans.length < UnitConfig.caravanCount) {
+        if (ds.level.caravans.length < playerModel.caravanGetMax()) {
             var caravan = {
                 roadPartIdx:getUnloadPos().idx,
                 ownerId:0,
@@ -352,7 +352,7 @@ class LevelModel {
     }
 
     private function levelNextTurnRegenMana() {
-        playerModel.manaChange(GameConfig.MANA_REGEN, "startTurnRegen");
+        playerModel.manaChange(playerModel.mageGetManaRegen(), "startTurnRegen");
     }
 
 
@@ -444,6 +444,12 @@ class LevelModel {
         var enemy = createEnemy();
         var level:LevelStruct = {
             ice:0,
+            mageLevels: {
+                FIREBALL:0,
+                CARAVAN:0,
+                MANA:0,
+                ICE:0,
+            },
             turnEnemyAI:0,
             turn:0,
             lose:false,
