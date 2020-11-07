@@ -163,6 +163,7 @@ __shared_project_intent_processors_IntentLevelProcessor = _hx_e()
 __shared_project_intent_processors_IntentModalProcessor = _hx_e()
 __shared_project_intent_processors_IntentProcessor = _hx_e()
 __shared_project_intent_processors_IntentTutorialProcessor = _hx_e()
+__shared_project_model_EnemyModel = _hx_e()
 __shared_project_model_IBattleUnit = _hx_e()
 __shared_project_model_LevelModel = _hx_e()
 __shared_project_model_PlayerModel = _hx_e()
@@ -6142,6 +6143,43 @@ __shared_project_intent_processors_IntentTutorialProcessor.prototype.__class__ =
 __shared_project_intent_processors_IntentTutorialProcessor.__super__ = __shared_project_intent_processors_IntentSubProcessor
 setmetatable(__shared_project_intent_processors_IntentTutorialProcessor.prototype,{__index=__shared_project_intent_processors_IntentSubProcessor.prototype})
 
+__shared_project_model_EnemyModel.new = function(world) 
+  local self = _hx_new(__shared_project_model_EnemyModel.prototype)
+  __shared_project_model_EnemyModel.super(self,world)
+  return self
+end
+__shared_project_model_EnemyModel.super = function(self,world) 
+  self.world = world;
+  self.ds = self.world:storageGet();
+end
+_hx_exports["shared"]["project"]["model"]["EnemyModel"] = __shared_project_model_EnemyModel
+__shared_project_model_EnemyModel.__name__ = true
+__shared_project_model_EnemyModel.prototype = _hx_a();
+__shared_project_model_EnemyModel.prototype.world= nil;
+__shared_project_model_EnemyModel.prototype.ds= nil;
+__shared_project_model_EnemyModel.prototype.unitsSpawnUnit = function(self,unitType) 
+  self.world.levelModel:unitsSpawnUnit(1, unitType, 0);
+  self.world.speechBuilder:text(Std.string("enemy spawn ") .. Std.string(unitType));
+end
+__shared_project_model_EnemyModel.prototype.modelRestore = function(self) 
+end
+__shared_project_model_EnemyModel.prototype.turn = function(self) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("enemy can't turn no level",0);
+  end;
+  local step = _G.math.fmod(level.turn, 6);
+  if (step == 2) then 
+    self:unitsSpawnUnit("KNIGHT");
+  else
+    if (step == 5) then 
+      self:unitsSpawnUnit("ARCHER");
+    end;
+  end;
+end
+
+__shared_project_model_EnemyModel.prototype.__class__ =  __shared_project_model_EnemyModel
+
 __shared_project_model_IBattleUnit.new = {}
 __shared_project_model_IBattleUnit.__name__ = true
 __shared_project_model_IBattleUnit.prototype = _hx_a();
@@ -6160,6 +6198,7 @@ __shared_project_model_LevelModel.super = function(self,world)
   self.world = world;
   self.ds = self.world:storageGet();
   self.playerModel = __shared_project_model_PlayerModel.new(world);
+  self.enemyModel = __shared_project_model_EnemyModel.new(world);
   self.battleUnitModels = __haxe_ds_List.new();
   self:modelRestore();
 end
@@ -6169,6 +6208,7 @@ __shared_project_model_LevelModel.prototype = _hx_a();
 __shared_project_model_LevelModel.prototype.world= nil;
 __shared_project_model_LevelModel.prototype.ds= nil;
 __shared_project_model_LevelModel.prototype.playerModel= nil;
+__shared_project_model_LevelModel.prototype.enemyModel= nil;
 __shared_project_model_LevelModel.prototype.battleUnitModels= nil;
 __shared_project_model_LevelModel.prototype.addUnit = function(self,unit) 
   self.battleUnitModels:push(unit);
@@ -6206,7 +6246,7 @@ __shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,owner
   end;
   local unit = _hx_o({__fields__={roadPartIdx=true,id=true,hpLvl=true,hp=true,ownerId=true,type=true,attackLvl=true,attackRange=true,reward=true},roadPartIdx=-1,id=level.unitIdx,hpLvl=unitLevel,hp=scales.hpByLevel[unitLevel],ownerId=ownerId,type=type,attackLvl=unitLevel,attackRange=scales.attackRange,reward=scales.rewardByLevel[unitLevel]});
   level.unitIdx = level.unitIdx + 1;
-  local road = level.roads[level.roads.length - 2];
+  local road = level.roads[level.roads.length - 1];
   if (ownerId == 0) then 
     unit.roadPartIdx = _hx_funcToField(road[0].idx);
   else
@@ -6313,6 +6353,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurn = function(self)
   end;
   __shared_base_event_EventHelper.levelNextTurn(self.world);
   level.turn = level.turn + 1;
+  self.enemyModel:turn();
   self:levelNextTurnBattles();
   self:levelNextTurnRegenMoney();
   self:levelNextTurnRegenMana();

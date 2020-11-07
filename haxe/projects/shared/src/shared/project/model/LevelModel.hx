@@ -17,16 +17,17 @@ class LevelModel {
     private var world:World;
     private var ds:StorageStruct;
     public var playerModel:PlayerModel;
+    public var enemyModel:EnemyModel;
     private var battleUnitModels:List<BattleUnitModel>;
 
     public function new(world:World) {
         this.world = world;
         this.ds = this.world.storageGet();
         this.playerModel = new PlayerModel(world);
+        this.enemyModel = new EnemyModel(world);
         this.battleUnitModels = new List<BattleUnitModel>();
         modelRestore();
     }
-
 
 
     private function addUnit(unit:BattleUnitModel) {
@@ -39,7 +40,7 @@ class LevelModel {
             //lua плохо реагирует на пустой массив
             if (Reflect.hasField(ds.level.units, "length")) {
                 for (unit in ds.level.units) {
-                    battleUnitModels.add(new BattleUnitModel(unit,world));
+                    battleUnitModels.add(new BattleUnitModel(unit, world));
                 }
             }
         }
@@ -49,7 +50,7 @@ class LevelModel {
         var level = world.storageGet().level;
         if (level == null) {throw "no level in unitsSpawnUnit";}
         var scales = UnitConfig.scalesByUnitType[type];
-        if(scales == null) {throw "no scales in unitsSpawnUnit";}
+        if (scales == null) {throw "no scales in unitsSpawnUnit";}
         var unit:BattleUnitStruct = {
             roadPartIdx:-1,
             id:level.unitIdx,
@@ -65,7 +66,7 @@ class LevelModel {
 
         //ADD CHECK THAT NO UNITS IN SPAWN POINT
 
-        var road = level.roads[level.roads.length - 2];
+        var road = level.roads[level.roads.length - 1];
         //PLAYER
         if (ownerId == 0) {
             unit.roadPartIdx = road[0].idx;
@@ -74,7 +75,7 @@ class LevelModel {
         }
 
         level.units.push(unit);
-        addUnit(new BattleUnitModel(unit,world));
+        addUnit(new BattleUnitModel(unit, world));
     }
 
     private function createPlayer():LevelPlayerStruct {
@@ -102,9 +103,9 @@ class LevelModel {
                 if (attacker.canMove()) {
                     var newPos:LevelRoadPart;
                     //if (attacker.getOwnerId() > 0) { //Не понял и закомментировал. Почему ходит только враг
-                        newPos = unitNewPosition(attacker);
-                        attacker.move(newPos.idx);
-                   // }
+                    newPos = unitNewPosition(attacker);
+                    attacker.move(newPos.idx);
+                    // }
                 }
             } else {
                 var defender = canAttack[0];
@@ -137,11 +138,11 @@ class LevelModel {
             //change behavior if enemies can go off the roadPlayerToEnemy, current behavior
             //might cause IndexOutOfBoundsException
             var id = road.indexOf(unit.getPos()) - 1;
-            if(id<0){id = 0;}
+            if (id < 0) {id = 0;}
             return road[id];
         }
         var id = road.indexOf(unit.getPos()) + 1;
-        if(id>=road.length){id = road.length-1;}
+        if (id >= road.length) {id = road.length - 1;}
         return road[id];
     }
 
@@ -173,6 +174,7 @@ class LevelModel {
         if (level == null) { throw "no level in levelNextTurn";}
         EventHelper.levelNextTurn(world);
         level.turn++;
+        enemyModel.turn();
         levelNextTurnBattles();
         levelNextTurnCaravans();
 
@@ -274,9 +276,10 @@ class LevelModel {
         if (level == null) {throw "no level model roadsGetByIdx";}
         return level.roads[idx];
     }
-    public function unitsGetUnitById(id:Int):Null<BattleUnitModel>{
-        for(model in battleUnitModels){
-            if(model.getId() == id){
+
+    public function unitsGetUnitById(id:Int):Null<BattleUnitModel> {
+        for (model in battleUnitModels) {
+            if (model.getId() == id) {
                 return model;
             }
         }

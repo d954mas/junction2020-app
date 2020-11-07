@@ -40,7 +40,6 @@ end
 function View:bind_vh()
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local parts = collectionfactory.create(FACTORY_URL,vmath.vector3(0,0,0))
-    pprint(parts)
     self.vh = {
         root = msg.url(assert(parts[FACTORY_PART.ROOT])),
         unit = msg.url(assert(parts[FACTORY_PART.UNIT])),
