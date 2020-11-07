@@ -68,6 +68,19 @@ class LevelModel {
         }
     }
 
+    public function dequeUnits(ownerId:Int, type:UnitType, amount:Int) {
+        var counter = amount;
+        var owner = getPlayerById(ownerId);
+        if (owner != null) {
+            var queuedOfType = Lambda(owner.unitQueue, function (v) {return v.unitType == type;});
+            for (unit in queuedOfType) {
+                owner.unitQueue.remove(unit);
+                counter--;
+                if (counter == 0) break;
+            }
+        }
+    }
+
     public function unitsSpawnUnitCastle(ownerId:Int, unitLevel:Int):CastleUnitModel {
         var level = world.storageGet().level;
         var type = UnitType.CASTLE;
