@@ -82,9 +82,7 @@ typedef UtilsStruct = {
     var auto_listening:Bool;
 }
 
-typedef CastleStruct = {
-    var idx:Int;
-}
+
 
 typedef LevelPlayerOrAiStruct = {
     var id:Int;
@@ -140,6 +138,15 @@ typedef ClientStruct = {
 typedef BasicUnitStruct = {
     var roadPartIdx:Int;
     var id:Int;
+}
+
+typedef CastleUnitStruct = {
+    >BattleUnitStruct,
+}
+
+typedef CastleStruct = {
+    var idx:Int;
+    var unit:CastleUnitStruct;
 }
 
 typedef BattleUnitStruct = {

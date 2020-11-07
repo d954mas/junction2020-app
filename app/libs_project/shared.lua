@@ -170,6 +170,7 @@ __shared_project_model_PlayerModel = _hx_e()
 __shared_project_model_Restrictions = _hx_e()
 __shared_project_model_World = _hx_e()
 __shared_project_model_units_BattleUnitModel = _hx_e()
+__shared_project_model_units_CastleUnitModel = _hx_e()
 __shared_project_storage_Storage = _hx_e()
 __shared_project_timers_Timers = _hx_e()
 __shared_project_tutorial_TutorialsModel = _hx_e()
@@ -5217,6 +5218,12 @@ end
 __shared_base_event_EventHelper.levelUnitMove = function(world,id,roadId) 
   world:eventEmit("LEVEL_UNIT_MOVE", _hx_o({__fields__={id=true,roadId=true},id=id,roadId=roadId}));
 end
+__shared_base_event_EventHelper.levelUnitAttack = function(world,attackerId,defenderId) 
+  world:eventEmit("LEVEL_UNIT_ATTACK", _hx_o({__fields__={attackerId=true,defenderId=true},attackerId=attackerId,defenderId=defenderId}));
+end
+__shared_base_event_EventHelper.levelUnitDied = function(world,id) 
+  world:eventEmit("LEVEL_UNIT_DIED", _hx_o({__fields__={id=true},id=id}));
+end
 
 __shared_base_model_WorldBaseModel.new = function(storage) 
   local self = _hx_new(__shared_base_model_WorldBaseModel.prototype)
@@ -5843,6 +5850,10 @@ __shared_project_configs_UnitConfig.unitTypeGetById = function(id)
   else
     if (id == "KNIGHT") then 
       do return "KNIGHT" end;
+    else
+      if (id == "CASTLE") then 
+        do return "CASTLE" end;
+      end;
     end;
   end;
   do return nil end;
@@ -6186,6 +6197,7 @@ __shared_project_model_IBattleUnit.prototype = _hx_a();
 __shared_project_model_IBattleUnit.prototype.takeDamage= nil;
 __shared_project_model_IBattleUnit.prototype.getPos= nil;
 __shared_project_model_IBattleUnit.prototype.getOwnerId= nil;
+__shared_project_model_IBattleUnit.prototype.getId= nil;
 
 __shared_project_model_IBattleUnit.prototype.__class__ =  __shared_project_model_IBattleUnit
 
@@ -6214,6 +6226,9 @@ __shared_project_model_LevelModel.prototype.addUnit = function(self,unit)
   self.battleUnitModels:push(unit);
   __shared_base_event_EventHelper.levelUnitSpawn(self.world, unit:getId());
 end
+__shared_project_model_LevelModel.prototype.addUnitCastle = function(self,unit) 
+  self.battleUnitModels:push(unit);
+end
 __shared_project_model_LevelModel.prototype.modelRestore = function(self) 
   if (self.ds.level ~= nil) then 
     local o = self.ds.level.units;
@@ -6230,10 +6245,37 @@ __shared_project_model_LevelModel.prototype.modelRestore = function(self)
       while (_g < _g1.length) do 
         local unit = _g1[_g];
         _g = _g + 1;
-        self.battleUnitModels:add(__shared_project_model_units_BattleUnitModel.new(unit, self.world));
+        if (unit.type == "CASTLE") then 
+          self.battleUnitModels:add(__shared_project_model_units_CastleUnitModel.new(unit, self.world));
+        else
+          self.battleUnitModels:add(__shared_project_model_units_BattleUnitModel.new(unit, self.world));
+        end;
       end;
     end;
   end;
+end
+__shared_project_model_LevelModel.prototype.unitsSpawnUnitCastle = function(self,ownerId,unitLevel) 
+  local level = self.world:storageGet().level;
+  local type = "CASTLE";
+  if (level == nil) then 
+    _G.error("no level in unitsSpawnUnitCastle",0);
+  end;
+  local scales = __shared_project_configs_UnitConfig.scalesByUnitType:get(type);
+  if (scales == nil) then 
+    _G.error("no scales in unitsSpawnUnitCastle",0);
+  end;
+  local unit = _hx_o({__fields__={roadPartIdx=true,id=true,hpLvl=true,hp=true,ownerId=true,type=true,attackLvl=true,attackRange=true,reward=true},roadPartIdx=-1,id=level.unitIdx,hpLvl=unitLevel,hp=scales.hpByLevel[unitLevel],ownerId=ownerId,type=type,attackLvl=unitLevel,attackRange=scales.attackRange,reward=scales.rewardByLevel[unitLevel]});
+  level.unitIdx = level.unitIdx + 1;
+  local road = level.roads[level.roads.length - 1];
+  if (ownerId == 0) then 
+    unit.roadPartIdx = _hx_funcToField(road[0].idx);
+  else
+    unit.roadPartIdx = _hx_funcToField(road[road.length - 1].idx);
+  end;
+  level.units:push(unit);
+  local model = __shared_project_model_units_CastleUnitModel.new(unit, self.world);
+  self:addUnitCastle(model);
+  do return model end
 end
 __shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,ownerId,type,unitLevel) 
   local level = self.world:storageGet().level;
@@ -6281,17 +6323,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
         attacker[0]:move(newPos.idx);
       end;
     else
-      local defender = canAttack[0];
-      attacker[0]:attack(defender);
-      if (defender:canAttack(attacker[0])) then 
-        defender:attack(attacker[0]);
-      end;
-      if (not defender:isAlive()) then 
-        self.battleUnitModels:remove(defender);
-      end;
-      if (not attacker[0]:isAlive()) then 
-        self.battleUnitModels:remove(attacker[0]);
-      end;
+      attacker[0]:attack(canAttack[0]);
     end;
   end;
   self:removeDeadUnits();
@@ -6300,11 +6332,21 @@ __shared_project_model_LevelModel.prototype.removeDeadUnits = function(self)
   local dead = Lambda.filter(self.ds.level.units, function(u) 
     do return u.hp == 0 end;
   end);
+  local deadModels = Lambda.filter(self.battleUnitModels, function(u1) 
+    do return not u1:isAlive() end;
+  end);
   local _g = 0;
   while (_g < dead.length) do 
     local unit = dead[_g];
     _g = _g + 1;
     self.ds.level.units:remove(unit);
+  end;
+  local _g1 = 0;
+  while (_g1 < deadModels.length) do 
+    local unit1 = deadModels[_g1];
+    _g1 = _g1 + 1;
+    __shared_base_event_EventHelper.levelUnitDied(self.world, unit1:getId());
+    self.battleUnitModels:remove(unit1);
   end;
 end
 __shared_project_model_LevelModel.prototype.unitNewPosition = function(self,unit) 
@@ -6360,9 +6402,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurn = function(self)
 end
 __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self) 
   local level = _hx_o({__fields__={turn=true,unitIdx=true,player=true,enemy=true,castles=true,roads=true,units=true},turn=0,unitIdx=0,player=self:createPlayer(),enemy=self:createEnemy(),castles=Array.new(),roads=Array.new(),units=Array.new()});
-  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
-  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
-  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
+  self.world:storageGet().level = level;
   local roadResToPlayer = Array.new();
   roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
   roadResToPlayer:push(self:createRoadPart(1, 0, "BASE"));
@@ -6381,6 +6421,9 @@ __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(13, 0, "CASTLE"));
   level.roads:push(roadResToPlayer);
   level.roads:push(roadPlayerToEnemy);
+  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(0, 0):getStruct()}));
+  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(0, 0):getStruct()}));
+  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(1, 0):getStruct()}));
   do return level end
 end
 __shared_project_model_LevelModel.prototype.createLevel = function(self) 
@@ -6399,7 +6442,6 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   level.enemy = self:createEnemy();
   local lastRoad = level.roads[level.roads.length - 1];
   local startX = lastRoad[lastRoad.length - 1].x;
-  level.castles:push(_hx_o({__fields__={idx=true},idx=level.castles.length}));
   local roadPlayerToEnemy = Array.new();
   roadPlayerToEnemy:push(self:createRoadPart(startX + 1, 0, "CASTLE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 2, 0, "BASE"));
@@ -6409,6 +6451,7 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   roadPlayerToEnemy:push(self:createRoadPart(startX + 6, 0, "BASE"));
   roadPlayerToEnemy:push(self:createRoadPart(startX + 7, 0, "CASTLE"));
   level.roads:push(roadPlayerToEnemy);
+  level.castles:push(_hx_o({__fields__={idx=true,unit=true},idx=level.castles.length,unit=self:unitsSpawnUnitCastle(1, 0):getStruct()}));
   __shared_base_event_EventHelper.levelMoveToNext(self.world);
 end
 __shared_project_model_LevelModel.prototype.castlesGetByIdx = function(self,idx) 
@@ -6806,6 +6849,7 @@ end
 __shared_project_model_units_BattleUnitModel.prototype.attack = function(self,enemy) 
   if (self:canAttack(enemy)) then 
     enemy:takeDamage(self:calcDamage(enemy));
+    __shared_base_event_EventHelper.levelUnitAttack(self.world, self:getId(), enemy:getId());
   end;
 end
 __shared_project_model_units_BattleUnitModel.prototype.calcDamage = function(self,enemy) 
@@ -6862,6 +6906,28 @@ __shared_project_model_units_BattleUnitModel.prototype.getAttack = function(self
 end
 
 __shared_project_model_units_BattleUnitModel.prototype.__class__ =  __shared_project_model_units_BattleUnitModel
+
+__shared_project_model_units_CastleUnitModel.new = function(struct,world) 
+  local self = _hx_new(__shared_project_model_units_CastleUnitModel.prototype)
+  __shared_project_model_units_CastleUnitModel.super(self,struct,world)
+  return self
+end
+__shared_project_model_units_CastleUnitModel.super = function(self,struct,world) 
+  __shared_project_model_units_BattleUnitModel.super(self,struct,world);
+end
+_hx_exports["shared"]["project"]["model"]["units"]["CastleUnitModel"] = __shared_project_model_units_CastleUnitModel
+__shared_project_model_units_CastleUnitModel.__name__ = true
+__shared_project_model_units_CastleUnitModel.prototype = _hx_a();
+__shared_project_model_units_CastleUnitModel.prototype.canMove = function(self) 
+  do return false end
+end
+__shared_project_model_units_CastleUnitModel.prototype.getStruct = function(self) 
+  do return self.struct end
+end
+
+__shared_project_model_units_CastleUnitModel.prototype.__class__ =  __shared_project_model_units_CastleUnitModel
+__shared_project_model_units_CastleUnitModel.__super__ = __shared_project_model_units_BattleUnitModel
+setmetatable(__shared_project_model_units_CastleUnitModel.prototype,{__index=__shared_project_model_units_BattleUnitModel.prototype})
 
 __shared_project_storage_Storage.new = {}
 __shared_project_storage_Storage.__name__ = true
@@ -7406,6 +7472,8 @@ local _hx_static_init = function()
     _g:set("ARCHER", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=2, 4, 6, 8, 10}, 5),attackRange=3,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
     
     _g:set("KNIGHT", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=5, 10, 15, 20, 25}, 5),attackByLevel=_hx_tab_array({[0]=4, 8, 12, 16, 20}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5)}));
+    
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 100, 150, 200, 250}, 5),attackByLevel=_hx_tab_array({[0]=1, 2, 3, 4, 5}, 5),attackRange=1,rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2

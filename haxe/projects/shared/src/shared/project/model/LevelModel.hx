@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.project.model.units.CastleUnitModel;
 import shared.project.model.units.BasicUnitModel;
 import shared.project.storage.Storage.BattleUnitStruct;
 import shared.project.configs.UnitConfig;
@@ -34,16 +35,58 @@ class LevelModel {
         battleUnitModels.push(unit);
         EventHelper.levelUnitSpawn(world, unit.getId());
     }
+    private function addUnitCastle(unit:BattleUnitModel) {
+        battleUnitModels.push(unit);
+       //EventHelper.levelUnitSpawn(world, unit.getId());
+    }
 
     public function modelRestore():Void {
         if (ds.level != null) {
             //lua плохо реагирует на пустой массив
             if (Reflect.hasField(ds.level.units, "length")) {
                 for (unit in ds.level.units) {
-                    battleUnitModels.add(new BattleUnitModel(unit, world));
+                    if(unit.type == UnitType.CASTLE){
+                        battleUnitModels.add(new CastleUnitModel(unit, world));
+                    }else{
+                        battleUnitModels.add(new BattleUnitModel(unit, world));
+                    }
+
                 }
             }
         }
+    }
+
+    public function unitsSpawnUnitCastle(ownerId:Int, unitLevel:Int):CastleUnitModel {
+        var level = world.storageGet().level;
+        var type = UnitType.CASTLE;
+        if (level == null) {throw "no level in unitsSpawnUnitCastle";}
+        var scales = UnitConfig.scalesByUnitType[type];
+        if (scales == null) {throw "no scales in unitsSpawnUnitCastle";}
+        var unit:BattleUnitStruct = {
+            roadPartIdx:-1,
+            id:level.unitIdx,
+            hpLvl:unitLevel,
+            hp:scales.hpByLevel[unitLevel],
+            ownerId:ownerId,
+            type:type,
+            attackLvl:unitLevel,
+            attackRange:scales.attackRange,
+            reward:scales.rewardByLevel[unitLevel]
+        }
+        level.unitIdx++;
+
+        var road = level.roads[level.roads.length - 1];
+        //PLAYER
+        if (ownerId == 0) {
+            unit.roadPartIdx = road[0].idx;
+        } else { //ENEMY
+            unit.roadPartIdx = road[road.length - 1].idx;
+        }
+
+        level.units.push(unit);
+        var model = new CastleUnitModel(unit, world);
+        addUnitCastle(model);
+        return model;
     }
 
     public function unitsSpawnUnit(ownerId:Int, type:UnitType, unitLevel:Int) {
@@ -194,9 +237,8 @@ class LevelModel {
             roads:new Array<Array<LevelRoadPart>>(),
             units:new Array<BattleUnitStruct>()
         }
-        level.castles.push({idx:level.castles.length}); //resources_castle
-        level.castles.push({idx:level.castles.length});//player_castle
-        level.castles.push({idx:level.castles.length}); //enemy_castle
+        world.storageGet().level = level;//fix no level when spawn units for castles
+
 
         var roadResToPlayer:Array<LevelRoadPart> = new Array<LevelRoadPart>();
 
@@ -221,6 +263,10 @@ class LevelModel {
         level.roads.push(roadResToPlayer);
         level.roads.push(roadPlayerToEnemy);
 
+        level.castles.push({idx:level.castles.length, unit:unitsSpawnUnitCastle(0,0).getStruct()}); //resources_castle
+        level.castles.push({idx:level.castles.length, unit:unitsSpawnUnitCastle(0,0).getStruct()});//player_castle
+        level.castles.push({idx:level.castles.length, unit:unitsSpawnUnitCastle(1,0).getStruct()}); //enemy_castle
+
 
         return level;
     }
@@ -244,7 +290,6 @@ class LevelModel {
         var lastRoad = level.roads[level.roads.length - 1];
         var startX = lastRoad[lastRoad.length - 1].x;
 
-        level.castles.push({idx:level.castles.length}); //enemy_castle
 
         var roadPlayerToEnemy:Array<LevelRoadPart> = new Array<LevelRoadPart>();
         roadPlayerToEnemy.push(createRoadPart(startX + 1, 0, RoadType.CASTLE));
@@ -256,6 +301,8 @@ class LevelModel {
         roadPlayerToEnemy.push(createRoadPart(startX + 7, 0, RoadType.CASTLE));
 
         level.roads.push(roadPlayerToEnemy);
+
+        level.castles.push({idx:level.castles.length, unit:unitsSpawnUnitCastle(1,0).getStruct()}); //enemy_castle
 
         EventHelper.levelMoveToNext(world);
     }
