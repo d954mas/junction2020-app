@@ -42,10 +42,17 @@ function View:bind_vh()
     local parts = collectionfactory.create(FACTORY_URL,vmath.vector3(0,0,0))
     pprint(parts)
     self.vh = {
-        root = assert(parts[FACTORY_PART.ROOT]),
-        unit = assert(parts[FACTORY_PART.UNIT]),
+        root = msg.url(assert(parts[FACTORY_PART.ROOT])),
+        unit = msg.url(assert(parts[FACTORY_PART.UNIT])),
+        sprite = nil
     }
+    self.vh.sprite = msg.url(self.vh.unit.socket,self.vh.unit.path,"sprite")
     self:road_move(self.haxe_model:getPos())
+
+    --set sprite
+    local name = "unit_" .. self.haxe_model:getType():lower() .. (self.haxe_model:getOwnerId() == 0 and "" or "_enemy")
+    sprite.play_flipbook(self.vh.sprite,name)
+
     ctx:remove()
 end
 

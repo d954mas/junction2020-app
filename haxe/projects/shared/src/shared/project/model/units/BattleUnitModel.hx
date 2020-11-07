@@ -5,7 +5,7 @@ import shared.project.configs.UnitConfig;
 
 import shared.base.utils.MathUtils;
 import shared.project.storage.Storage.BattleUnitStruct;
-
+@:expose @:keep
 class BattleUnitModel implements IBattleUnit {
     private var struct:BattleUnitStruct;
     private var world:World;
@@ -71,6 +71,10 @@ class BattleUnitModel implements IBattleUnit {
 
     public function getOwnerId() {
         return struct.ownerId;
+    }
+
+    public function getType() {
+        return struct.type;
     }
 
     public function getId() {

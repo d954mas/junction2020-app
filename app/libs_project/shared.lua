@@ -56,6 +56,7 @@ _hx_exports["shared"]["project"]["utils"] = _hx_exports["shared"]["project"]["ut
 ;_hx_exports["shared"]["project"]["tutorial"] = _hx_exports["shared"]["project"]["tutorial"] or _hx_e()
 _hx_exports["shared"]["project"]["tutorial"]["tutorials"] = _hx_exports["shared"]["project"]["tutorial"]["tutorials"] or _hx_e()
 ;_hx_exports["shared"]["project"]["model"] = _hx_exports["shared"]["project"]["model"] or _hx_e()
+_hx_exports["shared"]["project"]["model"]["units"] = _hx_exports["shared"]["project"]["model"]["units"] or _hx_e()
 ;_hx_exports["shared"]["project"]["enums"] = _hx_exports["shared"]["project"]["enums"] or _hx_e()
 _hx_exports["shared"]["project"]["enums"]["_Intent"] = _hx_exports["shared"]["project"]["enums"]["_Intent"] or _hx_e()
 ;_hx_exports["shared"]["project"]["configs"] = _hx_exports["shared"]["project"]["configs"] or _hx_e()
@@ -6748,6 +6749,7 @@ __shared_project_model_units_BattleUnitModel.super = function(self,struct,world)
   self.struct = struct;
   self.world = world;
 end
+_hx_exports["shared"]["project"]["model"]["units"]["BattleUnitModel"] = __shared_project_model_units_BattleUnitModel
 __shared_project_model_units_BattleUnitModel.__name__ = true
 __shared_project_model_units_BattleUnitModel.__interfaces__ = {__shared_project_model_IBattleUnit}
 __shared_project_model_units_BattleUnitModel.prototype = _hx_a();
@@ -6778,6 +6780,13 @@ end
 __shared_project_model_units_BattleUnitModel.prototype.isAlive = function(self) 
   do return self.struct.hp > 0 end
 end
+__shared_project_model_units_BattleUnitModel.prototype.takeHealing = function(self,amount) 
+  local tmp = _G.math.floor(__shared_base_utils_MathUtils.clamp(self.struct.hp + amount, 0, self.struct.hp) + 0.5);
+  self.struct.hp = tmp;
+end
+__shared_project_model_units_BattleUnitModel.prototype.getReward = function(self) 
+  do return self:getScales().rewardByLevel[self.struct.hpLvl] end
+end
 __shared_project_model_units_BattleUnitModel.prototype.getScales = function(self) 
   do return __shared_project_configs_UnitConfig.scalesByUnitType:get(self.struct.type) end
 end
@@ -6793,6 +6802,9 @@ __shared_project_model_units_BattleUnitModel.prototype.move = function(self,road
 end
 __shared_project_model_units_BattleUnitModel.prototype.getOwnerId = function(self) 
   do return self.struct.ownerId end
+end
+__shared_project_model_units_BattleUnitModel.prototype.getType = function(self) 
+  do return self.struct.type end
 end
 __shared_project_model_units_BattleUnitModel.prototype.getId = function(self) 
   do return self.struct.id end

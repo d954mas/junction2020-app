@@ -27,7 +27,7 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/images/game/game.atlas\\\"\\n"
-  "default_animation: \\\"soldier\\\"\\n"
+  "default_animation: \\\"unit_knight\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
