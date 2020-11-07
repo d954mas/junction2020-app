@@ -119,6 +119,7 @@ typedef LevelStruct = {
     castles:Array<CastleStruct>,
     roads:Array<Array<LevelRoadPart>>,
     units:Array<BattleUnitStruct>,
+    caravans:Array<ResourceUnitStruct>,
     unitIdx:Int,
     lose:Bool
 }
@@ -145,6 +146,7 @@ typedef ClientStruct = {
 
 typedef BasicUnitStruct = {
     var roadPartIdx:Int;
+    var ownerId:Int;
     var id:Int;
 }
 
@@ -157,11 +159,16 @@ typedef CastleStruct = {
     var unitId:Int;
 }
 
+typedef ResourceUnitStruct = {
+    > BasicUnitStruct,
+    var resources:Int;
+    var resourceLvl:Int;
+}
+
 typedef BattleUnitStruct = {
     >BasicUnitStruct,
     var hpLvl:Int;
     var hp:Int;
-    var ownerId:Int;
     var type:UnitType;
     var attackLvl:Int;
     var attackRange:Int;
