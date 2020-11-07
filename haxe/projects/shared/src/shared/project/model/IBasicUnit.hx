@@ -1,14 +1,9 @@
 package shared.project.model;
 import shared.project.storage.Storage.LevelRoadPart;
-interface IBattleUnit extends IBasicUnit {
-    function attack(enemy:IBattleUnit):Void;
-    function canAttack(enemy:IBattleUnit):Bool;
-    function takeDamage(amount:Int):Void;
-    function isAlive():Bool;
+interface IBasicUnit {
     function getPos():LevelRoadPart;
     function canMove():Bool;
     function move(roadPartIdx:Int):Void;
     function getOwnerId():Int;
-    function getHp():Int;
     function getId():Int;
 }

@@ -1,5 +1,6 @@
 package shared.base.event;
 
+import shared.project.storage.Storage.ResourceUnitStruct;
 import shared.project.storage.Storage.BattleUnitStruct;
 import shared.project.model.World;
 enum abstract ModelEventName(String) {
@@ -21,6 +22,7 @@ enum abstract ModelEventName(String) {
     var LEVEL_PLAYER_LOST;
     var LEVEL_CASTLE_ENEMY_DESTROY;
     var LEVEL_RESTART;
+    var LEVEL_CARAVAN_SPAWN;
 }
 
 class EventHelper {
@@ -48,6 +50,11 @@ class EventHelper {
     public static function levelUnitSpawn(world:World, id:Int, struct:BattleUnitStruct):Void {
         var struct = Reflect.copy(struct);//copy struct. Unit view use it for default values
         world.eventEmit(LEVEL_UNIT_SPAWN, {id:id, struct:struct});
+    }
+
+    public static function levelCaravanSpawn(world:World, id:Int, struct:ResourceUnitStruct) {
+        var struct = Reflect.copy(struct);
+        world.eventEmit(LEVEL_CARAVAN_SPAWN, {id:id, struct:struct});
     }
 
     public static function levelUnitMove(world:World, id:Int, roadId:Int):Void {

@@ -55,6 +55,9 @@ class UnitConfig {
     }
     ];
 
+    public static var caravanCount = 2;
+    public static var resourceScale = [10, 20, 40, 50, 60];
+
     public static function unitTypeGetById(id:String):Null<UnitType> {
         if (id == Std.string(UnitType.ARCHER)) {return UnitType.ARCHER;}
         else if (id == Std.string(UnitType.KNIGHT)) {return UnitType.KNIGHT;}

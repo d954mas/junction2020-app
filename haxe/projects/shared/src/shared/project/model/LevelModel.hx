@@ -1,4 +1,5 @@
 package shared.project.model;
+import shared.project.model.units.ResourceUnitModel;
 import shared.project.configs.GameConfig;
 import shared.base.enums.ContextName;
 import shared.project.model.units.CastleUnitModel;
@@ -24,6 +25,7 @@ class LevelModel {
     public var playerModel:PlayerModel;
     public var enemyModel:EnemyModel;
     private var battleUnitModels:List<BattleUnitModel>;
+    private var resourceUnitModels:List<ResourceUnitModel>;
 
     public function new(world:World) {
         this.world = world;
@@ -31,6 +33,7 @@ class LevelModel {
         this.playerModel = new PlayerModel(world);
         this.enemyModel = new EnemyModel(world);
         this.battleUnitModels = new List<BattleUnitModel>();
+        this.resourceUnitModels = new List<ResourceUnitModel>();
         modelRestore();
     }
 
@@ -68,6 +71,11 @@ class LevelModel {
 
                 }
             }
+            if (Reflect.hasField(ds.level.caravans, "length")) {
+                for (caravan in ds.level.caravans) {
+                    resourceUnitModels.add(new ResourceUnitModel(caravan, world));
+                }
+            }
         }
     }
 
@@ -77,6 +85,19 @@ class LevelModel {
         while (counter > 0) {
             owner.unitQueue.push({ownerId:ownerId, unitType:type});
             counter--;
+        }
+    }
+
+    public function dequeUnits(ownerId:Int, type:UnitType, amount:Int) {
+        var counter = amount;
+        var owner = getPlayerById(ownerId);
+        if (owner != null) {
+            var queuedOfType = Lambda.filter(owner.unitQueue, function(v) {return v.unitType == type;});
+            for (unit in queuedOfType) {
+                owner.unitQueue.remove(unit);
+                counter--;
+                if (counter == 0) break;
+            }
         }
     }
 
@@ -111,6 +132,39 @@ class LevelModel {
         var model = new CastleUnitModel(unit, world);
         addUnitCastle(model);
         return model;
+    }
+
+    @:nullSafety(Off)
+    public function getResourceCastlePos() {
+        return ds.level.roads[ds.level.roads.length - 2][0];
+    }
+
+    @:nullSafety(Off)
+    public function getUnloadPos() {
+        var road = ds.level.roads[ds.level.roads.length - 2];
+        return road[road.length - 1];
+    }
+
+    @:nullSafety(Off)
+    public function spawnCaravan(level:Int) {
+        if (ds.level.caravans.length < UnitConfig.caravanCount) {
+            var caravan = {
+                roadPartIdx:getUnloadPos().idx,
+                ownerId:0,
+                id: ds.level.caravans.length,
+                resources:0,
+                resourceLvl:level
+            }
+            ds.level.caravans.push(caravan);
+            var model = new ResourceUnitModel(caravan, world);
+            addCaravan(model);
+        }
+
+    }
+
+    private function addCaravan(model:ResourceUnitModel) {
+        resourceUnitModels.add(model);
+        EventHelper.levelCaravanSpawn(world, model.getId(), model.getStruct());
     }
 
     public function unitsSpawnUnit(ownerId:Int, type:UnitType, unitLevel:Int) {
@@ -236,8 +290,8 @@ class LevelModel {
                 // ds.level.castles.remove(castle);
             } else {
                 EventHelper.levelUnitDied(world, unit.id);
-                if(unitModel.getOwnerId()>0){
-                    world.levelModel.playerModel.moneyChange(unitModel.getReward(),"kill enemy");
+                if (unitModel.getOwnerId() > 0) {
+                    world.levelModel.playerModel.moneyChange(unitModel.getReward(), "kill enemy");
                 }
                 battleUnitModels.remove(unitModel);
             }
@@ -268,7 +322,26 @@ class LevelModel {
         throw "Part doesnt belong to any road";
     }
 
-    private function levelNextTurnCaravans() {}
+    private function levelNextTurnCaravans() {
+        for (caravan in resourceUnitModels) {
+            if (caravan.canLoad()) {
+                caravan.loadResources();
+            }
+            else if (caravan.canUnload()) {
+                caravan.unloadResources();
+            } else if (caravan.canMove()) {
+                caravan.move(caravanNewPos(caravan).idx);
+            }
+        }
+    }
+
+    private function caravanNewPos(caravan:ResourceUnitModel) {
+        var road = roadByRoadPart(caravan.getPos());
+        if (caravan.getResources() > 0) {
+            return road[road.indexOf(caravan.getPos()) + 1];
+        }
+        else return road[road.indexOf(caravan.getPos()) - 1];
+    }
 
     private function levelNextTurnRegenMoney() {
         playerModel.moneyChange(GameConfig.MONEY_REGEN, "startTurnRegen");
@@ -363,6 +436,7 @@ class LevelModel {
             unitIdx:0,
             player:createPlayer(),
             enemy:createEnemy(),
+            caravans:new Array<ResourceUnitStruct>(),
             castles:new Array<CastleStruct>(),
             roads:new Array<Array<LevelRoadPart>>(),
             units:new Array<BattleUnitStruct>()
