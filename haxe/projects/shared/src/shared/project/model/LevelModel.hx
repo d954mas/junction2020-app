@@ -110,15 +110,6 @@ class LevelModel {
             } else {
                 var defender = canAttack[0];
                 attacker.attack(defender);
-                if (defender.canAttack(attacker)) {
-                    defender.attack(attacker);
-                }
-                if (!defender.isAlive()) {
-                    battleUnitModels.remove(defender);
-                }
-                if (!attacker.isAlive()) {
-                    battleUnitModels.remove(attacker);
-                }
             }
         }
         removeDeadUnits();
@@ -127,8 +118,13 @@ class LevelModel {
     @:nullSafety(Off)
     private function removeDeadUnits() {
         var dead = Lambda.filter(ds.level.units, function(u) {return u.hp == 0;});
+        var deadModels = Lambda.filter(battleUnitModels, function(u) {return !u.isAlive();});
         for (unit in dead) {
             ds.level.units.remove(unit);
+        }
+        for (unit in deadModels) {
+            EventHelper.levelUnitDied(world, unit.getId());
+            battleUnitModels.remove(unit);
         }
     }
 

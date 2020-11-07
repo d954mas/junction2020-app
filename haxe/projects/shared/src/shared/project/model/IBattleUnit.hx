@@ -9,4 +9,6 @@ interface IBattleUnit {
     function canMove():Bool;
     function move(roadPartIdx:Int):Void;
     function getOwnerId():Int;
+    function getHp():Int;
+    function getId():Int;
 }

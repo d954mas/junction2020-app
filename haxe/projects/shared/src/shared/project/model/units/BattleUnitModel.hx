@@ -17,6 +17,7 @@ class BattleUnitModel implements IBattleUnit {
     public function attack(enemy:IBattleUnit):Void {
         if (canAttack(enemy)) {
             enemy.takeDamage(calcDamage(enemy));
+            EventHelper.levelUnitAttack(world, getId(), enemy.getId());
         }
     }
 
@@ -66,7 +67,7 @@ class BattleUnitModel implements IBattleUnit {
 
     public function move(roadPartIdx:Int):Void {
         struct.roadPartIdx = roadPartIdx;
-        EventHelper.levelUnitMove(world,getId(), roadPartIdx);
+        EventHelper.levelUnitMove(world, getId(), roadPartIdx);
     }
 
     public function getOwnerId() {
@@ -81,12 +82,13 @@ class BattleUnitModel implements IBattleUnit {
         return struct.id;
     }
 
-    public function getHp(){
+    public function getHp() {
         return struct.hp;
     }
-    public function getAttack(){
+
+    public function getAttack() {
         var scales = getScales();
-        if(scales == null) {throw "no scales in getAttack";}
+        if (scales == null) {throw "no scales in getAttack";}
         return scales.attackByLevel[struct.attackLvl];
     }
 }
