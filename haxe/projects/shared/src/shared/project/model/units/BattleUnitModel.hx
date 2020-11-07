@@ -22,7 +22,7 @@ class BattleUnitModel implements IBattleUnit {
 
     //enemy is passed in case of addition of damage-reducing effects
     private function calcDamage(enemy:IBattleUnit):Int {
-        @:nullSafety(Off) var baseDmg = getScales().attackByLevel[struct.attackLvl - 1];
+        @:nullSafety(Off) var baseDmg = getScales().attackByLevel[struct.attackLvl];
         return baseDmg;
     }
 
@@ -79,5 +79,14 @@ class BattleUnitModel implements IBattleUnit {
 
     public function getId() {
         return struct.id;
+    }
+
+    public function getHp(){
+        return struct.hp;
+    }
+    public function getAttack(){
+        var scales = getScales();
+        if(scales == null) {throw "no scales in getAttack";}
+        return scales.attackByLevel[struct.attackLvl];
     }
 }

@@ -51,6 +51,9 @@ function Level:storage_changed()
     for _, road in ipairs(self.views.roads) do
         road:on_storage_changed()
     end
+    for _, unit in ipairs(self.views.units) do
+        unit:on_storage_changed()
+    end
 end
 
 function Level:units_spawn_unit(id)

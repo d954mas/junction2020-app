@@ -6809,7 +6809,7 @@ __shared_project_model_units_BattleUnitModel.prototype.attack = function(self,en
   end;
 end
 __shared_project_model_units_BattleUnitModel.prototype.calcDamage = function(self,enemy) 
-  do return self:getScales().attackByLevel[self.struct.attackLvl - 1] end
+  do return self:getScales().attackByLevel[self.struct.attackLvl] end
 end
 __shared_project_model_units_BattleUnitModel.prototype.calculateDistance = function(self,other) 
   do return _G.math.floor(_G.math.abs(self:getPos().x - other:getPos().x) + 0.5) + _G.math.floor(_G.math.abs(self:getPos().y - other:getPos().y) + 0.5) end
@@ -6849,6 +6849,16 @@ __shared_project_model_units_BattleUnitModel.prototype.getType = function(self)
 end
 __shared_project_model_units_BattleUnitModel.prototype.getId = function(self) 
   do return self.struct.id end
+end
+__shared_project_model_units_BattleUnitModel.prototype.getHp = function(self) 
+  do return self.struct.hp end
+end
+__shared_project_model_units_BattleUnitModel.prototype.getAttack = function(self) 
+  local scales = self:getScales();
+  if (scales == nil) then 
+    _G.error("no scales in getAttack",0);
+  end;
+  do return scales.attackByLevel[self.struct.attackLvl] end
 end
 
 __shared_project_model_units_BattleUnitModel.prototype.__class__ =  __shared_project_model_units_BattleUnitModel
