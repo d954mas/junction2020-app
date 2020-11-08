@@ -234,6 +234,8 @@ function Level:units_attack_unit(attacker_id, defender_id)
         local action = unit_view_defender:animation_take_damage()
         if (attacker_id == -10000) then
             self.threads_mage.take_damage:add_action(action)
+        else
+            self.threads.take_damage:add_action(action)
         end
 
     else
