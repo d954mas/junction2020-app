@@ -6901,6 +6901,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurnCaravans = function(sel
     local caravan = caravansToRemove[_g1];
     _g1 = _g1 + 1;
     self.resourceUnitModels:remove(caravan);
+    self.ds.level.caravans:remove(caravan:getStruct());
   end;
 end
 __shared_project_model_LevelModel.prototype.caravanNewPos = function(self,caravan) 
@@ -6935,7 +6936,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=381,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=384,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -8367,7 +8368,7 @@ local _hx_static_init = function()
     
     _g:set("MAGE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=4, 4, 4, 4, 4}, 5),attackByLevel=_hx_tab_array({[0]=3, 3, 3, 3, 3}, 5),attackRange=2,costByLevel=_hx_tab_array({[0]=400, 400, 400, 400, 400}, 5),rewardByLevel=_hx_tab_array({[0]=250, 250, 250, 250, 250}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=1, 50, 50, 50, 50}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2

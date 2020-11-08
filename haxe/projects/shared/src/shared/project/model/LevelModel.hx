@@ -342,8 +342,11 @@ class LevelModel {
                 caravan.move(caravanNewPos(caravan).idx);
             }
         }
+        @:nullSafety(Off)
         for (caravan in caravansToRemove) {
             resourceUnitModels.remove(caravan);
+            ds.level.caravans.remove(caravan.getStruct());
+
         }
     }
 

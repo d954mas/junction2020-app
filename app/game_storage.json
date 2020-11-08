@@ -1,9 +1,9 @@
 {
      "timers": {
+          "timerDelta": 0,
+          "time": 1604799993550.2,
           "clientDeltaTime": 0,
-          "time": 1604799560614.7,
-          "serverLastTime": 1604799560614.7,
-          "timerDelta": 0
+          "serverLastTime": 1604799993550.2
      },
      "version": {
           "server": "dev",
@@ -15,22 +15,44 @@
      },
      "user": {
           "verification": "",
-          "name": "name",
           "locale": "en",
+          "name": "name",
           "permisions":           {}
      },
+     "tutorials":      {},
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": true,
+          "conversationIdCurrent": "1111"
+     },
+     "stat": {
+          "startGameCounter": 0,
+          "version": 3,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 746,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "sberbox",
+          "userLevel": 1,
+          "platform": "sber",
+          "gameConfigVersion": ""
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
      "level": {
           "ice": 0,
           "lose": false,
-          "mageLevels": {
-               "ICE": 0,
-               "FIREBALL": 0,
-               "CARAVAN": 0,
-               "MANA": 0
-          },
-          "turnEnemyAI": 19,
-          "caravans":           [],
-          "unitIdx": 13,
           "enemy": {
                "unitLevels": {
                     "MAGE": 1,
@@ -40,53 +62,70 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "id": 1,
-               "unitQueue":                []
+               "unitQueue":                [],
+               "id": 1
+          },
+          "turnEnemyAI": 6,
+          "caravans": [
+               {
+                    "id": 0,
+                    "resourceLvl": 1,
+                    "roadPartIdx": 0,
+                    "ownerId": 0,
+                    "resources": 20
+               }
+          ],
+          "unitIdx": 6,
+          "mageLevels": {
+               "ICE": 0,
+               "FIREBALL": 0,
+               "CARAVAN": 0,
+               "MANA": 0
           },
           "units": [
                {
                     "id": 0,
                     "attackRange": 1,
-                    "hp": 50,
+                    "hp": 1,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 0,
                     "reward": 0
                },
                {
                     "id": 1,
                     "attackRange": 1,
-                    "hp": 44,
+                    "hp": 1,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 0,
                     "reward": 0
                },
                {
                     "id": 2,
                     "attackRange": 1,
-                    "hp": 50,
+                    "hp": 1,
                     "roadPartIdx": 13000,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 1,
                     "reward": 0
                },
                {
-                    "id": 12,
+                    "id": 5,
                     "attackRange": 1,
                     "hp": 2,
-                    "roadPartIdx": 11000,
+                    "roadPartIdx": 12000,
                     "attackLvl": 0,
-                    "type": "SHIELD",
                     "hpLvl": 0,
+                    "type": "KNIGHT",
                     "ownerId": 1,
-                    "reward": 100
+                    "reward": 50
                }
           ],
           "player": {
@@ -98,11 +137,11 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 60,
+               "mana": 25,
                "id": 0,
-               "money": 795,
-               "unitQueue":                [],
-               "caravanLevel": 1
+               "money": 315,
+               "caravanLevel": 1,
+               "unitQueue":                []
           },
           "roads": [
                [
@@ -194,7 +233,7 @@
                     }
                ]
           ],
-          "turn": 19,
+          "turn": 8,
           "castles": [
                {
                     "unitId": 0,
@@ -209,37 +248,6 @@
                     "idx": 2
                }
           ],
-          "caravanIdx": 0
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 3,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 679,
-          "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
-          "device": "sberbox",
-          "platform": "sber",
-          "gameSharedVersion": ""
-     },
-     "tutorials":      {},
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
-          "cheatsEnabled": true,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
-          "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
+          "caravanIdx": 1
      }
 }
