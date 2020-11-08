@@ -60,6 +60,27 @@ class IntentLevelProcessor extends IntentSubProcessor {
                 EventHelper.levelTurnStart(world);
                 world.levelModel.levelNextTurn();
                 return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+
+            case Intent.SIMPLE_SPELL_FIREBALL:
+                return processIntent(Intent.LEVEL_CAST,{spell : Std.string(MageType.FIREBALL)});
+            case Intent.SIMPLE_SPELL_ICE:
+                return processIntent(Intent.LEVEL_CAST,{spell : Std.string(MageType.ICE)});
+            case Intent.SIMPLE_SPELL_UPGRADE_CARAVAN:
+                return processIntent(Intent.LEVEL_CAST,{spell : Std.string(MageType.CARAVAN)});
+            case Intent.CHEATS_MANA_ADD:
+                return processIntent(Intent.LEVEL_CAST,{spell : Std.string(MageType.MANA)});
+
+            case Intent.SIMPLE_UNIT_KNIGHT:
+                return processIntent(Intent.LEVEL_SPAWN_UNIT,{unit : Std.string(UnitType.KNIGHT)});
+            case Intent.SIMPLE_UNIT_ARCHER:
+                return processIntent(Intent.LEVEL_SPAWN_UNIT,{unit : Std.string(UnitType.ARCHER)});
+            case Intent.SIMPLE_UNIT_SPEARMAN:
+                return processIntent(Intent.LEVEL_SPAWN_UNIT,{unit : Std.string(UnitType.SPEARMAN)});
+            case Intent.SIMPLE_UNIT_MAGE:
+                return processIntent(Intent.LEVEL_SPAWN_UNIT,{unit : Std.string(UnitType.MAGE)});
+            case Intent.SIMPLE_UNIT_TANK:
+                return processIntent(Intent.LEVEL_SPAWN_UNIT,{unit : Std.string(UnitType.SHIELD)});
+
             case Intent.LEVEL_SPAWN_CARAVAN:
                 ask("caravan");
                 world.levelModel.playerModel.spawnCaravan();

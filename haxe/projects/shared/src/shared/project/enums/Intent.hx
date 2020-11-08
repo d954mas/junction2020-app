@@ -32,6 +32,19 @@ enum abstract Intent(String) {
     var LEVEL_TURN_SKIP = "level.turn.skip";
     var LEVEL_SPAWN_CARAVAN = "level.spawn.caravan";
 
+
+
+    var SIMPLE_UNIT_KNIGHT = "simple.unit.knight";
+    var SIMPLE_UNIT_ARCHER = "simple.unit.archer";
+    var SIMPLE_UNIT_SPEARMAN = "simple.unit.spearman";
+    var SIMPLE_UNIT_TANK = "simple.unit.tank";
+    var SIMPLE_UNIT_MAGE = "simple.unit.mage";
+
+    var SIMPLE_SPELL_FIREBALL = "simple.spell.fireball";
+    var SIMPLE_SPELL_ICE= "simple.spell.ice";
+    var SIMPLE_SPELL_UPGRADE_MANA = "simple.spell.upgrade_mana";
+    var SIMPLE_SPELL_UPGRADE_CARAVAN = "simple.spell.upgrade_caravan";
+
     var LOSE_MODAL_RESTART = "lose.modal.restart";
 }
 
@@ -77,6 +90,17 @@ var intent:Intent;
         intentContexts[Intent.TUTORIAL_NO] = [];
         intentContexts[Intent.TUTORIAL_YES] = [];
         intentContexts[Intent.LEVEL_SPAWN_CARAVAN] = [];
+
+        intentContexts[Intent.SIMPLE_UNIT_ARCHER] = [];
+        intentContexts[Intent.SIMPLE_UNIT_KNIGHT] = [];
+        intentContexts[Intent.SIMPLE_UNIT_MAGE] = [];
+        intentContexts[Intent.SIMPLE_UNIT_SPEARMAN] = [];
+        intentContexts[Intent.SIMPLE_UNIT_TANK] = [];
+
+        intentContexts[Intent.SIMPLE_SPELL_FIREBALL] = [];
+        intentContexts[Intent.SIMPLE_SPELL_ICE] = [];
+        intentContexts[Intent.SIMPLE_SPELL_UPGRADE_MANA] = [];
+        intentContexts[Intent.SIMPLE_SPELL_UPGRADE_CARAVAN] = [];
 
 
         ignoreTutorialCheck.set(Intent.MAIN_WELCOME, true);

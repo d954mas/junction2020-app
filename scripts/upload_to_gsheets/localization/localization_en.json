@@ -25,7 +25,21 @@
 		"iap_complete": "Success purchase",
 		"iap_failed": "Failed to purchase",
 		"error_server_sync": "Failed to syncronise with server. Goodbye Guardian",
-		"shop_cant_get_prices": "Can't get prices. Try again later"
+		"shop_cant_get_prices": "Can't get prices. Try again later",
+		"help_GAME": "You are the king of the castle. This is a turn based game. Your goal is to capture the enemy's castle. You can recruit warriors, use spells, and send caravans for gold income.",
+		"help_KNIGHT": "This is the standard warrior of your army, he has two health points and two attack points.",
+		"help_ARCHER": "The archer attacks twice as far as the knight, but his attacks are weaker, he has two health points and one attack point.",
+		"help_SHIELD": "Quite a significant combat unit, well protected, he has four health points and two attack point.",
+		"help_SPEARMAN": "An ordinary warrior armed with a long spear can attack two squares, he has three health points and two attack point.",
+		"help_MAGE": "Elite warrior. Learned destructive magic. He has four health points and three attack point.",
+		"help_FIREBALL": "Fire spell, deals 1 point of damage to all enemies.",
+		"help_ICE": "Freezes all enemies for two turns.",
+		"ManaUp Lvl1": "Increase max mana level to 125 increase mana income to 20",
+		"help_CARAVANUP": "Increase max caravan count by 1.",
+		"fallback_1": "Spawn units to defeat enemy. For example knight",
+		"fallback_2": "You can skip turn",
+		"fallback_3": "Use spell to defeat enemy.For example fireball",
+		"fallback_4": "Different units have different parameters"
 	},
 	"tutorial": {
 		"hello_world": "hello_world"

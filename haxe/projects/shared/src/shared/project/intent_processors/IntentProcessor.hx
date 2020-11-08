@@ -1,4 +1,5 @@
 package shared.project.intent_processors;
+import shared.project.enums.UnitType.MageType;
 import shared.project.utils.TranslationUtils;
 import jsoni18n.I18n;
 import shared.base.enums.ContextName;
@@ -113,6 +114,11 @@ class IntentProcessor {
                 return getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.MAIN_KEEP_WORKING: //pass
                 return getResult({code : ModelOutputResultCode.SUCCESS});
+
+
+
+
+
             case Intent.MAIN_HELP:
                 if (data.question != null) {
                     var localizationInput = "conv/" + data.question;
@@ -128,7 +134,7 @@ class IntentProcessor {
                 }
                 return getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.MAIN_FALLBACK:
-                ask(i18n.tr("conv/fallback"));
+                ask(i18n.tr("conv/fallback_" + Math.ceil(Math.random()*4)));
                 if (world.storageGet().level != null) {
                     //  world.levelModel.levelNextCastle();
                 }

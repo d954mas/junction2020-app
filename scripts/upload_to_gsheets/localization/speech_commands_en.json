@@ -10,5 +10,53 @@
 	"debug.toggle": {
 		"order": 100,
 		"text": "((enable|show)\\s*)+((debug)|(back)|(bach))"
+	},
+	"main.help": {
+		"order": null,
+		"text": "(tell me about)|(i (want to)|(wanna) hear about)|(what is)"
+	},
+	"simple.unit.knight": {
+		"order": 1,
+		"text": "(knight)"
+	},
+	"simple.unit.archer": {
+		"order": 1,
+		"text": "(archer)"
+	},
+	"simple.unit.mage": {
+		"order": 1,
+		"text": "(mage)"
+	},
+	"simple.unit.spearman": {
+		"order": 1,
+		"text": "(spear)"
+	},
+	"simple.unit.tank": {
+		"order": 1,
+		"text": "(tank)"
+	},
+	"level.turn.skip": {
+		"order": 1,
+		"text": "(skip)"
+	},
+	"level.spawn.caravan": {
+		"order": 0,
+		"text": "(caravan)"
+	},
+	"simple.spell.fireball": {
+		"order": 1,
+		"text": "(fire)"
+	},
+	"simple.spell.ice": {
+		"order": 1,
+		"text": "(ice)"
+	},
+	"simple.spell.upgrade_mana": {
+		"order": 1,
+		"text": "(upgrade mana)"
+	},
+	"simple.spell.upgrade_caravan": {
+		"order": 1,
+		"text": "(upgrade caravan)"
 	}
 }

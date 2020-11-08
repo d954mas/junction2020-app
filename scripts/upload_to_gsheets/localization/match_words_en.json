@@ -1,1 +1,9 @@
-{}
+{
+	"simple.unit.archer": [
+		"help",
+		"sos",
+		"info",
+		"command",
+		"commands"
+	]
+}
