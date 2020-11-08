@@ -160,6 +160,7 @@ __shared_project_configs_UnitConfig = _hx_e()
 __shared_project_configs_MageConfig = _hx_e()
 __shared_project_enums_Intents = _hx_e()
 __shared_project_enums__UnitType_UnitType_Impl_ = _hx_e()
+__shared_project_enums__UnitType_MageType_Impl_ = _hx_e()
 __shared_project_intent_processors_IntentSubProcessor = _hx_e()
 __shared_project_intent_processors_IntentCheatsProcessor = _hx_e()
 __shared_project_intent_processors_IntentLevelProcessor = _hx_e()
@@ -182,6 +183,7 @@ __shared_project_tutorial_TutorialsModel = _hx_e()
 __shared_project_tutorial_tutorials_TutorialBase = _hx_e()
 __shared_project_utils_Base64 = _hx_e()
 __shared_project_utils_TimeUtils = _hx_e()
+__shared_project_utils_TranslationUtils = _hx_e()
 
 local _hx_bind, _hx_bit, _hx_staticToInstance, _hx_funcToField, _hx_maxn, _hx_print, _hx_apply_self, _hx_box_mr, _hx_bit_clamp, _hx_table, _hx_bit_raw
 local _hx_pcall_default = {};
@@ -6099,6 +6101,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("main.fallback", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("main.error", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("main.keep_working", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("main.help", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("webapp.load_done", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("actions.iap.buy", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.cast", _hx_tab_array({}, 0));
@@ -6155,6 +6158,21 @@ end
 
 __shared_project_enums__UnitType_UnitType_Impl_.new = {}
 __shared_project_enums__UnitType_UnitType_Impl_.__name__ = true
+
+__shared_project_enums__UnitType_MageType_Impl_.new = {}
+__shared_project_enums__UnitType_MageType_Impl_.__name__ = true
+__shared_project_enums__UnitType_MageType_Impl_.getByName = function(mageName) 
+  local _g = __lua_lib_luautf8_Utf8.lower(mageName);
+  if (_g) == "caravan" then 
+    do return "CARAVAN" end;
+  elseif (_g) == "fireball" then 
+    do return "FIREBALL" end;
+  elseif (_g) == "ice" then 
+    do return "ICE" end;
+  elseif (_g) == "mana" then 
+    do return "MANA" end;else
+  do return nil end; end;
+end
 
 __shared_project_intent_processors_IntentSubProcessor.new = function(world,shared1,i18n) 
   local self = _hx_new(__shared_project_intent_processors_IntentSubProcessor.prototype)
@@ -6369,7 +6387,7 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     __shared_project_analytics_AnalyticsHelper.sendProcessIntentEvent(self.world, intent, data);
     __shared_project_analytics_AnalyticsHelper.sendPlayerInfoEvent(self.world);
   end;
-  __haxe_Log.trace(Std.string("process intent:") .. Std.string(intent), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=65,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+  __haxe_Log.trace(Std.string("process intent:") .. Std.string(intent), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=66,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
   if (intent == "main.welcome") then 
     self:ask(self.i18n:tr("conv/welcome"));
     __shared_project_analytics_AnalyticsHelper.sendGameLaunchEvent(self.world);
@@ -6409,10 +6427,24 @@ __shared_project_intent_processors_IntentProcessor.prototype.processIntent = fun
     if (data.iapKey == nil) then 
       _G.error("no iap key",0);
     end;
-    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=125,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
+    __haxe_Log.trace(Std.string("iap buy:") .. Std.string(data.iapKey), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/intent_processors/IntentProcessor.hx",lineNumber=141,className="shared.project.intent_processors.IntentProcessor",methodName="processIntent"}));
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.fallback" then 
     self:ask(self.i18n:tr("conv/fallback"));
+    do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "main.help" then 
+    if (data.question ~= nil) then 
+      local localizationInput = Std.string("conv/") .. Std.string(Std.string(data.question));
+      local argMap = __shared_project_utils_TranslationUtils.getSpellCostMap(data.question, self.world);
+      local localized = self.i18n:tr(localizationInput, argMap);
+      if (localized == localizationInput) then 
+        do return self:processIntent("main.fallback") end;
+      else
+        self:ask(localized);
+      end;
+    else
+      do return self:processIntent("main.fallback") end;
+    end;
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "main.keep_working" then 
     do return self:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
@@ -8176,6 +8208,25 @@ __shared_project_utils_TimeUtils.timeToStringShort = function(time)
   d.d = _G.os.date("*t", Std.int(d.t));
   d.dUTC = _G.os.date("!*t", Std.int(d.t));
   do return DateTools.format(d, "%d %H:%M:%S") end;
+end
+
+__shared_project_utils_TranslationUtils.new = {}
+__shared_project_utils_TranslationUtils.__name__ = true
+__shared_project_utils_TranslationUtils.getSpellCostMap = function(spellName,world) 
+  local spell = __shared_project_enums__UnitType_MageType_Impl_.getByName(spellName);
+  if (spell ~= nil) then 
+    local _g = __haxe_ds_StringMap.new();
+    local value = world.levelModel.playerModel:mageGetPower(spell);
+    local key = Std.string(spellName) .. Std.string("_cost");
+    if (value == nil) then 
+      _g.h[key] = __haxe_ds_StringMap.tnull;
+    else
+      _g.h[key] = value;
+    end;
+    do return _g end;
+  else
+    do return __haxe_ds_StringMap.new() end;
+  end;
 end
 _hx_bit_clamp = function(v)
   if v <= 2147483647 and v >= -2147483648 then

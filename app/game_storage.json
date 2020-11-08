@@ -1,8 +1,8 @@
 {
      "timers": {
           "clientDeltaTime": 0,
-          "time": 1604792674610.2,
-          "serverLastTime": 1604792674610.2,
+          "time": 1604794121510.2,
+          "serverLastTime": 1604794121510.2,
           "timerDelta": 0
      },
      "version": {
@@ -26,7 +26,7 @@
           "version": 3,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 354,
+          "intentIdx": 356,
           "gameBackendVersion": "",
           "gameConfigVersion": "",
           "userLevel": 1,
@@ -57,11 +57,11 @@
                "ICE": 0,
                "FIREBALL": 0,
                "CARAVAN": 0,
-               "MANA": 1
+               "MANA": 0
           },
-          "turnEnemyAI": 3,
+          "turnEnemyAI": 0,
           "caravans":           [],
-          "unitIdx": 4,
+          "unitIdx": 3,
           "enemy": {
                "unitLevels": {
                     "MAGE": 1,
@@ -107,17 +107,6 @@
                     "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 0
-               },
-               {
-                    "id": 3,
-                    "attackRange": 1,
-                    "hp": 2,
-                    "roadPartIdx": 12000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 1,
-                    "reward": 50
                }
           ],
           "player": {
@@ -129,9 +118,9 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 0,
+               "mana": 60,
                "id": 0,
-               "money": 165,
+               "money": 150,
                "unitQueue":                [],
                "caravanLevel": 1
           },
@@ -225,7 +214,7 @@
                     }
                ]
           ],
-          "turn": 3,
+          "turn": 0,
           "castles": [
                {
                     "unitId": 0,
