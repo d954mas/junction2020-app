@@ -1,9 +1,9 @@
 {
      "timers": {
-          "timerDelta": 0,
-          "time": 1604797896711.3,
           "clientDeltaTime": 0,
-          "serverLastTime": 1604797896711.3
+          "time": 1604799560614.7,
+          "serverLastTime": 1604799560614.7,
+          "timerDelta": 0
      },
      "version": {
           "server": "dev",
@@ -19,31 +19,6 @@
           "locale": "en",
           "permisions":           {}
      },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": true,
-          "conversationIdCurrent": "1111"
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 3,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 642,
-          "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
-          "userLevel": 1,
-          "platform": "sber",
-          "gameConfigVersion": ""
-     },
      "level": {
           "ice": 0,
           "lose": false,
@@ -53,17 +28,9 @@
                "CARAVAN": 0,
                "MANA": 0
           },
-          "turnEnemyAI": 14,
-          "caravans": [
-               {
-                    "id": 0,
-                    "resourceLvl": 1,
-                    "roadPartIdx": 6000,
-                    "ownerId": 0,
-                    "resources": 0
-               }
-          ],
-          "unitIdx": 7,
+          "turnEnemyAI": 19,
+          "caravans":           [],
+          "unitIdx": 13,
           "enemy": {
                "unitLevels": {
                     "MAGE": 1,
@@ -91,7 +58,7 @@
                {
                     "id": 1,
                     "attackRange": 1,
-                    "hp": 50,
+                    "hp": 44,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
                     "type": "CASTLE",
@@ -111,15 +78,15 @@
                     "reward": 0
                },
                {
-                    "id": 6,
+                    "id": 12,
                     "attackRange": 1,
                     "hp": 2,
-                    "roadPartIdx": 10000,
+                    "roadPartIdx": 11000,
                     "attackLvl": 0,
-                    "type": "KNIGHT",
+                    "type": "SHIELD",
                     "hpLvl": 0,
                     "ownerId": 1,
-                    "reward": 50
+                    "reward": 100
                }
           ],
           "player": {
@@ -131,9 +98,9 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 95,
+               "mana": 60,
                "id": 0,
-               "money": 415,
+               "money": 795,
                "unitQueue":                [],
                "caravanLevel": 1
           },
@@ -227,7 +194,7 @@
                     }
                ]
           ],
-          "turn": 14,
+          "turn": 19,
           "castles": [
                {
                     "unitId": 0,
@@ -242,12 +209,37 @@
                     "idx": 2
                }
           ],
-          "caravanIdx": 1
+          "caravanIdx": 0
      },
+     "timerDelta": 0,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 3,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 679,
+          "gameBackendVersion": "",
+          "gameConfigVersion": "",
+          "userLevel": 1,
+          "device": "sberbox",
+          "platform": "sber",
+          "gameSharedVersion": ""
+     },
+     "tutorials":      {},
      "iap": {
           "current_iap": ""
      },
      "time": 1586967396797,
      "serverLastTime": 1586967396797,
-     "tutorials":      {}
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
+          "cheatsEnabled": true,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdCurrent": "1111",
+          "isDev": true,
+          "firstLaunchTimestamp": 1604618196,
+          "conversationIdAtStart": "1111"
+     }
 }

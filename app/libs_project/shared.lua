@@ -6489,6 +6489,7 @@ __shared_project_model_EnemyModel.new = function(world)
   return self
 end
 __shared_project_model_EnemyModel.super = function(self,world) 
+  self.ai = _hx_tab_array({[0]=_hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0,knight=0.5,archer=0.5,shield=0,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.5,archer=0.5,shield=0,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0,knight=0.5,archer=0.5,shield=0,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.5,archer=0.5,shield=0,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0,knight=0.5,archer=0.5,shield=0,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.5,archer=0.5,shield=0,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.5,knight=0.33,archer=0.33,shield=0.33,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.33,archer=0.33,shield=0.33,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.5,knight=0.33,archer=0.33,shield=0.33,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.33,archer=0.33,shield=0.33,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.5,knight=0.33,archer=0.33,shield=0.33,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.25,archer=0.25,shield=0.25,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.5,knight=0.25,archer=0.25,shield=0.25,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0,knight=0.25,archer=0.25,shield=0.25,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.5,knight=0.25,archer=0.25,shield=0.25,spearman=0,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.25,archer=0.25,shield=0.25,spearman=0.25,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.5,knight=0.2,archer=0.2,shield=0.3,spearman=0.3,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.2,archer=0.2,shield=0.3,spearman=0.3,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.1,knight=0.15,archer=0.15,shield=0.35,spearman=0.3,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=0.5,knight=0.1,archer=0.1,shield=0.4,spearman=0.4,mage=0}), _hx_o({__fields__={spawn_percent=true,knight=true,archer=true,shield=true,spearman=true,mage=true},spawn_percent=1,knight=0.05,archer=0.5,shield=0.2,spearman=0.2,mage=0.5})}, 21);
   self.world = world;
   self.ds = self.world:storageGet();
 end
@@ -6497,6 +6498,7 @@ __shared_project_model_EnemyModel.__name__ = true
 __shared_project_model_EnemyModel.prototype = _hx_a();
 __shared_project_model_EnemyModel.prototype.world= nil;
 __shared_project_model_EnemyModel.prototype.ds= nil;
+__shared_project_model_EnemyModel.prototype.ai= nil;
 __shared_project_model_EnemyModel.prototype.unitsSpawnUnit = function(self,unitType) 
   self.world.levelModel:unitsSpawnUnit(1, unitType, 0);
   self.world.speechBuilder:text(Std.string("enemy spawn ") .. Std.string(unitType));
@@ -6511,28 +6513,25 @@ __shared_project_model_EnemyModel.prototype.turn = function(self)
   if (level.ice > 0) then 
     do return end;
   end;
-  local step = _G.math.fmod(level.turnEnemyAI, 6);
-  if (step == 2) then 
+  local data = self.ai[level.turnEnemyAI];
+  if (data.spawn_percent >= _G.math.random()) then 
     local chance = _G.math.random();
-    if (chance < 0.5) then 
+    if (data.knight >= chance) then 
       self:unitsSpawnUnit("KNIGHT");
     else
-      if (chance < 0.8) then 
-        self:unitsSpawnUnit("SHIELD");
-      else
-        self:unitsSpawnUnit("SPEARMAN");
-      end;
-    end;
-  else
-    if (step == 5) then 
-      local chance1 = _G.math.random();
-      if (chance1 < 0.5) then 
+      if ((data.knight + data.archer) >= chance) then 
         self:unitsSpawnUnit("ARCHER");
       else
-        if (chance1 < 0.8) then 
-          self:unitsSpawnUnit("MAGE");
+        if (((data.knight + data.archer) + data.shield) >= chance) then 
+          self:unitsSpawnUnit("SHIELD");
         else
-          self:unitsSpawnUnit("KNIGHT");
+          if ((((data.knight + data.archer) + data.shield) + data.spearman) >= chance) then 
+            self:unitsSpawnUnit("SPEARMAN");
+          else
+            if (((((data.knight + data.archer) + data.shield) + data.spearman) + data.mage) >= chance) then 
+              self:unitsSpawnUnit("MAGE");
+            end;
+          end;
         end;
       end;
     end;

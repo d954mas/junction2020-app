@@ -103,7 +103,7 @@ function Level:caravan_move(id, roadId)
     -- self.world.thread_sequence:add_action(function()
     local unit_view = self:caravans_view_by_id(id)
     local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
-    self.threads.caravan_move:add_action(action)
+    self.threads.move:add_action(action)
     --end)
 end
 
