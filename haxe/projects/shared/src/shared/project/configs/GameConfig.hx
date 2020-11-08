@@ -21,7 +21,7 @@ class GameConfig {
     public static final START_MANA:Int = 60;
     public static final START_MONEY:Int = 150;
 
-    public static final MONEY_REGEN:Int = 5;
+    public static final MONEY_REGEN:Int = 30;
     public static final MANA_REGEN:Int = 10;
 #end
 }

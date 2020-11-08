@@ -152,7 +152,7 @@ function Action:set_property()
     elseif self.object_type == OBJECT_TYPES.GUI then
         self:set_property_gui()
     elseif self.object_type == OBJECT_TYPES.GO then
-        self:set_property_go()
+        pcall(self.set_property_go,self)
     end
 end
 

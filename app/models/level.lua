@@ -169,12 +169,12 @@ function Level:animation_turn_end()
     self.animation_sequence:add_action(function()
         local threads = self.threads
         local orders = {
+            threads.spell,
             threads.spawn,
             threads.move,
             threads.attack,
             threads.take_damage,
             threads.die,
-            threads.spell,
             threads.caravan_spawn,
             threads.caravan_move,
             threads.caravan_load,

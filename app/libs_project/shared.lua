@@ -8364,7 +8364,7 @@ local _hx_static_init = function()
   
   __shared_project_configs_GameConfig.START_MONEY = 150;
   
-  __shared_project_configs_GameConfig.MONEY_REGEN = 5;
+  __shared_project_configs_GameConfig.MONEY_REGEN = 30;
   
   __shared_project_configs_GameConfig.MANA_REGEN = 10;
   
@@ -8383,7 +8383,7 @@ local _hx_static_init = function()
     
     _g:set("MAGE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=4, 4, 4, 4, 4}, 5),attackByLevel=_hx_tab_array({[0]=3, 3, 3, 3, 3}, 5),attackRange=2,costByLevel=_hx_tab_array({[0]=400, 400, 400, 400, 400}, 5),rewardByLevel=_hx_tab_array({[0]=250, 250, 250, 250, 250}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=1, 50, 50, 50, 50}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2
@@ -8396,9 +8396,9 @@ local _hx_static_init = function()
     
     local _g = __haxe_ds_StringMap.new();
     
-    _g:set("FIREBALL", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("FIREBALL", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=90, 90, 90, 90, 90}, 5),powerByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
-    _g:set("ICE", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("ICE", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=150, 150, 150, 150, 150}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _g:set("CARAVAN", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 150, 200, 999}, 4),powerByLevel=_hx_tab_array({[0]=1, 2, 3, 4}, 4),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     

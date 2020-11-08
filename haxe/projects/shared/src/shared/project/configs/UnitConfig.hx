@@ -47,7 +47,7 @@ class UnitConfig {
         rewardByLevel: [250, 250, 250, 250, 250]
     },
         UnitType.CASTLE => {
-        hpByLevel: [1, 50, 50, 50, 50],
+        hpByLevel: [50, 50, 50, 50, 50],
         attackByLevel: [1, 1, 1, 1, 1],
         attackRange: 1,
         costByLevel: [0, 0, 0, 0, 0],
@@ -79,12 +79,12 @@ var power2ByLevel:Array<Int>;
 class MageConfig {
     public static var scalesByMageType:haxe.ds.Map<MageType, MageScales> = [
         MageType.FIREBALL => {
-        costByLevel: [50, 50, 50, 50, 50],
-        powerByLevel: [2, 2, 2, 2, 2],
+        costByLevel: [90, 90, 90, 90, 90],
+        powerByLevel: [1, 1, 1, 1, 1],
         power2ByLevel: [0, 0, 0, 0, 0],
     },
         MageType.ICE => {
-        costByLevel: [100, 100, 100, 100, 100],
+        costByLevel: [150, 150, 150, 150, 150],
         powerByLevel: [2, 2, 2, 2, 2],
         power2ByLevel: [0, 0, 0, 0, 0],
     },
