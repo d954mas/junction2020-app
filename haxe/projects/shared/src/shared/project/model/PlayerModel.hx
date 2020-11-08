@@ -81,6 +81,9 @@ class PlayerModel {
             world.levelModel.removeDeadUnits();
         } else if (type == MageType.ICE) {
             level.ice = power;
+            if(newTurn){
+                level.ice++;
+            }
             world.levelModel.removeDeadUnits();
         } else if (type == MageType.CARAVAN) {
             level.mageLevels.set(Std.string(MageType.CARAVAN), level.mageLevels.get(Std.string(MageType.CARAVAN)) + 1);

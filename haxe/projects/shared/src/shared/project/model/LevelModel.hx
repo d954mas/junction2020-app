@@ -346,7 +346,6 @@ class LevelModel {
         for (caravan in caravansToRemove) {
             resourceUnitModels.remove(caravan);
             ds.level.caravans.remove(caravan.getStruct());
-
         }
     }
 
@@ -533,6 +532,12 @@ class LevelModel {
                 EventHelper.levelUnitDiedMoveToNextCastle(world, unit.id);
             }
         }
+
+        for (caravan in level.caravans) {
+            EventHelper.levelCaravanDiewMoveToNextCastle(world, caravan.id);
+        }
+        level.caravans = new Array();
+        resourceUnitModels = new List();
 
         var enemy = createEnemy();
         level.enemy = enemy;

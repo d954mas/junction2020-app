@@ -1,9 +1,9 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1604799993550.2,
-          "clientDeltaTime": 0,
-          "serverLastTime": 1604799993550.2
+          "time": 1604800891164.5,
+          "serverLastTime": 1604800891164.5,
+          "clientDeltaTime": 0
      },
      "version": {
           "server": "dev",
@@ -15,44 +15,22 @@
      },
      "user": {
           "verification": "",
-          "locale": "en",
           "name": "name",
+          "locale": "en",
           "permisions":           {}
      },
-     "tutorials":      {},
-     "timerDelta": 0,
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": true,
-          "conversationIdCurrent": "1111"
-     },
-     "stat": {
-          "startGameCounter": 0,
-          "version": 3,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 746,
-          "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
-          "userLevel": 1,
-          "platform": "sber",
-          "gameConfigVersion": ""
-     },
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
      "level": {
           "ice": 0,
           "lose": false,
+          "mageLevels": {
+               "ICE": 0,
+               "FIREBALL": 0,
+               "CARAVAN": 0,
+               "MANA": 1
+          },
+          "turnEnemyAI": 17,
+          "caravans":           [],
+          "unitIdx": 26,
           "enemy": {
                "unitLevels": {
                     "MAGE": 1,
@@ -62,25 +40,8 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "unitQueue":                [],
-               "id": 1
-          },
-          "turnEnemyAI": 6,
-          "caravans": [
-               {
-                    "id": 0,
-                    "resourceLvl": 1,
-                    "roadPartIdx": 0,
-                    "ownerId": 0,
-                    "resources": 20
-               }
-          ],
-          "unitIdx": 6,
-          "mageLevels": {
-               "ICE": 0,
-               "FIREBALL": 0,
-               "CARAVAN": 0,
-               "MANA": 0
+               "id": 1,
+               "unitQueue":                []
           },
           "units": [
                {
@@ -89,8 +50,8 @@
                     "hp": 1,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "hpLvl": 0,
                     "type": "CASTLE",
+                    "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 0
                },
@@ -100,32 +61,54 @@
                     "hp": 1,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 11,
+                    "attackRange": 1,
+                    "hp": 1,
+                    "roadPartIdx": 14000,
+                    "attackLvl": 0,
                     "hpLvl": 0,
                     "type": "CASTLE",
                     "ownerId": 0,
                     "reward": 0
                },
                {
-                    "id": 2,
+                    "id": 24,
                     "attackRange": 1,
                     "hp": 1,
-                    "roadPartIdx": 13000,
+                    "roadPartIdx": 21000,
                     "attackLvl": 0,
-                    "hpLvl": 0,
                     "type": "CASTLE",
-                    "ownerId": 1,
+                    "hpLvl": 0,
+                    "ownerId": 0,
                     "reward": 0
                },
                {
-                    "id": 5,
+                    "id": 24,
                     "attackRange": 1,
-                    "hp": 2,
-                    "roadPartIdx": 12000,
+                    "hp": 1,
+                    "roadPartIdx": 21000,
                     "attackLvl": 0,
+                    "type": "CASTLE",
                     "hpLvl": 0,
-                    "type": "KNIGHT",
+                    "ownerId": 0,
+                    "reward": 0
+               },
+               {
+                    "id": 25,
+                    "attackRange": 1,
+                    "hp": 1,
+                    "roadPartIdx": 27000,
+                    "attackLvl": 0,
+                    "type": "CASTLE",
+                    "hpLvl": 0,
                     "ownerId": 1,
-                    "reward": 50
+                    "reward": 0
                }
           ],
           "player": {
@@ -137,11 +120,11 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 25,
+               "mana": 60,
                "id": 0,
-               "money": 315,
-               "caravanLevel": 1,
-               "unitQueue":                []
+               "money": 150,
+               "unitQueue":                [],
+               "caravanLevel": 1
           },
           "roads": [
                [
@@ -231,9 +214,97 @@
                          "idx": 13000,
                          "y": 0
                     }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 14,
+                         "idx": 14000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 15,
+                         "idx": 15000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 16,
+                         "idx": 16000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 17,
+                         "idx": 17000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 18,
+                         "idx": 18000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 19,
+                         "idx": 19000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 20,
+                         "idx": 20000,
+                         "y": 0
+                    }
+               ],
+               [
+                    {
+                         "type": "CASTLE",
+                         "x": 21,
+                         "idx": 21000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 22,
+                         "idx": 22000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 23,
+                         "idx": 23000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 24,
+                         "idx": 24000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 25,
+                         "idx": 25000,
+                         "y": 0
+                    },
+                    {
+                         "type": "BASE",
+                         "x": 26,
+                         "idx": 26000,
+                         "y": 0
+                    },
+                    {
+                         "type": "CASTLE",
+                         "x": 27,
+                         "idx": 27000,
+                         "y": 0
+                    }
                ]
           ],
-          "turn": 8,
+          "turn": 17,
           "castles": [
                {
                     "unitId": 0,
@@ -244,10 +315,49 @@
                     "idx": 1
                },
                {
-                    "unitId": 2,
+                    "unitId": 11,
                     "idx": 2
+               },
+               {
+                    "unitId": 24,
+                    "idx": 3
+               },
+               {
+                    "unitId": 25,
+                    "idx": 4
                }
           ],
-          "caravanIdx": 1
+          "caravanIdx": 2
+     },
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": true,
+          "conversationIdCurrent": "1111"
+     },
+     "tutorials":      {},
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 3,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 926,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "sberbox",
+          "userLevel": 1,
+          "platform": "sber",
+          "gameConfigVersion": ""
      }
 }

@@ -5388,6 +5388,9 @@ end
 __shared_base_event_EventHelper.levelCaravanSpawn = function(world,id,struct) 
   world:eventEmit("LEVEL_CARAVAN_SPAWN", _hx_o({__fields__={id=true,struct=true},id=id,struct=Reflect.copy(struct)}));
 end
+__shared_base_event_EventHelper.levelCaravanDiewMoveToNextCastle = function(world,id) 
+  world:eventEmit("LEVEL_CARAVAN_DIED_MOVE_TO_NEXT_CASTLE", _hx_o({__fields__={id=true},id=id}));
+end
 __shared_base_event_EventHelper.levelCaravanMove = function(world,id,roadId) 
   world:eventEmit("LEVEL_CARAVAN_MOVE", _hx_o({__fields__={id=true,roadId=true},id=id,roadId=roadId}));
 end
@@ -6281,7 +6284,7 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     local price = self.world.levelModel.playerModel:mageGetPrice(spelType);
     if (self.world.levelModel.playerModel:canSpendMana(price)) then 
       self.world.levelModel.playerModel:manaChange(-price, "cast");
-      self.world.levelModel.playerModel:castSpell(spelType, false);
+      self.world.levelModel.playerModel:castSpell(spelType, true);
     else
       self:ask(Std.string("not enought mana.Need ") .. Std.string(price));
     end;
@@ -6936,7 +6939,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=384,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=383,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -7064,6 +7067,15 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
       __shared_base_event_EventHelper.levelUnitDiedMoveToNextCastle(self.world, unit.id);
     end;
   end;
+  local _g2 = 0;
+  local _g3 = level.caravans;
+  while (_g2 < _g3.length) do 
+    local caravan = _g3[_g2];
+    _g2 = _g2 + 1;
+    __shared_base_event_EventHelper.levelCaravanDiewMoveToNextCastle(self.world, caravan.id);
+  end;
+  level.caravans = Array.new();
+  self.resourceUnitModels = __haxe_ds_List.new();
   level.enemy = self:createEnemy();
   local lastRoad = level.roads[level.roads.length - 1];
   local startX = lastRoad[lastRoad.length - 1].x;
@@ -7080,11 +7092,11 @@ __shared_project_model_LevelModel.prototype.levelNextCastle = function(self)
   level.castles:pop();
   local newUserCastleUnit = self:unitsSpawnUnitCastle(0, 0);
   level.castles:push(_hx_o({__fields__={idx=true,unitId=true},idx=level.castles.length,unitId=newUserCastleUnit:getId()}));
-  local _g2 = 0;
-  local _g3 = level.castles;
-  while (_g2 < _g3.length) do 
-    local castle = _g3[_g2];
-    _g2 = _g2 + 1;
+  local _g4 = 0;
+  local _g5 = level.castles;
+  while (_g4 < _g5.length) do 
+    local castle = _g5[_g4];
+    _g4 = _g4 + 1;
     local castleUnit = self:unitsGetUnitById(castle.unitId);
     if (castleUnit ~= nil) then 
       persistCastleUnits:push((__lua_Boot.__cast(castleUnit , __shared_project_model_units_CastleUnitModel)):getStruct());
@@ -7253,6 +7265,9 @@ __shared_project_model_PlayerModel.prototype.castSpell = function(self,type,newT
   else
     if (type == "ICE") then 
       level.ice = power;
+      if (newTurn) then 
+        level.ice = level.ice + 1;
+      end;
       self.world.levelModel:removeDeadUnits();
     else
       if (type == "CARAVAN") then 

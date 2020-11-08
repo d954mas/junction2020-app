@@ -26,6 +26,7 @@ enum abstract ModelEventName(String) {
     var LEVEL_CARAVAN_SPAWN;
     var LEVEL_CARAVAN_MOVE;
     var LEVEL_CARAVAN_LOAD;
+    var LEVEL_CARAVAN_DIED_MOVE_TO_NEXT_CASTLE;
     var LEVEL_CARAVAN_UNLOAD;
     var LEVEL_CAST_SPELL_START;
     var LEVEL_CAST_SPELL_END;
@@ -62,6 +63,10 @@ class EventHelper {
     public static function levelCaravanSpawn(world:World, id:Int, struct:ResourceUnitStruct) {
         var struct = Reflect.copy(struct);
         world.eventEmit(LEVEL_CARAVAN_SPAWN, {id:id, struct:struct});
+    }
+
+    public static function levelCaravanDiewMoveToNextCastle(world:World, id:Int) {
+        world.eventEmit(LEVEL_CARAVAN_DIED_MOVE_TO_NEXT_CASTLE, {id:id});
     }
 
     public static function levelCaravanMove(world:World, id:Int, roadId:Int) {
