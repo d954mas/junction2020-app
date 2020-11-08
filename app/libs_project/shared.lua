@@ -8360,9 +8360,9 @@ local _hx_static_init = function()
     
     _g:set("ICE", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
-    _g:set("CARAVAN", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 100, 100, 100, 100, 999}, 6),powerByLevel=_hx_tab_array({[0]=1, 2, 3, 4}, 4),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("CARAVAN", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 150, 200, 999}, 4),powerByLevel=_hx_tab_array({[0]=1, 2, 3, 4}, 4),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
-    _g:set("MANA", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=100, 125, 150, 200, 999}, 5),powerByLevel=_hx_tab_array({[0]=15, 20, 30, 40, 2}, 5),power2ByLevel=_hx_tab_array({[0]=100, 125, 150, 200, 250}, 5)}));
+    _g:set("MANA", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=75, 90, 150, 999}, 4),powerByLevel=_hx_tab_array({[0]=15, 20, 30, 40, 2}, 5),power2ByLevel=_hx_tab_array({[0]=100, 125, 150, 200, 250}, 5)}));
     
     _hx_3 = _g;
     return _hx_3

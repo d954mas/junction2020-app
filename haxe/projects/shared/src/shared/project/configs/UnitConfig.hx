@@ -89,12 +89,12 @@ class MageConfig {
         power2ByLevel: [0, 0, 0, 0, 0],
     },
         MageType.CARAVAN => {
-        costByLevel: [100, 100, 100, 100, 100, 999],
+        costByLevel: [100, 150, 200, 999],
         powerByLevel: [1, 2, 3, 4],
         power2ByLevel: [0, 0, 0, 0, 0],
     },
         MageType.MANA => {
-        costByLevel: [100, 125, 150, 200, 999],
+        costByLevel: [75, 90, 150, 999],
         powerByLevel: [15, 20, 30, 40, 2],
         power2ByLevel: [100, 125, 150, 200, 250],
     },

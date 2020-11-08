@@ -1,9 +1,9 @@
 {
      "timers": {
-          "clientDeltaTime": 0,
-          "time": 1604794121510.2,
-          "serverLastTime": 1604794121510.2,
-          "timerDelta": 0
+          "timerDelta": 0,
+          "time": 1604794578347.5,
+          "serverLastTime": 1604794578347.5,
+          "clientDeltaTime": 0
      },
      "version": {
           "server": "dev",
@@ -19,37 +19,31 @@
           "locale": "en",
           "permisions":           {}
      },
-     "tutorials":      {},
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "isDev": true,
+          "cheatsEnabled": true,
+          "conversationIdCurrent": "1111"
+     },
      "timerDelta": 0,
      "stat": {
           "startGameCounter": 0,
           "version": 3,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 356,
+          "intentIdx": 397,
           "gameBackendVersion": "",
-          "gameConfigVersion": "",
-          "userLevel": 1,
+          "gameSharedVersion": "",
           "device": "sberbox",
+          "userLevel": 1,
           "platform": "sber",
-          "gameSharedVersion": ""
+          "gameConfigVersion": ""
      },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
-          "cheatsEnabled": false,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdCurrent": "1111",
-          "isDev": true,
-          "firstLaunchTimestamp": 1604618196,
-          "conversationIdAtStart": "1111"
-     },
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
      "level": {
           "ice": 0,
           "lose": false,
@@ -230,5 +224,11 @@
                }
           ],
           "caravanIdx": 0
-     }
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "tutorials":      {}
 }
