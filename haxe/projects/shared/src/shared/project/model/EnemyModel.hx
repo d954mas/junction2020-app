@@ -67,7 +67,7 @@ class EnemyModel {
         if (level == null) {throw "enemy can't turn no level";}
         if (level.ice > 0) {return;}
         var step = level.turnEnemyAI % ai.length;
-        var data:EnemyModelAITurn = ai[level.turnEnemyAI];
+        var data:EnemyModelAITurn = ai[step];
         if (data.spawn_percent >= Math.random()) {
             var chance = Math.random();
             if(data.knight>=chance){
