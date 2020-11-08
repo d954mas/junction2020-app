@@ -24,6 +24,9 @@ enum abstract ModelEventName(String) {
     var LEVEL_CASTLE_ENEMY_DESTROY;
     var LEVEL_RESTART;
     var LEVEL_CARAVAN_SPAWN;
+    var LEVEL_CARAVAN_MOVE;
+    var LEVEL_CARAVAN_LOAD;
+    var LEVEL_CARAVAN_UNLOAD;
     var LEVEL_CAST_SPELL_START;
     var LEVEL_CAST_SPELL_END;
     var LEVEL_SPELL_ICE_END;
@@ -59,6 +62,16 @@ class EventHelper {
     public static function levelCaravanSpawn(world:World, id:Int, struct:ResourceUnitStruct) {
         var struct = Reflect.copy(struct);
         world.eventEmit(LEVEL_CARAVAN_SPAWN, {id:id, struct:struct});
+    }
+
+    public static function levelCaravanMove(world:World, id:Int, roadId:Int) {
+        world.eventEmit(LEVEL_CARAVAN_MOVE, {id:id, roadId:roadId});
+    }
+    public static function levelCaravanLoad(world:World, id:Int) {
+        world.eventEmit(LEVEL_CARAVAN_LOAD, {id:id});
+    }
+    public static function levelCaravanUnLoad(world:World, id:Int) {
+        world.eventEmit(LEVEL_CARAVAN_UNLOAD, {id:id});
     }
 
     public static function levelUnitMove(world:World, id:Int, roadId:Int):Void {
@@ -101,8 +114,8 @@ class EventHelper {
         world.eventEmit(LEVEL_CAST_SPELL_START, {type:type});
     }
 
-    public static function levelCastSpellEnd(world:World,type:MageType) {
-        world.eventEmit(LEVEL_CAST_SPELL_END,{type:type});
+    public static function levelCastSpellEnd(world:World, type:MageType) {
+        world.eventEmit(LEVEL_CAST_SPELL_END, {type:type});
     }
 
     public static function levelSpellIceEnd(world:World) {

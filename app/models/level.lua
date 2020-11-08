@@ -7,6 +7,7 @@ local CastleView = require "models.view.castle_view"
 local RoadView = require "models.view.road_view"
 local UnitView = require "models.view.unit_view"
 local CAMERAS = require "libs_project.cameras"
+local CaravanView = require "models.view.caravan_view"
 
 ---@class Level
 local Level = COMMON.class("Level")
@@ -20,7 +21,9 @@ function Level:initialize(world)
         ---@type RoadView[]
         roads = {},
         ---@type UnitView[]
-        units = {}
+        units = {},
+        ---@type CaravanView[]
+        caravans = {}
     }
     --iterate all and create all views
     local castles = HAXE_WRAPPER.level_castles_get_array()
@@ -47,6 +50,11 @@ function Level:animation_turn_start()
         attack = ACTIONS.Parallel(),
         take_damage = ACTIONS.Parallel(),
         castle_change = ACTIONS.Parallel(),
+
+        caravan_spawn = ACTIONS.Parallel(),
+        caravan_move = ACTIONS.Parallel(),
+        caravan_load = ACTIONS.Parallel(),
+        caravan_die = ACTIONS.Parallel(),
     }
 
     while (self.animation_sequence.current ~= nil) do
@@ -74,6 +82,45 @@ function Level:animation_spell_start(type)
             end
         end
     end
+end
+
+function Level:caravan_spawn(id, struct)
+    local view = CaravanView(id, self.world, struct)
+    self.threads.spawn:add_action(view:animation_spawn())
+    table.insert(self.views.caravans, view)
+end
+
+
+function Level:caravan_move(id, roadId)
+    -- self.world.thread_sequence:add_action(function()
+    local unit_view = self:caravans_view_by_id(id)
+    local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
+    self.threads.move:add_action(action)
+    --end)
+end
+
+function Level:caravan_move(id, roadId)
+    -- self.world.thread_sequence:add_action(function()
+    local unit_view = self:caravans_view_by_id(id)
+    local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
+    self.threads.caravan_move:add_action(action)
+    --end)
+end
+
+function Level:caravan_load(id, roadId)
+    -- self.world.thread_sequence:add_action(function()
+    local unit_view = self:caravans_view_by_id(id)
+    local action = unit_view:caravan_load()
+    self.threads.caravan_load:add_action(action)
+    --end)
+end
+
+function Level:caravan_unload(id, roadId)
+    -- self.world.thread_sequence:add_action(function()
+    local unit_view = self:caravans_view_by_id(id)
+    local action = unit_view:die()
+    self.threads.caravan_die:add_action(action)
+    --end)
 end
 
 function Level:animation_ice_off()
@@ -128,6 +175,11 @@ function Level:animation_turn_end()
             threads.take_damage,
             threads.die,
             threads.spell,
+            threads.caravan_spawn,
+            threads.caravan_move,
+            threads.caravan_load,
+            threads.caravan_die,
+
             threads.dieMoveToNextCastle,
             threads.castle_change,
         }
@@ -161,6 +213,9 @@ function Level:update(dt)
     for _, road in ipairs(self.views.roads) do
         road:update()
     end
+    for _, caravan in ipairs(self.views.caravans) do
+        caravan:update()
+    end
     self.animation_sequence:update(dt)
 end
 
@@ -173,6 +228,9 @@ function Level:storage_changed()
     end
     for _, unit in ipairs(self.views.units) do
         unit:on_storage_changed()
+    end
+    for _, caravan in ipairs(self.views.caravans) do
+        caravan:on_storage_changed()
     end
 end
 
@@ -193,11 +251,22 @@ function Level:units_view_by_id(id)
     end
 end
 
+
+function Level:caravans_view_by_id(id)
+    for _, view in ipairs(self.views.caravans) do
+        if (view.unit_id == id) then
+            return view
+        end
+    end
+end
+
 function Level:units_move_unit(id, roadId)
     -- self.world.thread_sequence:add_action(function()
     local unit_view = self:units_view_by_id(id)
-    local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
-    self.threads.move:add_action(action)
+    if(unit_view)then  
+        local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
+        self.threads.move:add_action(action)
+    end
     --end)
 end
 

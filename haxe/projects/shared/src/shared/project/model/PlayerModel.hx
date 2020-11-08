@@ -22,9 +22,11 @@ class PlayerModel {
 
     @:nullSafety(Off)
     public function spawnCaravan():Bool {
+        if (ds.level.caravans.length < caravanGetMax()) {
+            EventHelper.levelTurnStart(world);
+        }
         var success = world.levelModel.spawnCaravan(ds.level.player.caravanLevel);
         if (success) {
-            EventHelper.levelTurnStart(world);
             world.speechBuilder.text("spawned caravan");
             world.levelModel.levelNextTurn();
         }
@@ -81,7 +83,7 @@ class PlayerModel {
             level.ice = power;
             world.levelModel.removeDeadUnits();
         } else if (type == MageType.CARAVAN) {
-            level.mageLevels.set(Std.string(MageType.CARAVAN), level.mageLevels.get(Std.string(MageType.CARAVAN))+1);
+            level.mageLevels.set(Std.string(MageType.CARAVAN), level.mageLevels.get(Std.string(MageType.CARAVAN)) + 1);
         } else if (type == MageType.MANA) {
             level.mageLevels.set(Std.string(MageType.MANA), level.mageLevels.get(Std.string(MageType.MANA)) + 1);
         }
@@ -102,6 +104,7 @@ class PlayerModel {
         var price = scales.costByLevel[0];
         return price;
     }
+
     @:nullSafety(Off)
     public function mageGetPrice(type:MageType) {
         var level = world.storageGet().level;
@@ -112,6 +115,7 @@ class PlayerModel {
         var price = scales.costByLevel[mageLevel];
         return price;
     }
+
     @:nullSafety(Off)
     public function mageGetPower(type:MageType) {
         var level = world.storageGet().level;
@@ -122,6 +126,7 @@ class PlayerModel {
         var price = scales.powerByLevel[mageLevel];
         return price;
     }
+
     @:nullSafety(Off)
     public function mageGetPower2(type:MageType) {
         var level = world.storageGet().level;

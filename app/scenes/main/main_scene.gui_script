@@ -37,6 +37,8 @@ function Script:bind_vh()
         btn_cast_ice = GUI.ButtonScale("btn_cast_ice"),
         btn_cast_mana = GUI.ButtonScale("btn_cast_mana"),
         btn_cast_caravan = GUI.ButtonScale("btn_cast_caravan"),
+
+        btn_send_caravan = GUI.ButtonScale("btn_send_caravan"),
     }
 end
 
@@ -93,6 +95,10 @@ function Script:init_gui()
         interactive_canvas.send_text_query("level.cast CARAVAN")
     end)
 
+    self.views.btn_send_caravan:set_input_listener(function()
+        interactive_canvas.send_text_query("level.spawn.caravan")
+    end)
+
     gui.set_text(self.vh.price_archer, HAXE_WRAPPER.level_player_unit_get_price("ARCHER"))
     gui.set_text(self.vh.price_knight, HAXE_WRAPPER.level_player_unit_get_price("KNIGHT"))
     gui.set_text(self.vh.price_spearman, HAXE_WRAPPER.level_player_unit_get_price("SPEARMAN"))
@@ -139,6 +145,8 @@ function Script:on_input(action_id, action)
     self.views.btn_cast_ice:on_input(action_id, action)
     self.views.btn_cast_caravan:on_input(action_id, action)
     self.views.btn_cast_mana:on_input(action_id, action)
+
+    self.views.btn_send_caravan:on_input(action_id, action)
 
     self.views.btn_skip:on_input(action_id, action)
 end

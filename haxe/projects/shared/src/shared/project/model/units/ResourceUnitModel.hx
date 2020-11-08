@@ -25,6 +25,7 @@ class ResourceUnitModel implements IBasicUnit {
     public function move(roadPartIdx:Int):Void {
         struct.roadPartIdx = roadPartIdx;
         EventHelper.levelUnitMove(world, getId(), roadPartIdx);
+        EventHelper.levelCaravanMove(world, getId(), roadPartIdx);
     }
 
     public function getOwnerId():Int {
@@ -41,24 +42,26 @@ class ResourceUnitModel implements IBasicUnit {
 
     public function canLoad():Bool {
         var level = world.levelModel;
-        if (level.getResourceCastlePos().idx == struct.roadPartIdx) return true;
+        if (struct.resources == 0 && level.getResourceCastlePos().idx == struct.roadPartIdx) return true;
         else return false;
     }
 
     public function loadResources() {
         if (canLoad()) {
             struct.resources += UnitConfig.resourceScale[struct.resourceLvl];
+            EventHelper.levelCaravanLoad(world, struct.id);
         }
     }
 
     public function canUnload():Bool {
-        if (world.levelModel.getUnloadPos().idx == struct.roadPartIdx) return true;
+        if (struct.resources > 0 && world.levelModel.getUnloadPos().idx == struct.roadPartIdx) return true;
         else return false;
     }
 
     @:nullSafety(Off)
     public function unloadResources() {
         if (canUnload()) {
+            EventHelper.levelCaravanUnLoad(world, struct.id);
             world.storageGet().level.player.money += struct.resources;
             struct.resources = 0;
         }

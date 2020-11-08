@@ -5388,6 +5388,15 @@ end
 __shared_base_event_EventHelper.levelCaravanSpawn = function(world,id,struct) 
   world:eventEmit("LEVEL_CARAVAN_SPAWN", _hx_o({__fields__={id=true,struct=true},id=id,struct=Reflect.copy(struct)}));
 end
+__shared_base_event_EventHelper.levelCaravanMove = function(world,id,roadId) 
+  world:eventEmit("LEVEL_CARAVAN_MOVE", _hx_o({__fields__={id=true,roadId=true},id=id,roadId=roadId}));
+end
+__shared_base_event_EventHelper.levelCaravanLoad = function(world,id) 
+  world:eventEmit("LEVEL_CARAVAN_LOAD", _hx_o({__fields__={id=true},id=id}));
+end
+__shared_base_event_EventHelper.levelCaravanUnLoad = function(world,id) 
+  world:eventEmit("LEVEL_CARAVAN_UNLOAD", _hx_o({__fields__={id=true},id=id}));
+end
 __shared_base_event_EventHelper.levelUnitMove = function(world,id,roadId) 
   world:eventEmit("LEVEL_UNIT_MOVE", _hx_o({__fields__={id=true,roadId=true},id=id,roadId=roadId}));
 end
@@ -6867,21 +6876,32 @@ __shared_project_model_LevelModel.prototype.roadByRoadPart = function(self,part)
   _G.error("Part doesnt belong to any road",0);
 end
 __shared_project_model_LevelModel.prototype.levelNextTurnCaravans = function(self) 
+  local caravansToRemove = Array.new();
   local _g_head = self.resourceUnitModels.h;
   while (_g_head ~= nil) do 
     local val = _g_head.item;
     _g_head = _g_head.next;
     if (val:canLoad()) then 
+      __haxe_Log.trace("can load", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=333,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
       val:loadResources();
     else
       if (val:canUnload()) then 
+        __haxe_Log.trace("can unload", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=337,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
         val:unloadResources();
+        caravansToRemove:push(val);
       else
         if (val:canMove()) then 
+          __haxe_Log.trace("can move", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=341,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
           val:move(self:caravanNewPos(val).idx);
         end;
       end;
     end;
+  end;
+  local _g1 = 0;
+  while (_g1 < caravansToRemove.length) do 
+    local caravan = caravansToRemove[_g1];
+    _g1 = _g1 + 1;
+    self.resourceUnitModels:remove(caravan);
   end;
 end
 __shared_project_model_LevelModel.prototype.caravanNewPos = function(self,caravan) 
@@ -6916,7 +6936,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=373,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=381,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -7169,9 +7189,11 @@ __shared_project_model_PlayerModel.prototype = _hx_a();
 __shared_project_model_PlayerModel.prototype.world= nil;
 __shared_project_model_PlayerModel.prototype.ds= nil;
 __shared_project_model_PlayerModel.prototype.spawnCaravan = function(self) 
+  if (self.ds.level.caravans.length < self:caravanGetMax()) then 
+    __shared_base_event_EventHelper.levelTurnStart(self.world);
+  end;
   local success = self.world.levelModel:spawnCaravan(self.ds.level.player.caravanLevel);
   if (success) then 
-    __shared_base_event_EventHelper.levelTurnStart(self.world);
     self.world.speechBuilder:text("spawned caravan");
     self.world.levelModel:levelNextTurn();
   end;
@@ -7728,6 +7750,7 @@ end
 __shared_project_model_units_ResourceUnitModel.prototype.move = function(self,roadPartIdx) 
   self.struct.roadPartIdx = roadPartIdx;
   __shared_base_event_EventHelper.levelUnitMove(self.world, self:getId(), roadPartIdx);
+  __shared_base_event_EventHelper.levelCaravanMove(self.world, self:getId(), roadPartIdx);
 end
 __shared_project_model_units_ResourceUnitModel.prototype.getId = function(self) 
   do return self.struct.id end
@@ -7736,7 +7759,7 @@ __shared_project_model_units_ResourceUnitModel.prototype.getResources = function
   do return self.struct.resources end
 end
 __shared_project_model_units_ResourceUnitModel.prototype.canLoad = function(self) 
-  if (self.world.levelModel:getResourceCastlePos().idx == self.struct.roadPartIdx) then 
+  if ((self.struct.resources == 0) and (self.world.levelModel:getResourceCastlePos().idx == self.struct.roadPartIdx)) then 
     do return true end;
   else
     do return false end;
@@ -7746,10 +7769,11 @@ __shared_project_model_units_ResourceUnitModel.prototype.loadResources = functio
   if (self:canLoad()) then 
     local tmp = self.struct;
     tmp.resources = tmp.resources + __shared_project_configs_UnitConfig.resourceScale[self.struct.resourceLvl];
+    __shared_base_event_EventHelper.levelCaravanLoad(self.world, self.struct.id);
   end;
 end
 __shared_project_model_units_ResourceUnitModel.prototype.canUnload = function(self) 
-  if (self.world.levelModel:getUnloadPos().idx == self.struct.roadPartIdx) then 
+  if ((self.struct.resources > 0) and (self.world.levelModel:getUnloadPos().idx == self.struct.roadPartIdx)) then 
     do return true end;
   else
     do return false end;
@@ -7757,6 +7781,7 @@ __shared_project_model_units_ResourceUnitModel.prototype.canUnload = function(se
 end
 __shared_project_model_units_ResourceUnitModel.prototype.unloadResources = function(self) 
   if (self:canUnload()) then 
+    __shared_base_event_EventHelper.levelCaravanUnLoad(self.world, self.struct.id);
     local tmp = self.world:storageGet().level.player;
     tmp.money = tmp.money + self.struct.resources;
     self.struct.resources = 0;

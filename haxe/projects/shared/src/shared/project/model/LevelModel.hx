@@ -327,15 +327,23 @@ class LevelModel {
     }
 
     private function levelNextTurnCaravans() {
+        var caravansToRemove = new Array<ResourceUnitModel>();
         for (caravan in resourceUnitModels) {
             if (caravan.canLoad()) {
+                trace("can load");
                 caravan.loadResources();
             }
             else if (caravan.canUnload()) {
+                trace("can unload");
                 caravan.unloadResources();
+                caravansToRemove.push(caravan);
             } else if (caravan.canMove()) {
+                trace("can move");
                 caravan.move(caravanNewPos(caravan).idx);
             }
+        }
+        for (caravan in caravansToRemove) {
+            resourceUnitModels.remove(caravan);
         }
     }
 
@@ -424,9 +432,9 @@ class LevelModel {
         levelNextTurnRegenMoney();
         levelNextTurnRegenMana();
 
-        if(level.ice>0){
+        if (level.ice > 0) {
             level.ice--;
-            if(level.ice == 0){
+            if (level.ice == 0) {
                 EventHelper.levelSpellIceEnd(world);
             }
 
@@ -569,7 +577,7 @@ class LevelModel {
         level.units = new Array<BattleUnitStruct>();
         level.units = level.units.concat(persistCastleUnits);
 
-        if(level.ice>0){
+        if (level.ice > 0) {
             level.ice = 0;
             EventHelper.levelSpellIceEnd(world);
         }
