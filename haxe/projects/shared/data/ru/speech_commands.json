@@ -10,5 +10,53 @@
 	"debug.toggle": {
 		"order": 100,
 		"text": "((включить|покажи)\\s*)+(дебаг)"
+	},
+	"main.help": {
+		"order": null,
+		"text": "(?!x)x"
+	},
+	"simple.unit.knight": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"simple.unit.archer": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"simple.unit.mage": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"simple.unit.spearman": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"simple.unit.tank": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"level.turn.skip": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"level.spawn.caravan": {
+		"order": 0,
+		"text": "(?!x)x"
+	},
+	"simple.spell.fireball": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"simple.spell.ice": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"simple.spell.upgrade_mana": {
+		"order": 1,
+		"text": "(?!x)x"
+	},
+	"simple.spell.upgrade_caravan": {
+		"order": 1,
+		"text": "(?!x)x"
 	}
 }
