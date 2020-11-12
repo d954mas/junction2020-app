@@ -48,8 +48,11 @@ end
 
 function View:road_move(road)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-    local roadIdx = math.ceil(road.x / 7)
-    local roadPartIdx = road.x - (roadIdx) * 7
+    local roadIdx = math.floor(road.x / 4)
+    local roadPartIdx = road.x - (roadIdx) * 4
+    pprint(roadIdx)
+    pprint(roadPartIdx)
+    pprint("***************")
     self.pos = self:road_pos_to_pos(self.world:road_idx_to_position(roadIdx, roadPartIdx))
 
     go.set_position(self.pos, self.vh.root)
@@ -83,8 +86,8 @@ end
 
 function View:animation_move(road)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-    local roadIdx = math.ceil(road.x / 7)
-    local roadPartIdx = road.x - (roadIdx) * 7
+    local roadIdx = math.ceil(road.x / 4)
+    local roadPartIdx = road.x - (roadIdx) * 4
     local new_pos = self:road_pos_to_pos(self.world:road_idx_to_position(roadIdx, roadPartIdx))
     local pos = self.pos
   --  self.pos = new_pos

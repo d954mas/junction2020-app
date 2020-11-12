@@ -55,6 +55,9 @@ end
 
 function World:castle_idx_to_position(idx)
 	local pos_x = COMMON.CONSTANTS.CONFIG.CASTLE_PAD_BORDER + COMMON.CONSTANTS.CONFIG.CASTLE_SIZE/2
+	if(idx == 0) then
+		pos_x = pos_x + 230
+	end
 	pos_x = pos_x + (1280-COMMON.CONSTANTS.CONFIG.CASTLE_PAD_BORDER*2-COMMON.CONSTANTS.CONFIG.CASTLE_SIZE)/2*idx
 	return vmath.vector3(pos_x,270,-0.8)
 end
@@ -65,15 +68,21 @@ function World:road_idx_to_position(road_idx,road_part_idx)
 	local castle_pos_next = self:castle_idx_to_position(road_idx+1).x
 	local dmove = castle_pos_next-castle_pos-COMMON.CONSTANTS.CONFIG.CASTLE_SIZE-COMMON.CONSTANTS.CONFIG.ROAD_CASTLES_PAD*2
 	local roads_per_move = 5
+	if(road_idx==0)then
+		roads_per_move = 2
+	end
+
 
 
 	local cell_size = dmove/roads_per_move
+
 	pprint(cell_size)
 
 	local road_pos = castle_pos + COMMON.CONSTANTS.CONFIG.ROAD_CASTLES_PAD + COMMON.CONSTANTS.CONFIG.CASTLE_SIZE/2
 	road_pos = road_pos + cell_size*road_part_idx + COMMON.CONSTANTS.CONFIG.ROAD_SIZE/2
 
 	road_pos = road_pos - cell_size
+
 	return vmath.vector3(road_pos,y,-0.9)
 
 end

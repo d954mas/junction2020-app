@@ -6544,7 +6544,7 @@ __shared_project_model_EnemyModel.prototype.turn = function(self)
   if (level.ice > 0) then 
     do return end;
   end;
-  local data = self.ai[level.turnEnemyAI];
+  local data = self.ai[_G.math.fmod(level.turnEnemyAI, self.ai.length)];
   if (data.spawn_percent >= _G.math.random()) then 
     local chance = _G.math.random();
     if (data.knight >= chance) then 
@@ -7051,10 +7051,7 @@ __shared_project_model_LevelModel.prototype.levelFirstInitial = function(self)
   roadResToPlayer:push(self:createRoadPart(0, 0, "CASTLE"));
   roadResToPlayer:push(self:createRoadPart(1, 0, "BASE"));
   roadResToPlayer:push(self:createRoadPart(2, 0, "BASE"));
-  roadResToPlayer:push(self:createRoadPart(3, 0, "BASE"));
-  roadResToPlayer:push(self:createRoadPart(4, 0, "BASE"));
-  roadResToPlayer:push(self:createRoadPart(5, 0, "BASE"));
-  roadResToPlayer:push(self:createRoadPart(6, 0, "CASTLE"));
+  roadResToPlayer:push(self:createRoadPart(3, 0, "CASTLE"));
   local roadPlayerToEnemy = Array.new();
   roadPlayerToEnemy:push(self:createRoadPart(7, 0, "CASTLE"));
   roadPlayerToEnemy:push(self:createRoadPart(8, 0, "BASE"));

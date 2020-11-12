@@ -1,6 +1,6 @@
 local M = {}
 
-M.DEBUG_HTML = false
+M.DEBUG_HTML = true
 M.SYSTEM_NAME = sys.get_sys_info().system_name
 M.ANDROID = M.SYSTEM_NAME == "Android"
 M.HTML5 = M.SYSTEM_NAME == "HTML5"
@@ -9,7 +9,7 @@ M.HTML5 = M.SYSTEM_NAME == "HTML5"
 M.INTERACTIVE_CANVAS = (M.HTML5 and not M.DEBUG_HTML)
 M.REST_CANVAS = false
 M.REST_CANVAS_LOCAL = false
-M.FAKE_CANVAS = false
+M.FAKE_CANVAS = true
 
 M.SHOW_TEXT_INPUT = not M.FAKE_CANVAS and(M.REST_CANVAS or M.REST_CANVAS_LOCAL)
 
@@ -46,6 +46,7 @@ M.CONFIG = {
 	CASTLE_SIZE = 160,
 	ROAD_CASTLES_PAD = 5,
 	ROAD_SIZE = 80,
+	ROAD_CELL = 0
 }
 
 M.FACTORIES = {

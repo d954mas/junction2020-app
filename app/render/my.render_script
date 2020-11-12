@@ -130,62 +130,6 @@ function Render:render_gui()
 	render.disable_state(render.STATE_STENCIL_TEST)
 end
 
-function Render:render_gui_battle()
-	if (CAMERAS.current == CAMERAS.battle_camera) then
-		-- GUI Rendering
-		render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y, CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
-		render.set_view(self.empty_view)
-		render.set_projection(CAMERAS.current and CAMERAS.current.gui_proj or self.gui_proj)
-
-		render.enable_state(render.STATE_STENCIL_TEST)
-		render.draw(self.predicates.gui_battle)
-	--	render.draw(self.predicates.text)
-		render.disable_state(render.STATE_STENCIL_TEST)
-	end
-end
-
-function Render:render_gui_map()
-	if (CAMERAS.current == CAMERAS.map_camera) then
-		-- GUI Rendering
-		render.set_view(CAMERAS.current:get_view())
-		render.set_projection(CAMERAS.current:get_proj())
-
-		render.enable_state(render.STATE_STENCIL_TEST)
-		render.draw(self.predicates.gui_map)
-		render.draw(self.predicates.text_in_go)
-		render.disable_state(render.STATE_STENCIL_TEST)
-	end
-end
-
-function Render:render_sprites_3d()
-	local scene_state = SM:get_scene_by_name(SM.SCENES.BATTLE)._state
-	if scene_state == "RUNNING" or scene_state == "PAUSED" then
-		render.set_viewport(CAMERAS.battle_camera3d.viewport.x, CAMERAS.battle_camera3d.viewport.y, CAMERAS.battle_camera3d.viewport.width, CAMERAS.battle_camera3d.viewport.height)
-
-		render.set_view(CAMERAS.battle_camera3d:get_view())
-		render.set_projection(CAMERAS.battle_camera3d:get_proj())
-
-		render.set_depth_mask(true)
-		render.enable_state(render.STATE_DEPTH_TEST)
-		render.disable_state(render.STATE_STENCIL_TEST)
-		render.enable_state(render.STATE_BLEND)
-		render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
-		render.enable_state(render.STATE_CULL_FACE)
-		render.set_cull_face(render.FACE_FRONT)
-
-		render.set_depth_func(render.COMPARE_FUNC_LESS)
-
-		render.draw(self.predicates.tile3d)
-		render.draw(self.predicates.tile3d2)
-		render.draw(self.predicates.tile3d3)
-		render.draw(self.predicates.tile3d4)
-
-		render.set_depth_mask(false)
-		render.disable_state(render.STATE_DEPTH_TEST)
-		render.disable_state(render.STATE_CULL_FACE)
-	end
-
-end
 
 function Render:render_sprites()
 	render.set_view(CAMERAS.current:get_view())
@@ -203,35 +147,6 @@ function Render:render_sprites()
 	render.draw_debug3d()
 end
 
-function Render:render_bg()
-	render.set_view(CAMERAS.current:get_view())
-	render.set_projection(CAMERAS.current:get_proj())
-
-	render.set_depth_mask(false)
-	render.disable_state(render.STATE_DEPTH_TEST)
-	render.disable_state(render.STATE_STENCIL_TEST)
-	render.disable_state(render.STATE_CULL_FACE)
-	render.enable_state(render.STATE_BLEND)
-	render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
-	render.draw(self.predicates.bg)
-end
-
-function Render:render_battle_top()
-	render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y, CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
-
-	render.set_view(CAMERAS.battle_camera:get_view())
-	render.set_projection(CAMERAS.battle_camera:get_proj())
-
-	render.set_depth_mask(false)
-	render.disable_state(render.STATE_DEPTH_TEST)
-	render.disable_state(render.STATE_STENCIL_TEST)
-	render.disable_state(render.STATE_CULL_FACE)
-	render.enable_state(render.STATE_BLEND)
-	render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
-
-	render.draw(self.predicates.battle_top)
-end
-
 --endregion
 
 function Render:render_clear()
@@ -243,12 +158,7 @@ end
 function Render:update(dt)
 	self:render_clear()
 	render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y, CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
-	self:render_bg()
---	self:render_gui_battle()
 	self:render_sprites()
---	self:render_sprites_3d()
---	self:render_battle_top()
---	self:render_gui_map()
 	self:render_gui()
 	--
 

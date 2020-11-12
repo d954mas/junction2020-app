@@ -22,6 +22,9 @@ function Script:bind_vh()
         price_cast_ice = gui.get_node("btn_cast_ice/lbl_price"),
         price_cast_mana = gui.get_node("btn_cast_mana/lbl_price"),
         price_cast_caravan = gui.get_node("btn_cast_caravan/lbl_price"),
+
+        panel_units = gui.get_node("panel_units"),
+        panel_mage = gui.get_node("panel_mage"),
     }
     self.views = {
         mana_panel = ManaPanel("mana_panel", WORLD),
@@ -39,6 +42,8 @@ function Script:bind_vh()
         btn_cast_caravan = GUI.ButtonScale("btn_cast_caravan"),
 
         btn_send_caravan = GUI.ButtonScale("btn_send_caravan"),
+
+        btn_change = GUI.ButtonIconTest("btn_change"),
     }
 end
 
@@ -47,6 +52,18 @@ function Script:init()
     COMMON.input_acquire()
     self:bind_vh()
     self:init_gui()
+    self:change_tab("units")
+end
+
+function Script:change_tab(tab)
+    self.tab = tab
+    if (tab == "units") then
+        gui.set_enabled(self.vh.panel_mage, false)
+        gui.set_enabled(self.vh.panel_units, true)
+    elseif (tab == "skills") then
+        gui.set_enabled(self.vh.panel_mage, true)
+        gui.set_enabled(self.vh.panel_units, false)
+    end
 end
 
 function Script:init_gui()
@@ -81,6 +98,13 @@ function Script:init_gui()
 
     self.views.btn_cast_fireball:set_input_listener(function()
         interactive_canvas.send_text_query("level.cast FIREBALL")
+    end)
+    self.views.btn_change:set_input_listener(function()
+        if (self.tab == "units") then
+            self:change_tab("skills")
+        else
+            self:change_tab("units")
+        end
     end)
 
     self.views.btn_cast_ice:set_input_listener(function()
@@ -149,6 +173,7 @@ function Script:on_input(action_id, action)
     self.views.btn_send_caravan:on_input(action_id, action)
 
     self.views.btn_skip:on_input(action_id, action)
+    self.views.btn_change:on_input(action_id, action)
 end
 
 COMMON.N28S.register(Script)

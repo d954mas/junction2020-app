@@ -480,10 +480,7 @@ class LevelModel {
         roadResToPlayer.push(createRoadPart(0, 0, RoadType.CASTLE));
         roadResToPlayer.push(createRoadPart(1, 0, RoadType.BASE));
         roadResToPlayer.push(createRoadPart(2, 0, RoadType.BASE));
-        roadResToPlayer.push(createRoadPart(3, 0, RoadType.BASE));
-        roadResToPlayer.push(createRoadPart(4, 0, RoadType.BASE));
-        roadResToPlayer.push(createRoadPart(5, 0, RoadType.BASE));
-        roadResToPlayer.push(createRoadPart(6, 0, RoadType.CASTLE));
+        roadResToPlayer.push(createRoadPart(3, 0, RoadType.CASTLE));
 
         var roadPlayerToEnemy:Array<LevelRoadPart> = new Array<LevelRoadPart>();
 

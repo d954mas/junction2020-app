@@ -1,9 +1,9 @@
 {
      "timers": {
-          "timerDelta": 0,
-          "time": 1604803418619,
+          "serverLastTime": 1605208334627.4,
+          "time": 1605208334627.4,
           "clientDeltaTime": 0,
-          "serverLastTime": 1604803418619
+          "timerDelta": 0
      },
      "version": {
           "server": "dev",
@@ -19,37 +19,6 @@
           "locale": "en",
           "permisions":           {}
      },
-     "tutorials":      {},
-     "timerDelta": 0,
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": true,
-          "conversationIdCurrent": "1111"
-     },
-     "stat": {
-          "startGameCounter": 0,
-          "version": 3,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 1038,
-          "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
-          "userLevel": 1,
-          "platform": "sber",
-          "gameConfigVersion": ""
-     },
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
      "level": {
           "ice": 0,
           "lose": false,
@@ -145,27 +114,9 @@
                          "y": 0
                     },
                     {
-                         "type": "BASE",
+                         "type": "CASTLE",
                          "x": 3,
                          "idx": 3000,
-                         "y": 0
-                    },
-                    {
-                         "type": "BASE",
-                         "x": 4,
-                         "idx": 4000,
-                         "y": 0
-                    },
-                    {
-                         "type": "BASE",
-                         "x": 5,
-                         "idx": 5000,
-                         "y": 0
-                    },
-                    {
-                         "type": "CASTLE",
-                         "x": 6,
-                         "idx": 6000,
                          "y": 0
                     }
                ],
@@ -230,5 +181,36 @@
                }
           ],
           "caravanIdx": 0
+     },
+     "timerDelta": 0,
+     "stat": {
+          "startGameCounter": 0,
+          "version": 3,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 1216,
+          "gameBackendVersion": "",
+          "gameConfigVersion": "",
+          "userLevel": 1,
+          "device": "sberbox",
+          "platform": "sber",
+          "gameSharedVersion": ""
+     },
+     "tutorials":      {},
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
+          "cheatsEnabled": true,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdCurrent": "1111",
+          "isDev": true,
+          "firstLaunchTimestamp": 1604618196,
+          "conversationIdAtStart": "1111"
      }
 }

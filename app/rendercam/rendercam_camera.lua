@@ -129,7 +129,8 @@ function Camera:initialize(id, config)
 			self.view_area.x = scale * self.aspect_ratio_number;
 			self.view_area.y = scale
 		end
-	elseif not self.useViewArea then
+	elseif not self.use_view_area then
+		pprint(self.useViewArea)
 		-- not using viewArea and non-fixed aspect ratio
 		-- Set viewArea to current window size
 		self.view_area.x = self.screen_size.w;

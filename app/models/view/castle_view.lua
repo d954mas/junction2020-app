@@ -8,7 +8,9 @@ local FACTORY_CASTLE_PART = {
     ROOT = hash("/root"),
     CASTLE = hash("/castle"),
     HP_TEXT = hash("/hp_text"),
-    ATTACK_TEXT = hash("/attack_text")
+    ATTACK_TEXT = hash("/attack_text"),
+    ATTACK_ICON = hash("/attack_icon"),
+    HP_ICON = hash("/hp_icon")
 }
 
 ---@class CastleView
@@ -81,20 +83,29 @@ function View:bind_vh()
         root = msg.url(assert(parts[FACTORY_CASTLE_PART.ROOT])),
         castle = msg.url(assert(parts[FACTORY_CASTLE_PART.CASTLE])),
         castle_sprite = nil,
+        hp_text_root = msg.url(parts[FACTORY_CASTLE_PART.HP_TEXT]),
+        attack_text_root = msg.url(parts[FACTORY_CASTLE_PART.ATTACK_TEXT]),
+        hp_icon_root = msg.url(parts[FACTORY_CASTLE_PART.HP_ICON]),
+        attack_icon_root = msg.url(parts[FACTORY_CASTLE_PART.ATTACK_ICON]),
         hp_lbl = nil,
         attack_lbl = nil,
     }
     self.vh.castle_sprite = msg.url(self.vh.castle.socket, self.vh.castle.path, "sprite")
 
-    local hp_text_root = msg.url(parts[FACTORY_CASTLE_PART.HP_TEXT])
-    local attack_text_root = msg.url(parts[FACTORY_CASTLE_PART.ATTACK_TEXT])
-    self.vh.hp_lbl = msg.url(hp_text_root.socket, hp_text_root.path, "label")
-    self.vh.attack_lbl = msg.url(attack_text_root.socket, attack_text_root.path, "label")
+    self.vh.hp_lbl = msg.url(self.vh.hp_text_root.socket, self.vh.hp_text_root.path, "label")
+    self.vh.attack_lbl = msg.url(self.vh.attack_text_root.socket, self.vh.attack_text_root.path, "label")
 
     self.haxe_model = HAXE_WRAPPER.level_castle_get_by_idx(self.castleIdx)
     self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
     sprite.play_flipbook(self.vh.castle_sprite, self.unit_model:getOwnerId() == 0 and "castle_player" or "castle_enemy")
-
+    if(self.castleIdx==0)then
+        sprite.play_flipbook(self.vh.castle_sprite, "vilage")
+        msg.post(self.vh.attack_lbl,COMMON.HASHES.MSG_DISABLE)
+        msg.post(self.vh.attack_icon_root,COMMON.HASHES.MSG_DISABLE)
+        msg.post(self.vh.hp_lbl,COMMON.HASHES.MSG_DISABLE)
+        msg.post(self.vh.hp_icon_root,COMMON.HASHES.MSG_DISABLE)
+        go.set_position(vmath.vector3(20,50,0),self.vh.castle)
+    end
     ctx:remove()
 end
 

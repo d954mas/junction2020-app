@@ -37,7 +37,7 @@ function Level:initialize(world)
     self.animation_sequence = ACTIONS.Sequence()
     self.animation_sequence.drop_empty = false;
 
-    CAMERAS.battle_camera:set_position(vmath.vector3(640 or self.views.castles[#self.views.castles - 1].castle_pos.x, 340, 0))
+    CAMERAS.battle_camera:set_position(vmath.vector3((640 or self.views.castles[#self.views.castles - 1].castle_pos.x)+116, 340, 0))
 end
 
 function Level:animation_turn_start()
