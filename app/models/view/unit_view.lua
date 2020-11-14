@@ -144,7 +144,7 @@ function View:animation_take_damage(damage, tag, attacker_id)
     action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "flash.x", easing = TWEEN.easing.linear, from = 0.66, to = 0, time = 0.2 })
     action:add_action(function()
         self.params.hp = self.params.hp - damage
-        label.set_text(self.vh.hp_lbl,  self.params.hp)
+        label.set_text(self.vh.hp_lbl, math.max(0,self.params.hp))
     end)
     ctx:remove()
     return action
