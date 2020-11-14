@@ -7,7 +7,7 @@ embedded_instances {
   position {
     x: 0.0
     y: 0.0
-    z: 0.0
+    z: 0.1
   }
   rotation {
     x: 0.0
@@ -23,11 +23,32 @@ embedded_instances {
 }
 embedded_instances {
   id: "sprite"
+  children: "sprite_origin"
+  data: ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 0.5
+    y: 0.5
+    z: 0.5
+  }
+}
+embedded_instances {
+  id: "sprite_origin"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/images/game/game.atlas\\\"\\n"
-  "default_animation: \\\"unit_knight\\\"\\n"
+  "default_animation: \\\"effect_ice\\\"\\n"
   "material: \\\"/assets/materials/sprite_flash.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
@@ -46,7 +67,7 @@ embedded_instances {
   ""
   position {
     x: 0.0
-    y: 30.0
+    y: 58.0
     z: 0.0
   }
   rotation {
@@ -56,8 +77,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 0.5
-    y: 0.5
+    x: 1.0
+    y: 1.0
     z: 1.0
   }
 }

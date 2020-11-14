@@ -1,8 +1,8 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1605359745292,
-          "serverLastTime": 1605359745292,
+          "time": 1605362404477,
+          "serverLastTime": 1605362404477,
           "clientDeltaTime": 0
      },
      "version": {
@@ -36,7 +36,7 @@
           "version": 3,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 1489,
+          "intentIdx": 1594,
           "gameBackendVersion": "",
           "gameSharedVersion": "",
           "device": "sberbox",
@@ -59,9 +59,9 @@
                "unitQueue":                [],
                "id": 1
           },
-          "turnEnemyAI": 13,
+          "turnEnemyAI": 1,
           "caravans":           [],
-          "unitIdx": 15,
+          "unitIdx": 4,
           "mageLevels": {
                "ICE": 0,
                "FIREBALL": 0,
@@ -83,7 +83,7 @@
                {
                     "id": 1,
                     "attackRange": 1,
-                    "hp": 18,
+                    "hp": 20,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
                     "hpLvl": 0,
@@ -103,46 +103,13 @@
                     "reward": 0
                },
                {
-                    "id": 9,
-                    "attackRange": 1,
-                    "hp": 4,
-                    "roadPartIdx": 10000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "SHIELD",
-                    "ownerId": 1,
-                    "reward": 100
-               },
-               {
-                    "id": 11,
-                    "attackRange": 1,
-                    "hp": 2,
-                    "roadPartIdx": 11000,
-                    "attackLvl": 0,
-                    "type": "KNIGHT",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 50
-               },
-               {
-                    "id": 13,
-                    "attackRange": 2,
-                    "hp": 2,
-                    "roadPartIdx": 12000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 75
-               },
-               {
-                    "id": 14,
+                    "id": 3,
                     "attackRange": 1,
                     "hp": 2,
                     "roadPartIdx": 8000,
                     "attackLvl": 1,
-                    "hpLvl": 1,
                     "type": "KNIGHT",
+                    "hpLvl": 1,
                     "ownerId": 0,
                     "reward": 50
                }
@@ -156,9 +123,9 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 100,
+               "mana": 75,
                "id": 0,
-               "money": 365,
+               "money": 80,
                "caravanLevel": 1,
                "unitQueue":                []
           },
@@ -234,7 +201,7 @@
                     }
                ]
           ],
-          "turn": 13,
+          "turn": 1,
           "castles": [
                {
                     "unitId": 0,

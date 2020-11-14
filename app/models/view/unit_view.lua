@@ -2,6 +2,7 @@ local COMMON = require "libs.common"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local ACTIONS = require "libs.actions.actions"
 local TWEEN = require "libs.tween"
+local IceEffectView = require "models.view.effect_ice_view"
 
 local FACTORY_URL = msg.url("main_scene:/factories#unit_factory")
 local FACTORY_PART = {
@@ -120,19 +121,35 @@ function View:is_player()
 end
 
 function View:animation_ice_on()
+    if (self.ice_effect) then
+        return ACTIONS.Function({fun = function () end})
+    end
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-    local action = ACTIONS.Parallel()
-    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.x", easing = TWEEN.easing.inExpo, from = 1, to = 0, time = 0.33 })
-    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.y", easing = TWEEN.easing.inExpo, from = 1, to = 0, time = 0.33 })
+    local action = ACTIONS.Sequence()
+    action:add_action(function()
+        self.ice_effect = IceEffectView(self.world)
+        self.ice_effect:set_scale(1)
+        self.ice_effect:set_parent(self.vh.root)
+        self.ice_effect:set_position(vmath.vector3(0,-10,0.1))
+        local action_ice_show = self.ice_effect:animation_show()
+        while (not action_ice_show:is_finished()) do
+            local dt = coroutine.yield()
+            action_ice_show:update(dt)
+        end
+    end)
     ctx:remove()
     return action
 end
 
 function View:animation_ice_off()
+    assert(self.ice_effect)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-    local action = ACTIONS.Parallel()
-    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.x", easing = TWEEN.easing.inExpo, from = 0, to = 1, time = 0.33 })
-    action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "tint.y", easing = TWEEN.easing.inExpo, from = 0, to = 1, time = 0.33 })
+    local action = ACTIONS.Sequence()
+    action:add_action(self.ice_effect:animation_hide())
+    action:add_action(function()
+        self.ice_effect:dispose()
+        self.ice_effect = nil
+    end)
     ctx:remove()
     return action
 end
@@ -144,7 +161,7 @@ function View:animation_take_damage(damage, tag, attacker_id)
     action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "flash.x", easing = TWEEN.easing.linear, from = 0.66, to = 0, time = 0.2 })
     action:add_action(function()
         self.params.hp = self.params.hp - damage
-        label.set_text(self.vh.hp_lbl, math.max(0,self.params.hp))
+        label.set_text(self.vh.hp_lbl, math.max(0, self.params.hp))
     end)
     ctx:remove()
     return action
@@ -196,6 +213,8 @@ function View:die()
     action:add_action(actionHideParallel)
     action:add_action(function()
         local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+        self.ice_effect:dispose()
+        self.ice_effect = nil
         go.delete(self.vh.root, true)
         ctx:remove()
     end)

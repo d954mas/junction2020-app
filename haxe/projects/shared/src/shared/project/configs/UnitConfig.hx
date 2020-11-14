@@ -84,7 +84,7 @@ class MageConfig {
         power2ByLevel: [0, 0, 0, 0, 0],
     },
         MageType.ICE => {
-        costByLevel: [150, 150, 150, 150, 150],
+        costByLevel: [0, 150, 150, 150, 150],
         powerByLevel: [2, 2, 2, 2, 2],
         power2ByLevel: [0, 0, 0, 0, 0],
     },

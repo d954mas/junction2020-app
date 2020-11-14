@@ -10,8 +10,12 @@ local FACTORY_CASTLE_PART = {
     HP_TEXT = hash("/hp_text"),
     ATTACK_TEXT = hash("/attack_text"),
     ATTACK_ICON = hash("/attack_icon"),
-    HP_ICON = hash("/hp_icon")
+    HP_ICON = hash("/hp_icon"),
+    CANNON = hash("/cannon")
 }
+
+local CANNON_POS_ENEMY = vmath.vector3(50,66,0.01)
+local CANNON_POS_PLAYER = vmath.vector3(-54,50,0.01)
 
 ---@class CastleView
 local View = COMMON.class("CastleView")
@@ -42,8 +46,8 @@ end
 function View:animation_ice_on()
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Parallel()
-    action:add_action(ACTIONS.Tween { object = self.vh.castle_sprite, property = "tint.x", easing = TWEEN.easing.inExpo,  from = 1, to = 0, time = 0.33 })
-    action:add_action(ACTIONS.Tween { object = self.vh.castle_sprite, property = "tint.y", easing = TWEEN.easing.inExpo,  from = 1, to = 0, time = 0.33 })
+    action:add_action(ACTIONS.Tween { object = self.vh.castle_sprite, property = "tint.x", easing = TWEEN.easing.inExpo, from = 1, to = 0, time = 0.33 })
+    action:add_action(ACTIONS.Tween { object = self.vh.castle_sprite, property = "tint.y", easing = TWEEN.easing.inExpo, from = 1, to = 0, time = 0.33 })
     ctx:remove()
     return action
 end
@@ -87,6 +91,8 @@ function View:bind_vh()
         attack_text_root = msg.url(parts[FACTORY_CASTLE_PART.ATTACK_TEXT]),
         hp_icon_root = msg.url(parts[FACTORY_CASTLE_PART.HP_ICON]),
         attack_icon_root = msg.url(parts[FACTORY_CASTLE_PART.ATTACK_ICON]),
+        cannon = msg.url(parts[FACTORY_CASTLE_PART.CANNON]),
+        cannon_sprite = nil,
         hp_lbl = nil,
         attack_lbl = nil,
     }
@@ -95,16 +101,21 @@ function View:bind_vh()
     self.vh.hp_lbl = msg.url(self.vh.hp_text_root.socket, self.vh.hp_text_root.path, "label")
     self.vh.attack_lbl = msg.url(self.vh.attack_text_root.socket, self.vh.attack_text_root.path, "label")
 
+    self.vh.cannon_sprite = msg.url(self.vh.cannon.socket, self.vh.cannon.path, "sprite")
+
     self.haxe_model = HAXE_WRAPPER.level_castle_get_by_idx(self.castleIdx)
     self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
     sprite.play_flipbook(self.vh.castle_sprite, self.unit_model:getOwnerId() == 0 and "castle_player" or "castle_enemy")
-    if(self.castleIdx==0)then
+    sprite.play_flipbook(self.vh.cannon_sprite, self.unit_model:getOwnerId() == 0 and "cannon" or "cannon_enemy")
+    go.set_position(self.unit_model:getOwnerId() == 0 and CANNON_POS_PLAYER or CANNON_POS_ENEMY,self.vh.cannon)
+    if (self.castleIdx == 0) then
         sprite.play_flipbook(self.vh.castle_sprite, "vilage")
-        msg.post(self.vh.attack_lbl,COMMON.HASHES.MSG_DISABLE)
-        msg.post(self.vh.attack_icon_root,COMMON.HASHES.MSG_DISABLE)
-        msg.post(self.vh.hp_lbl,COMMON.HASHES.MSG_DISABLE)
-        msg.post(self.vh.hp_icon_root,COMMON.HASHES.MSG_DISABLE)
-        go.set_position(vmath.vector3(20,50,0),self.vh.castle)
+        msg.post(self.vh.attack_lbl, COMMON.HASHES.MSG_DISABLE)
+        msg.post(self.vh.attack_icon_root, COMMON.HASHES.MSG_DISABLE)
+        msg.post(self.vh.hp_lbl, COMMON.HASHES.MSG_DISABLE)
+        msg.post(self.vh.hp_icon_root, COMMON.HASHES.MSG_DISABLE)
+        msg.post(self.vh.cannon, COMMON.HASHES.MSG_DISABLE)
+        go.set_position(vmath.vector3(20, 50, 0), self.vh.castle)
     end
     ctx:remove()
 end
