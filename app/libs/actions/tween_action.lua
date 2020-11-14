@@ -152,7 +152,10 @@ function Action:set_property()
     elseif self.object_type == OBJECT_TYPES.GUI then
         self:set_property_gui()
     elseif self.object_type == OBJECT_TYPES.GO then
-        pcall(self.set_property_go,self)
+        local success, error = pcall(self.set_property_go, self)
+        if (not success) then
+            pprint(error)
+        end
     end
 end
 
@@ -173,7 +176,6 @@ function Action:set_property_gui()
     end
     return f(self.config.object, self:config_table_to_value(self.tween_value))
 end
-
 
 function Action:act(dt)
     if self.config.delay then

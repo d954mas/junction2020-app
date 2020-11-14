@@ -31,11 +31,11 @@ end
 
 function View:init_values()
     self.params = {
-        hp = self.haxe_unit_initial:getAttack(),
-        attack = self.haxe_unit_initial:getHp()
+        hp = self.haxe_unit_initial:getHp(),
+        attack = self.haxe_unit_initial:getAttack()
     }
-    label.set_text(self.vh.attack_lbl, self.params.hp)
-    label.set_text(self.vh.hp_lbl, self.params.attack)
+    label.set_text(self.vh.hp_lbl, self.params.hp)
+    label.set_text(self.vh.attack_lbl, self.params.attack)
 end
 
 function View:on_storage_changed()
@@ -122,7 +122,8 @@ end
 
 function View:animation_ice_on()
     if (self.ice_effect) then
-        return ACTIONS.Function({fun = function () end})
+        return ACTIONS.Function({ fun = function()
+        end })
     end
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()
@@ -130,7 +131,7 @@ function View:animation_ice_on()
         self.ice_effect = IceEffectView(self.world)
         self.ice_effect:set_scale(1)
         self.ice_effect:set_parent(self.vh.root)
-        self.ice_effect:set_position(vmath.vector3(0,-10,0.1))
+        self.ice_effect:set_position(vmath.vector3(0, -10, 0.1))
         local action_ice_show = self.ice_effect:animation_show()
         while (not action_ice_show:is_finished()) do
             local dt = coroutine.yield()
@@ -213,7 +214,9 @@ function View:die()
     action:add_action(actionHideParallel)
     action:add_action(function()
         local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-        self.ice_effect:dispose()
+        if (self.ice_effect) then
+            self.ice_effect:dispose()
+        end
         self.ice_effect = nil
         go.delete(self.vh.root, true)
         ctx:remove()

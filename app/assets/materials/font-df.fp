@@ -31,8 +31,9 @@ void main()
     lowp float shadow_alpha    = smoothstep(sdf_shadow - sdf_smoothing, sdf_edge + sdf_smoothing, distance_shadow);
 
     shadow_alpha = mix(shadow_alpha,outline_alpha,sdf_shadow_as_outline);
-
-    gl_FragColor = tint * (face_alpha * var_face_color * var_layer_mask.x +
+    // Apply a tint to the whole pixel
+    lowp vec4 tint_pm = vec4(tint.xyz * tint.w, tint.w);
+    gl_FragColor = tint_pm * (face_alpha * var_face_color * var_layer_mask.x +
         outline_alpha * var_outline_color * var_layer_mask.y * (1.0 - face_alpha * sdf_is_single_layer) +
         shadow_alpha * var_shadow_color * var_layer_mask.z * (1.0 - min(1.0,outline_alpha + face_alpha) * sdf_is_single_layer));
 }

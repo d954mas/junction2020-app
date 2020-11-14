@@ -8,6 +8,7 @@ local RoadView = require "models.view.road_view"
 local UnitView = require "models.view.unit_view"
 local CAMERAS = require "libs_project.cameras"
 local CaravanView = require "models.view.caravan_view"
+local FireballEffectView = require "models.view.effect_fireball_view"
 
 ---@class Level
 local Level = COMMON.class("Level")
@@ -81,6 +82,15 @@ function Level:animation_spell_start(type)
                 self.threads_mage.spell:add_action(castle:animation_ice_on())
             end
         end
+    elseif (self.spell_type == "FIREBALL") then
+        local fireball = FireballEffectView(self.world)
+        local actions = ACTIONS.Sequence()
+        actions:add_action(fireball:animation_fly({ from = vmath.vector3(720, 270, 0.2), to = vmath.vector3(1120, 270, 0.2) }))
+        actions:add_action(function()
+            fireball:dispose()
+        end)
+        self.threads_mage.spell:add_action(actions)
+
     end
 end
 
@@ -292,9 +302,9 @@ function Level:units_take_damage_unit(unit_id, damage, tag, attacker_id)
     if (unit_view) then
         local action = unit_view:animation_take_damage(damage, tag, attacker_id)
         if (attacker_id == -10000) then
-              self.threads_mage.take_damage:add_action(action)
+            self.threads_mage.take_damage:add_action(action)
         else
-               self.threads.take_damage:add_action(action)
+            self.threads.take_damage:add_action(action)
         end
     else
         COMMON.w("no unit view for take damage.Is it castle?", "LEVEL")
@@ -315,9 +325,9 @@ function Level:units_attack_unit(attacker_id, defender_id)
     if (unit_view_defender) then
         --local action = unit_view_defender:animation_take_damage()
         if (attacker_id == -10000) then
-          --  self.threads_mage.take_damage:add_action(action)
+            --  self.threads_mage.take_damage:add_action(action)
         else
-         --   self.threads.take_damage:add_action(action)
+            --   self.threads.take_damage:add_action(action)
         end
 
     else

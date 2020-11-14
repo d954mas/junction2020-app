@@ -8478,7 +8478,7 @@ local _hx_static_init = function()
     
     local _g = __haxe_ds_StringMap.new();
     
-    _g:set("FIREBALL", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=90, 90, 90, 90, 90}, 5),powerByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("FIREBALL", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=0, 90, 90, 90, 90}, 5),powerByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _g:set("ICE", _hx_o({__fields__={costByLevel=true,powerByLevel=true,power2ByLevel=true},costByLevel=_hx_tab_array({[0]=0, 150, 150, 150, 150}, 5),powerByLevel=_hx_tab_array({[0]=2, 2, 2, 2, 2}, 5),power2ByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
