@@ -122,8 +122,7 @@ end
 
 function View:animation_ice_on()
     if (self.ice_effect) then
-        return ACTIONS.Function({ fun = function()
-        end })
+        return ACTIONS.Function({ fun = function() end })
     end
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()
@@ -143,6 +142,9 @@ function View:animation_ice_on()
 end
 
 function View:animation_ice_off()
+    if(not self.ice_effect)then
+        return ACTIONS.Function({ fun = function() end })
+    end    
     assert(self.ice_effect)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()
