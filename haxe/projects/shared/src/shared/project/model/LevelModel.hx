@@ -552,6 +552,7 @@ class LevelModel {
     }
 
     public function levelWin() {
+        world.contextChange(ContextName.WIN_MODAL);
         var level = world.storageGet().level;
         if (level == null) {throw "can't win level storage is null";}
         EventHelper.levelWin(world);

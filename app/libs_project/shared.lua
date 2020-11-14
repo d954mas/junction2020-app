@@ -7122,6 +7122,7 @@ __shared_project_model_LevelModel.prototype.createLevel = function(self)
   end;
 end
 __shared_project_model_LevelModel.prototype.levelWin = function(self) 
+  self.world:contextChange("win_modal");
   if (self.world:storageGet().level == nil) then 
     _G.error("can't win level storage is null",0);
   end;

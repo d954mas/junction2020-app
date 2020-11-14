@@ -5,7 +5,8 @@ local sm = SM()
 
 sm.SCENES = {
 	MAIN = "MainScene",
-	LOSE_MODAL = "LoseModal"
+	LOSE_MODAL = "LoseModal",
+	WIN_MODAL = "WinModal"
 }
 
 return sm

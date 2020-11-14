@@ -144,6 +144,11 @@ function Processor:process_events(events, data)
                 COMMON.COROUTINES.coroutine_wait(0.33)
             end)
             self:show_scene(SM.SCENES.LOSE_MODAL)
+        elseif event.name == "LEVEL_WIN" then
+            self.world.thread_sequence:add_action(function()
+                COMMON.COROUTINES.coroutine_wait(0.33)
+            end)
+            self:show_scene(SM.SCENES.WIN_MODAL)
         elseif event.name == "LEVEL_RESTART" then
             self.world.thread_sequence:add_action(function()
                 while (SM.co) do
