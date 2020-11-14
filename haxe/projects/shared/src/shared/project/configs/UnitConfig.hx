@@ -79,12 +79,12 @@ var power2ByLevel:Array<Int>;
 class MageConfig {
     public static var scalesByMageType:haxe.ds.Map<MageType, MageScales> = [
         MageType.FIREBALL => {
-        costByLevel: [0, 90, 90, 90, 90],
+        costByLevel: [90, 90, 90, 90, 90],
         powerByLevel: [1, 1, 1, 1, 1],
         power2ByLevel: [0, 0, 0, 0, 0],
     },
         MageType.ICE => {
-        costByLevel: [0, 150, 150, 150, 150],
+        costByLevel: [150, 150, 150, 150, 150],
         powerByLevel: [2, 2, 2, 2, 2],
         power2ByLevel: [0, 0, 0, 0, 0],
     },

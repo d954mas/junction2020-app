@@ -64,7 +64,7 @@ function Canvas:send_request(intent, data, ignore_delay)
 			if not contexts then
 				contexts = JSON.encode(self.conv:contexts_get_list())
 			end
-			local shared = Shared.shared.Shared.new(self.native_api, storage, contexts, false, false)
+			local shared = Shared.shared.Shared.new(self.native_api, storage, contexts, false, true)
 			shared:updateServerTime();
 			if intent == INTENTS.INTENTS.BATTLE_USER_SAY_WORD then
 				data.word_exist = self.words:word_exist(data.word)
