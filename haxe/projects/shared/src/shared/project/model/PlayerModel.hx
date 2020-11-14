@@ -76,6 +76,7 @@ class PlayerModel {
                 if (unit.getOwnerId() > 0 && unit.getType() != UnitType.CASTLE) {
                     unit.takeDamage(power);
                     EventHelper.levelUnitAttack(world, -10000, unit.getId());
+                    EventHelper.levelUnitTakeDamage(world,unit.getId(),power,"fireball", -10000);
                 }
             }
             world.levelModel.removeDeadUnits();

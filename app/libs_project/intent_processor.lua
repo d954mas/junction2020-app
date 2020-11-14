@@ -131,6 +131,8 @@ function Processor:process_events(events, data)
             self.world.level_model:units_die_unit(assert(event.data.id))
         elseif event.name == "LEVEL_UNIT_ATTACK" then
             self.world.level_model:units_attack_unit(assert(event.data.attackerId), assert(event.data.defenderId))
+        elseif event.name == "LEVEL_UNIT_TAKE_DAMAGE" then
+            self.world.level_model:units_take_damage_unit(assert(event.data.unitId), assert(event.data.damage), assert(event.data.tag), assert(event.data.attackerUnitId))
         elseif event.name == "LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE" then
             self.world.level_model:units_die_unit_move_to_next_castle(assert(event.data.id))
         elseif event.name == "LEVEL_CASTLE_ENEMY_DESTROY" then
@@ -167,9 +169,9 @@ function Processor:process_events(events, data)
         elseif event.name == "LEVEL_SPELL_ICE_END" then
             self.world.level_model:animation_ice_off()
         elseif event.name == "LEVEL_CARAVAN_SPAWN" then
-            self.world.level_model:caravan_spawn(assert(event.data.id),assert(event.data.struct))
+            self.world.level_model:caravan_spawn(assert(event.data.id), assert(event.data.struct))
         elseif event.name == "LEVEL_CARAVAN_MOVE" then
-            self.world.level_model:caravan_move(assert(event.data.id),assert(event.data.roadId))
+            self.world.level_model:caravan_move(assert(event.data.id), assert(event.data.roadId))
         elseif event.name == "LEVEL_CARAVAN_LOAD" then
             self.world.level_model:caravan_load(assert(event.data.id))
         elseif event.name == "LEVEL_CARAVAN_UNLOAD" then

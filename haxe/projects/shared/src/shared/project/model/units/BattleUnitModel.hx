@@ -19,8 +19,11 @@ class BattleUnitModel implements IBattleUnit {
 
     public function attack(enemy:IBattleUnit):Void {
         if (canAttack(enemy)) {
+            var damage = calcDamage(enemy);
             enemy.takeDamage(calcDamage(enemy));
             EventHelper.levelUnitAttack(world, getId(), enemy.getId());
+            EventHelper.levelUnitTakeDamage(world,enemy.getId(),damage,"attack", getId());
+
         }
     }
 

@@ -5406,6 +5406,9 @@ end
 __shared_base_event_EventHelper.levelUnitAttack = function(world,attackerId,defenderId) 
   world:eventEmit("LEVEL_UNIT_ATTACK", _hx_o({__fields__={attackerId=true,defenderId=true},attackerId=attackerId,defenderId=defenderId}));
 end
+__shared_base_event_EventHelper.levelUnitTakeDamage = function(world,unitId,damage,tag,attackerUnitId) 
+  world:eventEmit("LEVEL_UNIT_TAKE_DAMAGE", _hx_o({__fields__={unitId=true,damage=true,tag=true,attackerUnitId=true},unitId=unitId,damage=damage,tag=tag,attackerUnitId=attackerUnitId}));
+end
 __shared_base_event_EventHelper.levelUnitDied = function(world,id) 
   world:eventEmit("LEVEL_UNIT_DIED", _hx_o({__fields__={id=true},id=id}));
 end
@@ -7335,6 +7338,7 @@ __shared_project_model_PlayerModel.prototype.castSpell = function(self,type,newT
       if ((val:getOwnerId() > 0) and (val:getType() ~= "CASTLE")) then 
         val:takeDamage(power);
         __shared_base_event_EventHelper.levelUnitAttack(self.world, -10000, val:getId());
+        __shared_base_event_EventHelper.levelUnitTakeDamage(self.world, val:getId(), power, "fireball", -10000);
       end;
     end;
     self.world.levelModel:removeDeadUnits();
@@ -7724,8 +7728,10 @@ __shared_project_model_units_BattleUnitModel.prototype.canAttack = function(self
 end
 __shared_project_model_units_BattleUnitModel.prototype.attack = function(self,enemy) 
   if (self:canAttack(enemy)) then 
+    local damage = self:calcDamage(enemy);
     enemy:takeDamage(self:calcDamage(enemy));
     __shared_base_event_EventHelper.levelUnitAttack(self.world, self:getId(), enemy:getId());
+    __shared_base_event_EventHelper.levelUnitTakeDamage(self.world, enemy:getId(), damage, "attack", self:getId());
   end;
 end
 __shared_project_model_units_BattleUnitModel.prototype.calcDamage = function(self,enemy) 

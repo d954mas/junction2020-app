@@ -18,6 +18,7 @@ enum abstract ModelEventName(String) {
     var LEVEL_UNIT_SPAWN;
     var LEVEL_UNIT_MOVE;
     var LEVEL_UNIT_ATTACK;
+    var LEVEL_UNIT_TAKE_DAMAGE;
     var LEVEL_UNIT_DIED;
     var LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE;
     var LEVEL_PLAYER_LOST;
@@ -73,9 +74,11 @@ class EventHelper {
     public static function levelCaravanMove(world:World, id:Int, roadId:Int) {
         world.eventEmit(LEVEL_CARAVAN_MOVE, {id:id, roadId:roadId});
     }
+
     public static function levelCaravanLoad(world:World, id:Int) {
         world.eventEmit(LEVEL_CARAVAN_LOAD, {id:id});
     }
+
     public static function levelCaravanUnLoad(world:World, id:Int) {
         world.eventEmit(LEVEL_CARAVAN_UNLOAD, {id:id});
     }
@@ -86,6 +89,10 @@ class EventHelper {
 
     public static function levelUnitAttack(world:World, attackerId:Int, defenderId:Int):Void {
         world.eventEmit(LEVEL_UNIT_ATTACK, {attackerId:attackerId, defenderId:defenderId});
+    }
+
+    public static function levelUnitTakeDamage(world:World, unitId:Int, damage:Int, tag:String, attackerUnitId:Null<Int>):Void {
+        world.eventEmit(LEVEL_UNIT_TAKE_DAMAGE, {unitId:unitId, damage:damage, tag:tag, attackerUnitId:attackerUnitId});
     }
 
     public static function levelUnitDied(world:World, id:Int) {
@@ -99,6 +106,7 @@ class EventHelper {
     public static function levelLost(world:World) {
         world.eventEmit(LEVEL_PLAYER_LOST);
     }
+
     public static function levelWin(world:World) {
         world.eventEmit(LEVEL_WIN);
     }

@@ -37,7 +37,7 @@ function Level:initialize(world)
     self.animation_sequence = ACTIONS.Sequence()
     self.animation_sequence.drop_empty = false;
 
-    CAMERAS.battle_camera:set_position(vmath.vector3((640 or self.views.castles[#self.views.castles - 1].castle_pos.x)+116, 340, 0))
+    CAMERAS.battle_camera:set_position(vmath.vector3((640 or self.views.castles[#self.views.castles - 1].castle_pos.x) + 116, 340, 0))
 end
 
 function Level:animation_turn_start()
@@ -89,7 +89,6 @@ function Level:caravan_spawn(id, struct)
     self.threads.spawn:add_action(view:animation_spawn())
     table.insert(self.views.caravans, view)
 end
-
 
 function Level:caravan_move(id, roadId)
     -- self.world.thread_sequence:add_action(function()
@@ -252,7 +251,6 @@ function Level:units_view_by_id(id)
     end
 end
 
-
 function Level:caravans_view_by_id(id)
     for _, view in ipairs(self.views.caravans) do
         if (view.unit_id == id) then
@@ -264,7 +262,7 @@ end
 function Level:units_move_unit(id, roadId)
     -- self.world.thread_sequence:add_action(function()
     local unit_view = self:units_view_by_id(id)
-    if(unit_view)then  
+    if (unit_view) then
         local action = unit_view:animation_move(HAXE_WRAPPER.level_road_part_get_by_id(roadId))
         self.threads.move:add_action(action)
     end
@@ -289,6 +287,20 @@ function Level:units_die_unit(id)
     -- end)
 end
 
+function Level:units_take_damage_unit(unit_id, damage, tag, attacker_id)
+    local unit_view = self:units_view_by_id(unit_id)
+    if (unit_view) then
+        local action = unit_view:animation_take_damage(damage, tag, attacker_id)
+        if (attacker_id == -10000) then
+              self.threads_mage.take_damage:add_action(action)
+        else
+               self.threads.take_damage:add_action(action)
+        end
+    else
+        COMMON.w("no unit view for take damage.Is it castle?", "LEVEL")
+    end
+end
+
 function Level:units_attack_unit(attacker_id, defender_id)
     -- self.world.thread_sequence:add_action(function()
     local unit_view = self:units_view_by_id(attacker_id)
@@ -301,11 +313,11 @@ function Level:units_attack_unit(attacker_id, defender_id)
 
     local unit_view_defender = self:units_view_by_id(defender_id)
     if (unit_view_defender) then
-        local action = unit_view_defender:animation_take_damage()
+        --local action = unit_view_defender:animation_take_damage()
         if (attacker_id == -10000) then
-            self.threads_mage.take_damage:add_action(action)
+          --  self.threads_mage.take_damage:add_action(action)
         else
-            self.threads.take_damage:add_action(action)
+         --   self.threads.take_damage:add_action(action)
         end
 
     else

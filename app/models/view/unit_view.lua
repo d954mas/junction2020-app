@@ -29,15 +29,19 @@ function View:initialize(id, world, struct)
 end
 
 function View:init_values()
-    label.set_text(self.vh.attack_lbl, self.haxe_unit_initial:getAttack())
-    label.set_text(self.vh.hp_lbl, self.haxe_unit_initial:getHp())
+    self.params = {
+        hp = self.haxe_unit_initial:getAttack(),
+        attack = self.haxe_unit_initial:getHp()
+    }
+    label.set_text(self.vh.attack_lbl, self.params.hp)
+    label.set_text(self.vh.hp_lbl, self.params.attack)
 end
 
 function View:on_storage_changed()
     self.haxe_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id) or self.haxe_model --get new model data or prev(if in was killed)
     if (self.haxe_model ~= nil) then
-        label.set_text(self.vh.attack_lbl, self.haxe_model:getAttack())
-       -- label.set_text(self.vh.hp_lbl, self.haxe_model:getHp())
+        --  label.set_text(self.vh.attack_lbl, self.haxe_model:getAttack())
+        -- label.set_text(self.vh.hp_lbl, self.haxe_model:getHp())
     end
 
 end
@@ -89,11 +93,11 @@ function View:animation_move(road)
     local roadPartIdx = road.x - (roadIdx) * 7
     local new_pos = self:road_pos_to_pos(self.world:road_idx_to_position(roadIdx, roadPartIdx))
     local pos = self.pos
-  --  self.pos = new_pos
+    --  self.pos = new_pos
     local action = ACTIONS.Sequence()
     local movement = ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = pos, to = new_pos, time = 1 }
     action:add_action(movement)
-    action:add_action(function ()
+    action:add_action(function()
         self.pos = new_pos
     end)
     ctx:remove()
@@ -133,17 +137,14 @@ function View:animation_ice_off()
     return action
 end
 
-
-function View:animation_take_damage()
+function View:animation_take_damage(damage, tag, attacker_id)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()
     action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "flash.x", easing = TWEEN.easing.inBack, from = 0, to = 0.66, time = 0.33 })
     action:add_action(ACTIONS.Tween { object = self.vh.sprite, property = "flash.x", easing = TWEEN.easing.linear, from = 0.66, to = 0, time = 0.2 })
-    action:add_action(function ()
-        self.haxe_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id) or self.haxe_model --get new model data or prev(if in was killed)
-        if (self.haxe_model ~= nil) then
-            label.set_text(self.vh.hp_lbl, self.haxe_model:getHp())
-        end
+    action:add_action(function()
+        self.params.hp = self.params.hp - damage
+        label.set_text(self.vh.hp_lbl,  self.params.hp)
     end)
     ctx:remove()
     return action
