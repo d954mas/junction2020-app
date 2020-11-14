@@ -21,6 +21,7 @@ enum abstract ModelEventName(String) {
     var LEVEL_UNIT_DIED;
     var LEVEL_UNIT_DIED_MOVE_TO_NEXT_CASTLE;
     var LEVEL_PLAYER_LOST;
+    var LEVEL_WIN;
     var LEVEL_CASTLE_ENEMY_DESTROY;
     var LEVEL_RESTART;
     var LEVEL_CARAVAN_SPAWN;
@@ -97,6 +98,9 @@ class EventHelper {
 
     public static function levelLost(world:World) {
         world.eventEmit(LEVEL_PLAYER_LOST);
+    }
+    public static function levelWin(world:World) {
+        world.eventEmit(LEVEL_WIN);
     }
 
     public static function levelTurnStart(world:World) {

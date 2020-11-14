@@ -5415,6 +5415,9 @@ end
 __shared_base_event_EventHelper.levelLost = function(world) 
   world:eventEmit("LEVEL_PLAYER_LOST");
 end
+__shared_base_event_EventHelper.levelWin = function(world) 
+  world:eventEmit("LEVEL_WIN");
+end
 __shared_base_event_EventHelper.levelTurnStart = function(world) 
   world:eventEmit("LEVEL_TURN_START");
 end
@@ -6120,6 +6123,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("level.spawn.unit", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.turn.skip", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("lose.modal.restart", _hx_tab_array({[0]="lose_modal"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("win.modal.restart", _hx_tab_array({[0]="win_modal"}, 1));
   __shared_project_enums_Intents.intentContexts:set("debug.toggle", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.enable", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.disable", _hx_tab_array({[0]="dev"}, 1));
@@ -6141,6 +6145,7 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("simple.spell.upgrade_caravan", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("lose.modal.restart", true);
+  __shared_project_enums_Intents.ignoreTutorialCheck:set("win.modal.restart", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.spawn.unit", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.cast", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("level.turn.skip", true);
@@ -6372,13 +6377,15 @@ end
 __shared_project_intent_processors_IntentModalProcessor.__name__ = true
 __shared_project_intent_processors_IntentModalProcessor.prototype = _hx_a();
 __shared_project_intent_processors_IntentModalProcessor.prototype.processIntent = function(self,intent,data) 
-  if (intent == "lose.modal.restart") then 
+  if (intent) == "lose.modal.restart" then 
     self:ask("restart");
     self.world.levelModel:restart();
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
-  else
-    do return nil end;
-  end;
+  elseif (intent) == "win.modal.restart" then 
+    self:ask("restart");
+    self.world.levelModel:restart();
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;else
+  do return nil end; end;
 end
 
 __shared_project_intent_processors_IntentModalProcessor.prototype.__class__ =  __shared_project_intent_processors_IntentModalProcessor
@@ -6983,7 +6990,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
       __shared_base_event_EventHelper.levelLost(self.world);
     else
       if (allEnemiesLost) then 
-        self:levelNextCastle();
+        self:levelWin();
       end;
     end;
   else
@@ -7009,6 +7016,41 @@ __shared_project_model_LevelModel.prototype.levelNextTurnQueue = function(self)
     end;
   end;
 end
+__shared_project_model_LevelModel.prototype.turnMove = function(self) 
+  local _g_head = self.battleUnitModels.h;
+  while (_g_head ~= nil) do 
+    local val = _g_head.item;
+    _g_head = _g_head.next;
+    if (val:canMove()) then 
+      local newPos = self:unitNewPosition(val);
+      if (self:canMoveToPart(newPos.idx)) then 
+        val:move(newPos.idx);
+      end;
+    end;
+  end;
+end
+__shared_project_model_LevelModel.prototype.turnEnemyAI = function(self) 
+  self.enemyModel:turn();
+end
+__shared_project_model_LevelModel.prototype.turnAttack = function(self) 
+  local _g_head = self.battleUnitModels.h;
+  while (_g_head ~= nil) do 
+    local val = _g_head.item;
+    _g_head = _g_head.next;
+    local attacker = _hx_tab_array({[0]=val}, 1);
+    local canAttack = Lambda.filter(self.battleUnitModels, (function(attacker1) 
+      do return function(v) 
+        do return attacker1[0]:canAttack(v) end;
+      end end;
+    end)(attacker));
+    if (canAttack.length ~= 0) then 
+      attacker[0]:attack(canAttack[0]);
+    end;
+  end;
+end
+__shared_project_model_LevelModel.prototype.turnRemoveDeadUnits = function(self) 
+  self:removeDeadUnits();
+end
 __shared_project_model_LevelModel.prototype.levelNextTurn = function(self) 
   local level = self.world:storageGet().level;
   if (level == nil) then 
@@ -7022,9 +7064,11 @@ __shared_project_model_LevelModel.prototype.levelNextTurn = function(self)
   end;
   __shared_base_event_EventHelper.levelNextTurn(self.world);
   level.turn = level.turn + 1;
-  self.enemyModel:turn();
+  self:turnEnemyAI();
   self:levelNextTurnQueue();
-  self:levelNextTurnBattles();
+  self:turnAttack();
+  self:turnMove();
+  self:turnRemoveDeadUnits();
   self:levelNextTurnCaravans();
   self:levelNextTurnRegenMoney();
   self:levelNextTurnRegenMana();
@@ -7076,6 +7120,12 @@ __shared_project_model_LevelModel.prototype.createLevel = function(self)
   else
     _G.error("level already created",0);
   end;
+end
+__shared_project_model_LevelModel.prototype.levelWin = function(self) 
+  if (self.world:storageGet().level == nil) then 
+    _G.error("can't win level storage is null",0);
+  end;
+  __shared_base_event_EventHelper.levelWin(self.world);
 end
 __shared_project_model_LevelModel.prototype.levelNextCastle = function(self) 
   local level = self.world:storageGet().level;
@@ -8408,7 +8458,7 @@ local _hx_static_init = function()
     
     _g:set("MAGE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=4, 4, 4, 4, 4}, 5),attackByLevel=_hx_tab_array({[0]=3, 3, 3, 3, 3}, 5),attackRange=2,costByLevel=_hx_tab_array({[0]=400, 400, 400, 400, 400}, 5),rewardByLevel=_hx_tab_array({[0]=250, 250, 250, 250, 250}, 5)}));
     
-    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=50, 50, 50, 50, 50}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
+    _g:set("CASTLE", _hx_o({__fields__={hpByLevel=true,attackByLevel=true,attackRange=true,costByLevel=true,rewardByLevel=true},hpByLevel=_hx_tab_array({[0]=20, 20, 20, 20, 20}, 5),attackByLevel=_hx_tab_array({[0]=1, 1, 1, 1, 1}, 5),attackRange=1,costByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5),rewardByLevel=_hx_tab_array({[0]=0, 0, 0, 0, 0}, 5)}));
     
     _hx_2 = _g;
     return _hx_2

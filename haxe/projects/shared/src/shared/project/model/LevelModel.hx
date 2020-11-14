@@ -392,7 +392,8 @@ class LevelModel {
                 EventHelper.levelLost(world);
             }
             else if (allEnemiesLost) {
-                levelNextCastle();
+                //levelNextCastle();
+                levelWin();
             }
         } else throw "no level";
     }
@@ -419,6 +420,35 @@ class LevelModel {
         }
     }
 
+    public function turnMove() {
+        for (unit in battleUnitModels) {
+            if (unit.canMove()) {
+                var newPos:LevelRoadPart = unitNewPosition(unit);
+                if (canMoveToPart(newPos.idx)) {unit.move(newPos.idx);}
+            }
+        }
+    }
+
+
+    public function turnEnemyAI() {
+        enemyModel.turn();
+    }
+
+    public function turnAttack() {
+        for (attacker in battleUnitModels) {
+            var canAttack = Lambda.filter(battleUnitModels, function(v) {return attacker.canAttack(v);});
+            if (canAttack.length != 0) {
+                var defender = canAttack[0];
+                attacker.attack(defender);
+            }
+        }
+    }
+
+    public function turnRemoveDeadUnits() {
+        removeDeadUnits();
+    }
+
+
     public function levelNextTurn() {
         var level = world.storageGet().level;
         if (level == null) { throw "no level in levelNextTurn";}
@@ -426,9 +456,16 @@ class LevelModel {
         if (level.lose) { throw "can't make turn we lose";}
         EventHelper.levelNextTurn(world);
         level.turn++;
-        enemyModel.turn();
+
+        turnEnemyAI();
         levelNextTurnQueue();
-        levelNextTurnBattles();
+
+        turnAttack();
+        turnMove();
+        turnRemoveDeadUnits();
+
+
+        //    levelNextTurnBattles();
         levelNextTurnCaravans();
 
         levelNextTurnRegenMoney();
@@ -512,6 +549,12 @@ class LevelModel {
         } else {
             throw "level already created";
         }
+    }
+
+    public function levelWin() {
+        var level = world.storageGet().level;
+        if (level == null) {throw "can't win level storage is null";}
+        EventHelper.levelWin(world);
     }
 
     public function levelNextCastle() {

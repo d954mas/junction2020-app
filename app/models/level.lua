@@ -171,9 +171,10 @@ function Level:animation_turn_end()
         local orders = {
             threads.spell,
             threads.spawn,
-            threads.move,
             threads.attack,
             threads.take_damage,
+            threads.move,
+
             threads.die,
             threads.caravan_spawn,
             threads.caravan_move,

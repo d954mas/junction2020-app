@@ -18,7 +18,11 @@ class IntentModalProcessor extends IntentSubProcessor {
                 ask("restart");
 
                 world.levelModel.restart();
-                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+            case Intent.WIN_MODAL_RESTART:
+                ask("restart");
+                world.levelModel.restart();
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
             default: return null;
         }
 

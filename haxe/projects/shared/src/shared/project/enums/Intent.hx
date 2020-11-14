@@ -46,6 +46,7 @@ enum abstract Intent(String) {
     var SIMPLE_SPELL_UPGRADE_CARAVAN = "simple.spell.upgrade_caravan";
 
     var LOSE_MODAL_RESTART = "lose.modal.restart";
+    var WIN_MODAL_RESTART = "win.modal.restart";
 }
 
 typedef ModalCloseIntent = {
@@ -77,6 +78,7 @@ var intent:Intent;
         intentContexts[Intent.LEVEL_TURN_SKIP] = [];
 
         intentContexts[Intent.LOSE_MODAL_RESTART] = [ContextName.LOSE_MODAL];
+        intentContexts[Intent.WIN_MODAL_RESTART] = [ContextName.WIN_MODAL];
 
         intentContexts[Intent.DEBUG_TOGGLE] = [ContextName.DEV];
         intentContexts[Intent.CHEATS_ENABLE] = [ContextName.DEV];
@@ -105,6 +107,7 @@ var intent:Intent;
 
         ignoreTutorialCheck.set(Intent.MAIN_WELCOME, true);
         ignoreTutorialCheck.set(Intent.LOSE_MODAL_RESTART, true);
+        ignoreTutorialCheck.set(Intent.WIN_MODAL_RESTART, true);
         ignoreTutorialCheck.set(Intent.LEVEL_SPAWN_UNIT, true);
         ignoreTutorialCheck.set(Intent.LEVEL_CAST, true);
         ignoreTutorialCheck.set(Intent.LEVEL_TURN_SKIP, true);
