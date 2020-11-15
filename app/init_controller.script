@@ -10,7 +10,7 @@ local JSON = require "libs_project.json"
 local CHECKS = require "libs.checks"
 local RUN_TEST = false
 local CAMERAS = require "libs_project.cameras"
-local JSON = require "libs_project.json" --not remove it init cjson params
+local WEB_MONETIZATION = require "libs_project.webmonetization"
 
 COMMON.empty_ne("defos")
 
@@ -38,6 +38,8 @@ function Script:input_init()
 end
 
 function Script:init()
+    WEB_MONETIZATION.init()
+    print("is monetized:" .. tostring(WEB_MONETIZATION.is_monetized()))
     CAMERAS:init()
     self.thread = COMMON.ThreadManager()
     self.subscription = COMMON.RX.SubscriptionsStorage()
@@ -64,7 +66,7 @@ function Script:init()
         COMMON.APPLICATION.THREAD:add(function()
             coroutine.yield()
             coroutine.yield()
-           -- COMMON.coroutine_wait(0.2)
+            -- COMMON.coroutine_wait(0.2)
             while not SPEECH.shared do
                 coroutine.yield()
             end
@@ -82,9 +84,9 @@ function Script:init()
     end
 
     self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):subscribe(
-        function()
-      
-        end)
+            function()
+
+            end)
     )
 
 

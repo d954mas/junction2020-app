@@ -1,8 +1,8 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1605432433071.9,
-          "serverLastTime": 1605432433071.9,
+          "time": 1605465183979.2,
+          "serverLastTime": 1605465183979.2,
           "clientDeltaTime": 0
      },
      "version": {
@@ -28,9 +28,9 @@
                "CARAVAN": 0,
                "MANA": 0
           },
-          "turnEnemyAI": 66,
+          "turnEnemyAI": 0,
           "caravans":           [],
-          "unitIdx": 71,
+          "unitIdx": 3,
           "enemy": {
                "unitLevels": {
                     "MAGE": 1,
@@ -58,7 +58,7 @@
                {
                     "id": 1,
                     "attackRange": 1,
-                    "hp": 18,
+                    "hp": 20,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
                     "type": "CASTLE",
@@ -69,68 +69,13 @@
                {
                     "id": 2,
                     "attackRange": 1,
-                    "hp": 18,
+                    "hp": 20,
                     "roadPartIdx": 13000,
                     "attackLvl": 0,
                     "type": "CASTLE",
                     "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 0
-               },
-               {
-                    "id": 63,
-                    "attackRange": 1,
-                    "hp": 3,
-                    "roadPartIdx": 10000,
-                    "attackLvl": 0,
-                    "type": "SHIELD",
-                    "hpLvl": 0,
-                    "ownerId": 1,
-                    "reward": 100
-               },
-               {
-                    "id": 65,
-                    "attackRange": 2,
-                    "hp": 1,
-                    "roadPartIdx": 11000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 75
-               },
-               {
-                    "id": 66,
-                    "attackRange": 2,
-                    "hp": 2,
-                    "roadPartIdx": 8000,
-                    "attackLvl": 1,
-                    "hpLvl": 1,
-                    "type": "MAGE",
-                    "ownerId": 0,
-                    "reward": 250
-               },
-               {
-                    "id": 68,
-                    "attackRange": 1,
-                    "hp": 1,
-                    "roadPartIdx": 12000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 1,
-                    "reward": 50
-               },
-               {
-                    "id": 69,
-                    "attackRange": 2,
-                    "hp": 4,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 1,
-                    "hpLvl": 1,
-                    "type": "MAGE",
-                    "ownerId": 0,
-                    "reward": 250
                }
           ],
           "player": {
@@ -142,39 +87,10 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 25,
+               "mana": 60,
                "id": 0,
-               "money": 355,
-               "unitQueue": [
-                    {
-                         "unitType": "MAGE",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "MAGE",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "MAGE",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "MAGE",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "MAGE",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "MAGE",
-                         "ownerId": 0
-                    },
-                    {
-                         "unitType": "MAGE",
-                         "ownerId": 0
-                    }
-               ],
+               "money": 150,
+               "unitQueue":                [],
                "caravanLevel": 1
           },
           "roads": [
@@ -249,7 +165,7 @@
                     }
                ]
           ],
-          "turn": 66,
+          "turn": 0,
           "castles": [
                {
                     "unitId": 0,
@@ -289,7 +205,7 @@
           "version": 3,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 2018,
+          "intentIdx": 2020,
           "gameBackendVersion": "",
           "gameSharedVersion": "",
           "device": "sberbox",

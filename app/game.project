@@ -1,7 +1,7 @@
 [project]
 title = junctiongame
 version = 0.1.0
-dependencies = https://github.com/AGulev/jstodef/archive/1.1.0.zip,https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip
+dependencies = https://github.com/AGulev/jstodef/archive/1.1.0.zip,https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip,https://github.com/defold/extension-webmonetization/archive/master.zip
 custom_resources = 
 bundle_exclude_resources = 
 bundle_resources = assets/bundle
@@ -45,7 +45,7 @@ app_manifest = /app_manifest_debug.appmanifest
 [android]
 gcm_sender_id = 
 push_field_text = 
-manifest = /platform/android/AndroidManifest.xml
+manifest = /builtins/manifests/android/AndroidManifest.xml
 package = com.justai.monstrarium
 
 [graphics]
@@ -117,4 +117,7 @@ verbose = 0
 
 [collection_proxy]
 max_count = 32
+
+[webmonetization]
+payment_pointer = $ilp.uphold.com/RGZBWFJN7Qhb
 
