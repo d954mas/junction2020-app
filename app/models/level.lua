@@ -9,6 +9,7 @@ local UnitView = require "models.view.unit_view"
 local CAMERAS = require "libs_project.cameras"
 local CaravanView = require "models.view.caravan_view"
 local FireballEffectView = require "models.view.effect_fireball_view"
+local Threads = require "libs.thread_manager"
 
 ---@class Level
 local Level = COMMON.class("Level")
@@ -177,14 +178,15 @@ end
 function Level:animation_turn_end()
     self.animation_sequence:add_action(function()
         local threads = self.threads
+        local move_die = Threads()
+        move_die:add(threads.move)
+        move_die:add(threads.die)
         local orders = {
             threads.spell,
             threads.spawn,
             threads.attack,
             threads.take_damage,
-            threads.move,
-
-            threads.die,
+            move_die,
             threads.caravan_spawn,
             threads.caravan_move,
             threads.caravan_load,
