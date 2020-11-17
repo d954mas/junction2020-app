@@ -27,16 +27,27 @@ function View:initialize(idx, world)
     self.castleIdx = idx
     self:bind_vh()
     self:on_storage_changed()
+    self:init_values()
+end
+
+function View:init_values()
+    self.params = {
+        hp = self.unit_model:getHp(),
+        attack = self.unit_model:getAttack()
+    }
+    label.set_text(self.vh.hp_lbl, self.params.hp)
+    label.set_text(self.vh.attack_lbl, self.params.attack)
 end
 
 function View:on_storage_changed()
     self.haxe_model = HAXE_WRAPPER.level_castle_get_by_idx(self.castleIdx)
-    self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
+    self.unit_id = self.unit_id or self.haxe_model.unitId
+    self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id)
     if (self.unit_model) then
-        label.set_text(self.vh.attack_lbl, self.unit_model:getAttack())
-        label.set_text(self.vh.hp_lbl, self.unit_model:getHp())
+      --  label.set_text(self.vh.attack_lbl, self.unit_model:getAttack())
+       -- label.set_text(self.vh.hp_lbl, self.unit_model:getHp())
     else
-        label.set_text(self.vh.hp_lbl, 0)
+      --  label.set_text(self.vh.hp_lbl, 0)
     end
 end
 
@@ -138,6 +149,29 @@ function View:bind_vh()
         go.set_position(vmath.vector3(20, 50, 0), self.vh.castle)
     end
     ctx:remove()
+end
+
+function View:animation_take_damage(damage, tag, attacker_id)
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local action = ACTIONS.Sequence()
+    local action1 = ACTIONS.Sequence()
+    local action2 = ACTIONS.Sequence()
+    action1:add_action(ACTIONS.Tween { object = self.vh.castle_sprite, property = "flash.x", easing = TWEEN.easing.inBack, from = 0, to = 0.66, time = 0.33 })
+    action1:add_action(ACTIONS.Tween { object = self.vh.castle_sprite, property = "flash.x", easing = TWEEN.easing.linear, from = 0.66, to = 0, time = 0.2 })
+    action2:add_action(ACTIONS.Tween { object = self.vh.cannon_sprite, property = "flash.x", easing = TWEEN.easing.inBack, from = 0, to = 0.66, time = 0.33 })
+    action2:add_action(ACTIONS.Tween { object = self.vh.cannon_sprite, property = "flash.x", easing = TWEEN.easing.linear, from = 0.66, to = 0, time = 0.2 })
+
+    local action_parallel = ACTIONS.Parallel()
+    action_parallel:add_action(action1)
+    action_parallel:add_action(action2)
+
+    action:add_action(action_parallel)
+    action:add_action(function()
+        self.params.hp = self.params.hp - damage
+        label.set_text(self.vh.hp_lbl, math.max(0, self.params.hp))
+    end)
+    ctx:remove()
+    return action
 end
 
 return View

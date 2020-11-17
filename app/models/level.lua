@@ -263,6 +263,14 @@ function Level:units_view_by_id(id)
     end
 end
 
+function Level:castle_view_by_unit_id(id)
+    for _, view in ipairs(self.views.castles) do
+        if (view.unit_id == id) then
+            return view
+        end
+    end
+end
+
 function Level:caravans_view_by_id(id)
     for _, view in ipairs(self.views.caravans) do
         if (view.unit_id == id) then
@@ -301,6 +309,9 @@ end
 
 function Level:units_take_damage_unit(unit_id, damage, tag, attacker_id)
     local unit_view = self:units_view_by_id(unit_id)
+    if(not unit_view)then
+        unit_view = self:castle_view_by_unit_id(unit_id)
+    end
     if (unit_view) then
         local action = unit_view:animation_take_damage(damage, tag, attacker_id)
         if (attacker_id == -10000) then
