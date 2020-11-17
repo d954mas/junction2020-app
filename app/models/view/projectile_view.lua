@@ -27,10 +27,10 @@ View.TYPES = {
 local TYPE_CONFIGS = {
     [View.TYPES.CANNON_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_cannon_player_factory"), scale = 1 },
     [View.TYPES.CANNON_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_cannon_enemy_factory"), scale = 1 },
-    [View.TYPES.ARROW_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_arrow_player_factory"), scale = 0.5 },
-    [View.TYPES.ARROW_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_arrow_enemy_factory"), scale = 0.5 },
-    [View.TYPES.MAGE_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_mage_player_factory"), scale = 0.5 },
-    [View.TYPES.MAGE_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_mage_enemy_factory"), scale = 0.5 }
+    [View.TYPES.ARROW_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_arrow_player_factory"), scale = 1 },
+    [View.TYPES.ARROW_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_arrow_enemy_factory"), scale = 1 },
+    [View.TYPES.MAGE_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_mage_player_factory"), scale = 1 },
+    [View.TYPES.MAGE_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_mage_enemy_factory"), scale = 1 }
 }
 
 ---@param world World
