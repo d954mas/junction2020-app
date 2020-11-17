@@ -3,6 +3,7 @@ local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local ACTIONS = require "libs.actions.actions"
 local TWEEN = require "libs.tween"
 local IceEffectView = require "models.view.effect_ice_view"
+local ProjectileView = require "models.view.projectile_view"
 
 local FACTORY_URL = msg.url("main_scene:/factories#castle_factory")
 local FACTORY_CASTLE_PART = {
@@ -15,8 +16,11 @@ local FACTORY_CASTLE_PART = {
     CANNON = hash("/cannon")
 }
 
-local CANNON_POS_ENEMY = vmath.vector3(50,66,0.01)
-local CANNON_POS_PLAYER = vmath.vector3(-54,50,0.01)
+local CANNON_POS_ENEMY = vmath.vector3(50, 66, 0.01)
+local CANNON_POS_PLAYER = vmath.vector3(-54, 50, 0.01)
+
+local CANNON_BALL_POS_PLAYER = vmath.vector3(38, 29, 0.01)
+local CANNON_BALL_POS_ENEMY = vmath.vector3(-15, 18, 0.01)
 
 ---@class CastleView
 local View = COMMON.class("CastleView")
@@ -42,17 +46,16 @@ end
 function View:on_storage_changed()
     self.haxe_model = HAXE_WRAPPER.level_castle_get_by_idx(self.castleIdx)
     self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
-    if(self.unit_id == nil)then
+    if (self.unit_id == nil) then
         self.unit_id = self.haxe_model.unitId
         self.haxe_unit_initial = self.unit_model
     end
 
-
     if (self.unit_model) then
-      --  label.set_text(self.vh.attack_lbl, self.unit_model:getAttack())
-       -- label.set_text(self.vh.hp_lbl, self.unit_model:getHp())
+        --  label.set_text(self.vh.attack_lbl, self.unit_model:getAttack())
+        -- label.set_text(self.vh.hp_lbl, self.unit_model:getHp())
     else
-      --  label.set_text(self.vh.hp_lbl, 0)
+        --  label.set_text(self.vh.hp_lbl, 0)
     end
 end
 
@@ -62,7 +65,8 @@ end
 
 function View:animation_ice_on()
     if (self.ice_effect) then
-        return ACTIONS.Function({ fun = function() end })
+        return ACTIONS.Function({ fun = function()
+        end })
     end
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()
@@ -82,8 +86,9 @@ function View:animation_ice_on()
 end
 
 function View:animation_ice_off()
-    if(not self.ice_effect)then
-        return ACTIONS.Function({ fun = function() end })
+    if (not self.ice_effect) then
+        return ACTIONS.Function({ fun = function()
+        end })
     end
     assert(self.ice_effect)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
@@ -141,7 +146,7 @@ function View:bind_vh()
     self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
     sprite.play_flipbook(self.vh.castle_sprite, self.unit_model:getOwnerId() == 0 and "castle_player" or "castle_enemy")
     sprite.play_flipbook(self.vh.cannon_sprite, self.unit_model:getOwnerId() == 0 and "cannon" or "cannon_enemy")
-    go.set_position(self.unit_model:getOwnerId() == 0 and CANNON_POS_PLAYER or CANNON_POS_ENEMY,self.vh.cannon)
+    go.set_position(self.unit_model:getOwnerId() == 0 and CANNON_POS_PLAYER or CANNON_POS_ENEMY, self.vh.cannon)
     if (self.castleIdx == 0) then
         sprite.play_flipbook(self.vh.castle_sprite, "vilage")
         msg.post(self.vh.attack_lbl, COMMON.HASHES.MSG_DISABLE)
@@ -154,15 +159,23 @@ function View:bind_vh()
     ctx:remove()
 end
 
-function View:animation_attack()
+function View:animation_attack(defender_id)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
-    local new_pos = vmath.vector3(self.castle_pos)
-    new_pos.x = new_pos.x + (self:is_player() and 15 or -15)
-    local action = ACTIONS.Sequence()
-    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = self.castle_pos, to = new_pos, time = 0.2 })
-    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.linear, v3 = true, from = new_pos, to = self.castle_pos, time = 0.1 })
+
+    local projectile = ProjectileView(self.world, self:is_player() and ProjectileView.TYPES.CANNON_PLAYER or ProjectileView.TYPES.CANNON_ENEMY)
+    local actions = ACTIONS.Sequence()
+    local start_pos = self.castle_pos + (self:is_player() and CANNON_POS_PLAYER or CANNON_POS_ENEMY)
+    start_pos = start_pos + (self:is_player() and CANNON_BALL_POS_PLAYER or CANNON_BALL_POS_ENEMY)
+
+    local defender_view = self.world.level_model:units_view_by_id(defender_id)
+
+    actions:add_action(projectile:animation_fly({ dispose = true, from = start_pos, to = defender_view.pos_new + vmath.vector3(0,15,0) }))
+
+
+
+
     ctx:remove()
-    return action
+    return actions
 end
 
 function View:animation_take_damage(damage, tag, attacker_id)

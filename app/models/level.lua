@@ -330,8 +330,10 @@ function Level:units_attack_unit(attacker_id, defender_id)
     if(not unit_view)then
         unit_view = self:castle_view_by_unit_id(attacker_id)
     end
+
+
     if (unit_view) then
-        local action = unit_view:animation_attack()
+        local action = unit_view:animation_attack(defender_id)
         self.threads.attack:add_action(action)
     else
         COMMON.w("no unit view for attack.Is it castle?", "LEVEL")

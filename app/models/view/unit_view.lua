@@ -64,7 +64,7 @@ function View:road_move(road)
     local roadIdx = math.ceil(road.x / 7)
     local roadPartIdx = road.x - (roadIdx) * 7
     self.pos = self:road_pos_to_pos(self.world:road_idx_to_position(roadIdx, roadPartIdx))
-
+    self.pos_new = self.pos
     go.set_position(self.pos, self.vh.root)
     ctx:remove()
 end
@@ -94,6 +94,7 @@ function View:animation_move(road)
     local roadPartIdx = road.x - (roadIdx) * 7
     local new_pos = self:road_pos_to_pos(self.world:road_idx_to_position(roadIdx, roadPartIdx))
     local pos = self.pos
+    self.pos_new = new_pos
     --  self.pos = new_pos
     local action = ACTIONS.Sequence()
     local movement = ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = pos, to = new_pos, time = 1 }
@@ -105,7 +106,7 @@ function View:animation_move(road)
     return action
 end
 
-function View:animation_attack()
+function View:animation_attack(defender_id)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local new_pos = vmath.vector3(self.pos)
     new_pos.x = new_pos.x + (self.haxe_unit_initial:getOwnerId() == 0 and 15 or -15)
