@@ -3,6 +3,7 @@ local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local ACTIONS = require "libs.actions.actions"
 local TWEEN = require "libs.tween"
 local IceEffectView = require "models.view.effect_ice_view"
+local ProjectileView = require "models.view.projectile_view"
 
 local FACTORY_URL = msg.url("main_scene:/factories#unit_factory")
 local FACTORY_PART = {
@@ -111,8 +112,29 @@ function View:animation_attack(defender_id)
     local new_pos = vmath.vector3(self.pos)
     new_pos.x = new_pos.x + (self.haxe_unit_initial:getOwnerId() == 0 and 15 or -15)
     local action = ACTIONS.Sequence()
-    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = self.pos, to = new_pos, time = 0.2 })
-    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.linear, v3 = true, from = new_pos, to = self.pos, time = 0.1 })
+
+    local unit_type = self.haxe_unit_initial:getType()
+    if(unit_type == "KNIGHT" or unit_type == "SPEARMAN" or unit_type == "SPEARMAN") then
+        action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = self.pos, to = new_pos, time = 0.2 })
+        action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.linear, v3 = true, from = new_pos, to = self.pos, time = 0.1 })
+    else
+        local projectile
+        if(unit_type == "ARCHER")then
+            projectile = ProjectileView(self.world, self:is_player() and ProjectileView.TYPES.ARROW_PLAYER or ProjectileView.TYPES.ARROW_ENEMY )
+        elseif(unit_type == "MAGE")then
+            projectile = ProjectileView(self.world, self:is_player() and ProjectileView.TYPES.MAGE_PLAYER or ProjectileView.TYPES.MAGE_ENEMY )
+        end
+        local action_projectile = ACTIONS.Sequence()
+        local start_pos = self.pos_new
+        start_pos = start_pos + vmath.vector3(0,20,0)
+        local defender_view = self.world.level_model:units_view_by_id(defender_id)
+        action_projectile:add_action(projectile:animation_fly({ dispose = true, from = start_pos, to = defender_view.pos_new + vmath.vector3(0,15,0) }))
+
+        action:add_action(action_projectile)
+    end
+
+
+
     ctx:remove()
     return action
 end
