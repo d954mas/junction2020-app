@@ -9,7 +9,7 @@ local COR_YIELD = coroutine.yield
 function M.coroutine_resume(cor,...)
 	local ok, res = COR_RESUME(cor,...)
 	if not ok then
-		LOG.e(res .. debug.traceback(cor,"",1),"Error in coroutine",1)
+		LOG.c(res .. debug.traceback(cor,"",1),"Error in coroutine",1)
 	else
 		return not (COR_STATUS(cor) == "dead") and cor
 	end
