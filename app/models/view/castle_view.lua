@@ -41,8 +41,13 @@ end
 
 function View:on_storage_changed()
     self.haxe_model = HAXE_WRAPPER.level_castle_get_by_idx(self.castleIdx)
-    self.unit_id = self.unit_id or self.haxe_model.unitId
-    self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.unit_id)
+    self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
+    if(self.unit_id == nil)then
+        self.unit_id = self.haxe_model.unitId
+        self.haxe_unit_initial = self.unit_model
+    end
+
+
     if (self.unit_model) then
       --  label.set_text(self.vh.attack_lbl, self.unit_model:getAttack())
        -- label.set_text(self.vh.hp_lbl, self.unit_model:getHp())
@@ -93,9 +98,7 @@ function View:animation_ice_off()
 end
 
 function View:is_player()
-    self.haxe_model = HAXE_WRAPPER.level_castle_get_by_idx(self.castleIdx)
-    self.unit_model = HAXE_WRAPPER.level_units_get_by_id(self.haxe_model.unitId)
-    return self.unit_model:getOwnerId() == 0
+    return self.haxe_unit_initial:getOwnerId() == 0
 end
 
 function View:animate_castle_change()
@@ -149,6 +152,17 @@ function View:bind_vh()
         go.set_position(vmath.vector3(20, 50, 0), self.vh.castle)
     end
     ctx:remove()
+end
+
+function View:animation_attack()
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
+    local new_pos = vmath.vector3(self.castle_pos)
+    new_pos.x = new_pos.x + (self:is_player() and 15 or -15)
+    local action = ACTIONS.Sequence()
+    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = self.castle_pos, to = new_pos, time = 0.2 })
+    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.linear, v3 = true, from = new_pos, to = self.castle_pos, time = 0.1 })
+    ctx:remove()
+    return action
 end
 
 function View:animation_take_damage(damage, tag, attacker_id)

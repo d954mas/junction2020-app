@@ -327,6 +327,9 @@ end
 function Level:units_attack_unit(attacker_id, defender_id)
     -- self.world.thread_sequence:add_action(function()
     local unit_view = self:units_view_by_id(attacker_id)
+    if(not unit_view)then
+        unit_view = self:castle_view_by_unit_id(attacker_id)
+    end
     if (unit_view) then
         local action = unit_view:animation_attack()
         self.threads.attack:add_action(action)
