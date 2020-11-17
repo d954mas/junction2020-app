@@ -6750,6 +6750,20 @@ __shared_project_model_LevelModel.prototype.addCaravan = function(self,model)
   self.resourceUnitModels:add(model);
   __shared_base_event_EventHelper.levelCaravanSpawn(self.world, model:getId(), model:getStruct());
 end
+__shared_project_model_LevelModel.prototype.unitsCanSpawn = function(self,ownerId) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level in unitsSpawnUnit",0);
+  end;
+  local road = level.roads[level.roads.length - 1];
+  local roadPartIdx;
+  if (ownerId == 0) then 
+    roadPartIdx = road[0].idx;
+  else
+    roadPartIdx = road[road.length - 1].idx;
+  end;
+  do return self:canMoveToPart(roadPartIdx, ownerId) end
+end
 __shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,ownerId,type,unitLevel) 
   local level = self.world:storageGet().level;
   if (level == nil) then 
@@ -6768,7 +6782,7 @@ __shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,owner
   else
     roadPartIdx = road[road.length - 1].idx;
   end;
-  if (self:canMoveToPart(roadPartIdx)) then 
+  if (self:canMoveToPart(roadPartIdx, ownerId)) then 
     unit.roadPartIdx = roadPartIdx;
     level.units:push(unit);
     self:addUnit(__shared_project_model_units_BattleUnitModel.new(unit, self.world));
@@ -6777,14 +6791,26 @@ __shared_project_model_LevelModel.prototype.unitsSpawnUnit = function(self,owner
     do return false end;
   end;
 end
-__shared_project_model_LevelModel.prototype.canMoveToPart = function(self,partIdx) 
-  do return Lambda.count(self.ds.level.units, function(v) 
-    if (v.type ~= "CASTLE") then 
-      do return v.roadPartIdx == partIdx end;
-    else
-      do return false end;
+__shared_project_model_LevelModel.prototype.canMoveToPart = function(self,partIdx,ownerId) 
+  local level = self.world:storageGet().level;
+  if (level == nil) then 
+    _G.error("no level in canMoveToPart",0);
+  end;
+  local _g = 0;
+  local _g1 = level.units;
+  while (_g < _g1.length) do 
+    local unit = _g1[_g];
+    _g = _g + 1;
+    if (unit.roadPartIdx == partIdx) then 
+      if (unit.type ~= "CASTLE") then 
+        do return false end;
+      end;
+      if (((ownerId ~= nil) and (unit.type == "CASTLE")) and (unit.ownerId ~= ownerId)) then 
+        do return false end;
+      end;
     end;
-  end) == 0 end
+  end;
+  do return true end
 end
 __shared_project_model_LevelModel.prototype.createPlayer = function(self) 
   local unitLevels = _hx_e();
@@ -6841,7 +6867,7 @@ __shared_project_model_LevelModel.prototype.levelNextTurnBattles = function(self
       if (attacker[0]:canMove()) then 
         if (madeTurn_h[attacker[0]] == nil) then 
           local newPos = self:unitNewPosition(attacker[0]);
-          if (self:canMoveToPart(newPos.idx)) then 
+          if (self:canMoveToPart(newPos.idx, attacker[0]:getOwnerId())) then 
             attacker[0]:move(newPos.idx);
             madeTurn_h[attacker[0]] = true;
             madeTurn_k[attacker[0]] = true;
@@ -6922,16 +6948,16 @@ __shared_project_model_LevelModel.prototype.levelNextTurnCaravans = function(sel
     local val = _g_head.item;
     _g_head = _g_head.next;
     if (val:canLoad()) then 
-      __haxe_Log.trace("can load", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=333,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
+      __haxe_Log.trace("can load", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=358,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
       val:loadResources();
     else
       if (val:canUnload()) then 
-        __haxe_Log.trace("can unload", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=337,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
+        __haxe_Log.trace("can unload", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=362,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
         val:unloadResources();
         caravansToRemove:push(val);
       else
         if (val:canMove()) then 
-          __haxe_Log.trace("can move", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=341,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
+          __haxe_Log.trace("can move", _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=366,className="shared.project.model.LevelModel",methodName="levelNextTurnCaravans"}));
           val:move(self:caravanNewPos(val).idx);
         end;
       end;
@@ -6977,7 +7003,7 @@ __shared_project_model_LevelModel.prototype.levelNextCheckWinLose = function(sel
     local allEnemiesLost = Lambda.count(self.ds.level.castles, function(castle1) 
       local unit1 = _gthis:unitsGetUnitById(castle1.unitId);
       if (unit1 ~= nil) then 
-        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=383,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
+        __haxe_Log.trace(Std.string(Std.string(unit1:getOwnerId()) .. Std.string(" ")) .. Std.string(unit1:getHp()), _hx_o({__fields__={fileName=true,lineNumber=true,className=true,methodName=true},fileName="shared/src/shared/project/model/LevelModel.hx",lineNumber=408,className="shared.project.model.LevelModel",methodName="levelNextCheckWinLose"}));
         if (unit1:getOwnerId() > 0) then 
           do return unit1:getHp() > 0 end;
         else
@@ -7026,7 +7052,7 @@ __shared_project_model_LevelModel.prototype.turnMove = function(self)
     _g_head = _g_head.next;
     if (val:canMove()) then 
       local newPos = self:unitNewPosition(val);
-      if (self:canMoveToPart(newPos.idx)) then 
+      if (self:canMoveToPart(newPos.idx, val:getOwnerId())) then 
         val:move(newPos.idx);
       end;
     end;
@@ -7292,9 +7318,12 @@ __shared_project_model_PlayerModel.prototype.spawnCaravan = function(self)
 end
 __shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unitType,amount) 
   __shared_base_event_EventHelper.levelTurnStart(self.world);
-  self.world.levelModel:enqueueUnits(0, unitType, amount);
-  self.world.speechBuilder:text(Std.string("enqueued ") .. Std.string(unitType));
-  self.world.levelModel:levelNextTurn();
+  if (self.world.levelModel:unitsSpawnUnit(0, unitType, amount)) then 
+    self.world.speechBuilder:text(Std.string("spawn ") .. Std.string(unitType));
+    self.world.levelModel:levelNextTurn();
+  else
+    self.world.speechBuilder:text(Std.string("cant spawn ") .. Std.string(unitType));
+  end;
 end
 __shared_project_model_PlayerModel.prototype.modelRestore = function(self) 
 end

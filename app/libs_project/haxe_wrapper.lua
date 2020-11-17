@@ -98,6 +98,18 @@ function M.level_units_get_by_id(idx)
     return M.get_world().levelModel:unitsGetUnitById(idx)
 end
 
+function M.level_units_can_spawn(owner_id)
+    return M.get_world().levelModel:unitsCanSpawn(owner_id)
+end
+
+function M.level_units_can_spawn_player()
+    return M.get_world().levelModel:unitsCanSpawn(0)
+end
+
+function M.level_units_can_spawn_enemy()
+    return M.get_world().levelModel:unitsCanSpawn(1)
+end
+
 function M.level_turn_get()
     return M.get_world().storage.level.turn
 end

@@ -35,11 +35,12 @@ class PlayerModel {
 
     public function unitsSpawnUnit(unitType:UnitType, amount:Int) {
         EventHelper.levelTurnStart(world);
-        world.levelModel.enqueueUnits(0, unitType, amount);
-        world.speechBuilder.text("enqueued " + unitType);
-        //spawn это ход игрока
-
-        world.levelModel.levelNextTurn();
+        if(world.levelModel.unitsSpawnUnit(0, unitType, amount)){
+            world.speechBuilder.text("spawn " + unitType);
+            world.levelModel.levelNextTurn();
+        }else{
+            world.speechBuilder.text("cant spawn " + unitType);
+        }
     }
 
     public function modelRestore():Void {
