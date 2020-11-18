@@ -9,6 +9,7 @@ local UnitView = require "models.view.unit_view"
 local CAMERAS = require "libs_project.cameras"
 local CaravanView = require "models.view.caravan_view"
 local FireballEffectView = require "models.view.effect_fireball_view"
+local TakeDamageEffectView = require "models.view.effect_take_damage"
 local Threads = require "libs.thread_manager"
 
 ---@class Level
@@ -308,29 +309,38 @@ function Level:units_die_unit(id)
 end
 
 function Level:units_take_damage_unit(unit_id, damage, tag, attacker_id)
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local unit_view = self:units_view_by_id(unit_id)
-    if(not unit_view)then
+    local castle = false
+    if (not unit_view) then
         unit_view = self:castle_view_by_unit_id(unit_id)
+        castle = true
     end
     if (unit_view) then
         local action = unit_view:animation_take_damage(damage, tag, attacker_id)
+        local action_effect = TakeDamageEffectView(self.world)
+        action_effect:set_scale(castle and 1.1 or 0.8)
+        local effect_config = { from = vmath.vector3(unit_view.pos_new or unit_view.castle_pos), castle = castle,
+        value = -damage}
         if (attacker_id == -10000) then
             self.threads_mage.take_damage:add_action(action)
+            self.threads_mage.take_damage:add_action(action_effect:animation_show(effect_config))
         else
             self.threads.take_damage:add_action(action)
+            self.threads.take_damage:add_action(action_effect:animation_show(effect_config))
         end
     else
         COMMON.w("no unit view for take damage.Is it castle?", "LEVEL")
     end
+    ctx:remove()
 end
 
 function Level:units_attack_unit(attacker_id, defender_id)
     -- self.world.thread_sequence:add_action(function()
     local unit_view = self:units_view_by_id(attacker_id)
-    if(not unit_view)then
+    if (not unit_view) then
         unit_view = self:castle_view_by_unit_id(attacker_id)
     end
-
 
     if (unit_view) then
         local action = unit_view:animation_attack(defender_id)

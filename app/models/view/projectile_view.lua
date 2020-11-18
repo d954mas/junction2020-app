@@ -27,7 +27,7 @@ View.TYPES = {
 local TYPE_CONFIGS = {
     [View.TYPES.CANNON_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_cannon_player_factory"), scale = 1, y_top = 20 },
     [View.TYPES.CANNON_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_cannon_enemy_factory"), scale = 1, y_top = 20 },
-    [View.TYPES.ARROW_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_arrow_player_factory"), scale = 1, y_top = 90 },
+    [View.TYPES.ARROW_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_arrow_player_factory"), scale = 1, y_top = 90, rotation = true },
     [View.TYPES.ARROW_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_arrow_enemy_factory"), scale = 1, y_top = 90 },
     [View.TYPES.MAGE_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_mage_player_factory"), scale = 1, y_top = 50 },
     [View.TYPES.MAGE_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_mage_enemy_factory"), scale = 1, y_top = 50 }
@@ -71,9 +71,10 @@ function View:animation_fly(config)
     config.y_top = config.y_top or self.config.y_top
     config.from.z = 0.2
     config.to.z = config.from.z
-    local middle =config.from +  (config.to-config.from)/2
+    local middle = config.from + (config.to - config.from) / 2
     middle.y = middle.y + config.y_top
     local curve = Curve({ points = { config.from, middle, config.to } })
+    local current = config.from
     local movement = ACTIONS.Function { fun = function()
         local movement_a = 0
         local len = 0
@@ -81,7 +82,7 @@ function View:animation_fly(config)
         --local speed = config.speed
         --  if (not speed) then
         --     local time = assert(config.speed, "need speed or time")
-        local speed = curve.len / 0.5
+        local speed = curve.len / 0.6
         --  end
         while (len < end_len) do
             local dt = coroutine.yield()
@@ -89,12 +90,34 @@ function View:animation_fly(config)
             len = math.min(len, end_len)
             movement_a = len / end_len
             local pos = curve:point_interpolated_get(len / end_len)
+            current = pos
             go.set_position(pos, self.vh.root)
         end
     end }
+
+    local update_rotation = ACTIONS.Function({ fun = function()
+        local prev = vmath.vector3(curve.points_calculated[1])
+        while (not movement:is_finished()) do
+            current = vmath.vector3(current.x, current.y, current.z)
+            local movement_v = vmath.normalize(current - prev)
+            local angle = math.atan2(movement_v.y, movement_v.x)
+            --angle = math.rad(90)
+            angle = angle + math.rad(-90)
+            local rotation = vmath.quat_rotation_z(angle)
+            go.set_rotation(rotation, self.vh.root)
+            prev = current
+            coroutine.yield()
+        end
+    end })
+
+
+    local action_move = ACTIONS.Parallel()
+    action_move:add_action(movement)
+    if(self.config.rotation) then action_move:add_action(update_rotation) end
+
     action:add_action(ACTIONS.Tween { object = self.vh.sprite_origin_sprite, property = "tint.w", easing = TWEEN.easing.linear, from = 0, to = 1, time = 0.1 })
     --action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", v3 = true, easing = TWEEN.easing.linear, from = config.from, to = config.to, time = 5.7 })
-    action:add_action(movement)
+    action:add_action(action_move)
     action:add_action(ACTIONS.Tween { object = self.vh.sprite_origin_sprite, property = "tint.w", easing = TWEEN.easing.linear, from = 1, to = 0, time = 0.15 })
     if (config.dispose) then
         action:add_action(function()

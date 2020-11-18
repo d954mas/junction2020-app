@@ -128,7 +128,10 @@ function View:animation_attack(defender_id)
         local start_pos = self.pos_new
         start_pos = start_pos + vmath.vector3(0,20,0)
         local defender_view = self.world.level_model:units_view_by_id(defender_id)
-        action_projectile:add_action(projectile:animation_fly({ dispose = true, from = start_pos, to = defender_view.pos_new + vmath.vector3(0,15,0) }))
+        if(not defender_view)then
+            defender_view = self.world.level_model:castle_view_by_unit_id(defender_id)
+        end
+        action_projectile:add_action(projectile:animation_fly({ dispose = true, from = start_pos, to = (defender_view.pos_new or defender_view.castle_pos) + vmath.vector3(0,15,0) }))
 
         action:add_action(action_projectile)
     end
@@ -167,7 +170,7 @@ end
 function View:animation_ice_off()
     if(not self.ice_effect)then
         return ACTIONS.Function({ fun = function() end })
-    end    
+    end
     assert(self.ice_effect)
     local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE)
     local action = ACTIONS.Sequence()
