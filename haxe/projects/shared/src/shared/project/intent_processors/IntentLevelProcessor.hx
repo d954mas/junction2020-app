@@ -26,8 +26,11 @@ class IntentLevelProcessor extends IntentSubProcessor {
                 var price = world.levelModel.playerModel.unitGetPrice(unitType);
                 var cost = amount * price;
                 if (world.levelModel.playerModel.canSpendMoney(cost)) {
-                    world.levelModel.playerModel.moneyChange(-cost, "spawn unit");
-                    world.levelModel.playerModel.unitsSpawnUnit(unitType, amount);
+                    if(world.levelModel.playerModel.unitsSpawnUnit(unitType, amount) == true){
+                        world.levelModel.playerModel.moneyChange(-cost, "spawn unit");
+                    };
+
+
                 } else {
                     ask("not enought money.Need " + price);
                 }

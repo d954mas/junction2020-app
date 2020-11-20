@@ -18,9 +18,9 @@ function View:set_value(value, force)
     self.views.label:set_value(value, force)
 end
 
-function View:value_add(value, tag)
+function View:value_add(value, tag, force)
     self.value = self.value + value
-    self:set_value(self.value)
+    self:set_value(self.value,force)
 end
 
 function View:on_storage_changed()

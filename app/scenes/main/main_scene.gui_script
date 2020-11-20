@@ -48,7 +48,7 @@ function Script:bind_vh()
 end
 
 function Script:init()
-    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI,self)
     COMMON.input_acquire()
     self:bind_vh()
     self:init_gui()
@@ -67,8 +67,8 @@ function Script:change_tab(tab)
 end
 
 function Script:init_gui()
-    self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana(), true)
-    self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money(), true)
+    self.views.mana_panel:value_add(HAXE_WRAPPER.resources_get_mana(),"",true)
+    self.views.money_panel:value_add(HAXE_WRAPPER.resources_get_money(),"",true)
 
     self.scheduler = COMMON.RX.CooperativeScheduler.create()
     self.subscriptions = COMMON.RX.SubscriptionsStorage()
@@ -137,8 +137,8 @@ end
 
 function Script:storage_changed()
     gui.set_text(self.vh.lbl_turn, "TURN:" .. (HAXE_WRAPPER.level_turn_get() + 1))
-    self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
-    self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
+   -- self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
+   -- self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
 
     gui.set_text(self.vh.price_cast_fireball, HAXE_WRAPPER.level_player_mage_get_price("FIREBALL"))
     gui.set_text(self.vh.price_cast_ice, HAXE_WRAPPER.level_player_mage_get_price("ICE"))

@@ -11,6 +11,8 @@ local CaravanView = require "models.view.caravan_view"
 local FireballEffectView = require "models.view.effect_fireball_view"
 local TakeDamageEffectView = require "models.view.effect_take_damage"
 local Threads = require "libs.thread_manager"
+local ChangeGoldEffect = require "models.view.effect_change_gold"
+local ChangeManaEffect = require "models.view.effect_change_mana"
 
 ---@class Level
 local Level = COMMON.class("Level")
@@ -53,6 +55,7 @@ function Level:animation_turn_start()
         attack = ACTIONS.Parallel(),
         take_damage = ACTIONS.Parallel(),
         castle_change = ACTIONS.Parallel(),
+        resources_start_turn = ACTIONS.Parallel(),
 
         caravan_spawn = ACTIONS.Parallel(),
         caravan_move = ACTIONS.Parallel(),
@@ -195,6 +198,7 @@ function Level:animation_turn_end()
 
             threads.dieMoveToNextCastle,
             threads.castle_change,
+            threads.resources_start_turn,
         }
         while (#orders > 0) do
             local dt = coroutine.yield()
@@ -321,7 +325,7 @@ function Level:units_take_damage_unit(unit_id, damage, tag, attacker_id)
         local action_effect = TakeDamageEffectView(self.world)
         action_effect:set_scale(castle and 1.1 or 0.8)
         local effect_config = { from = vmath.vector3(unit_view.pos_new or unit_view.castle_pos), castle = castle,
-        value = -damage}
+                                value = -damage }
         if (attacker_id == -10000) then
             self.threads_mage.take_damage:add_action(action)
             self.threads_mage.take_damage:add_action(action_effect:animation_show(effect_config))
@@ -375,6 +379,56 @@ function Level:units_die_unit_move_to_next_castle(id)
         COMMON.w("no unit view for die.Is it castle?", "LEVEL")
     end
     -- end)
+end
+
+function Level:resources_change_gold_panel_change(value)
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+    ctx.data.views.money_panel:value_add(value)
+    ctx:remove()
+
+end
+
+function Level:resources_change_mana_panel_change(value)
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+    ctx.data.views.mana_panel:value_add(value)
+    ctx:remove()
+end
+
+function Level:resources_change_gold(data)
+    local thread = self.world.thread_sequence
+    if (data.tag == "startTurnRegen") then
+        local effect = ChangeGoldEffect(self.world)
+        local castle_pos = self.world:castle_idx_to_position(1)
+        thread = self.threads.resources_start_turn
+        self.threads.resources_start_turn:add_action(effect:animation_show({ from = castle_pos + vmath.vector3(-60, 50, 0.2), value = data.count }))
+    elseif (data.tag == "kill enemy") then
+        local effect = ChangeGoldEffect(self.world)
+        local unit_view = self:units_view_by_id(data.tagData.unit_id)
+        thread = self.threads.die
+        self.threads.die:add_action(effect:animation_show({ from = unit_view.pos_new, value = data.count }))
+    elseif (data.tag == "spawn unit") then
+        thread = self.threads.spawn
+    elseif (data.tag == "caravan") then
+        local effect = ChangeGoldEffect(self.world)
+        local castle_pos = self.world:castle_idx_to_position(1)
+        thread = self.threads.caravan_die
+        self.threads.caravan_die:add_action(effect:animation_show({ from = castle_pos + vmath.vector3(-100, 50, 0.2), value = data.count }))
+    end
+    thread:add_action(function()
+        self:resources_change_gold_panel_change(data.count)
+    end)
+end
+function Level:resources_change_mana(data)
+    local thread = self.world.thread_sequence
+    if (data.tag == "startTurnRegen") then
+        local effect = ChangeManaEffect(self.world)
+        local castle_pos = self.world:castle_idx_to_position(1)
+        self.threads.resources_start_turn:add_action(effect:animation_show({ from = castle_pos + vmath.vector3(60, 50, 0.2), value = data.count }))
+        thread = self.threads.resources_start_turn;
+    end
+    thread:add_action(function()
+        self:resources_change_mana_panel_change(data.count)
+    end)
 end
 
 function Level:castle_enemy_destroy()

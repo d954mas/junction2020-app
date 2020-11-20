@@ -178,6 +178,10 @@ function Processor:process_events(events, data)
             self.world.level_model:caravan_unload(assert(event.data.id))
         elseif event.name == "LEVEL_CARAVAN_DIED_MOVE_TO_NEXT_CASTLE" then
             self.world.level_model:caravan_unload(assert(event.data.id))
+        elseif event.name == "LEVEL_MONEY_CHANGE" then
+            self.world.level_model:resources_change_gold(event.data)
+        elseif event.name == "LEVEL_MANA_CHANGE" then
+            self.world.level_model:resources_change_mana(event.data)
         end
     end
 end

@@ -114,7 +114,7 @@ function View:animation_attack(defender_id)
     local action = ACTIONS.Sequence()
 
     local unit_type = self.haxe_unit_initial:getType()
-    if(unit_type == "KNIGHT" or unit_type == "SPEARMAN" or unit_type == "SPEARMAN") then
+    if(unit_type == "KNIGHT" or unit_type == "SPEARMAN" or unit_type == "SHIELD") then
         action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.inBack, v3 = true, from = self.pos, to = new_pos, time = 0.2 })
         action:add_action(ACTIONS.Tween { object = self.vh.root, property = "position", easing = TWEEN.easing.linear, v3 = true, from = new_pos, to = self.pos, time = 0.1 })
     else
@@ -131,9 +131,11 @@ function View:animation_attack(defender_id)
         if(not defender_view)then
             defender_view = self.world.level_model:castle_view_by_unit_id(defender_id)
         end
-        action_projectile:add_action(projectile:animation_fly({ dispose = true, from = start_pos, to = (defender_view.pos_new or defender_view.castle_pos) + vmath.vector3(0,15,0) }))
+        if(defender_view)then
+            action_projectile:add_action(projectile:animation_fly({ dispose = true, from = start_pos, to = (defender_view.pos_new or defender_view.castle_pos) + vmath.vector3(0,15,0) }))
 
-        action:add_action(action_projectile)
+            action:add_action(action_projectile)
+        end
     end
 
 

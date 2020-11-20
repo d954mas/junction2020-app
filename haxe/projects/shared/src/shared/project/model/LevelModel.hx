@@ -320,7 +320,7 @@ class LevelModel {
             } else {
                 EventHelper.levelUnitDied(world, unit.id);
                 if (unitModel.getOwnerId() > 0) {
-                    world.levelModel.playerModel.moneyChange(unitModel.getReward(), "kill enemy");
+                    world.levelModel.playerModel.moneyChange(unitModel.getReward(), "kill enemy",{unit_id:unit.id});
                 }
                 battleUnitModels.remove(unitModel);
             }

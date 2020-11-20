@@ -49,8 +49,8 @@ class EventHelper {
         world.eventEmit(LEVEL_NEXT_TURN);
     }
 
-    public static function levelMoneyChange(world:World, count:Int, tag:String):Void {
-        world.eventEmit(LEVEL_MONEY_CHANGE, {count:count, tag:tag});
+    public static function levelMoneyChange(world:World, count:Int, tag:String, ?tagData:Dynamic):Void {
+        world.eventEmit(LEVEL_MONEY_CHANGE, {count:count, tag:tag, tagData:tagData});
     }
 
     public static function levelManaChange(world:World, count:Int, tag:String):Void {

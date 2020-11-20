@@ -62,7 +62,7 @@ class ResourceUnitModel implements IBasicUnit {
     public function unloadResources() {
         if (canUnload()) {
             EventHelper.levelCaravanUnLoad(world, struct.id);
-            world.storageGet().level.player.money += struct.resources;
+            world.levelModel.playerModel.moneyChange(struct.resources,"caravan");
             struct.resources = 0;
         }
     }

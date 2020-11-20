@@ -38,8 +38,10 @@ class PlayerModel {
         if(world.levelModel.unitsSpawnUnit(0, unitType, amount)){
             world.speechBuilder.text("spawn " + unitType);
             world.levelModel.levelNextTurn();
+            return true;
         }else{
             world.speechBuilder.text("cant spawn " + unitType);
+            return false;
         }
     }
 
@@ -48,14 +50,14 @@ class PlayerModel {
     }
 
     //tag for visual. To understand how to show
-    public function moneyChange(value:Int, tag:String) {
+    public function moneyChange(value:Int, tag:String, ?tagData:Dynamic) {
         var level = world.storageGet().level;
         if (level == null) {throw "no level model for playerModel:moneyChange";}
         if (value == 0) {return;}
         if (level.player.money + value < 0) {throw "not enought money";}
 
         level.player.money += value;
-        EventHelper.levelMoneyChange(world, value, tag);
+        EventHelper.levelMoneyChange(world, value, tag,tagData);
     }
 
     public function canSpendMoney(value:Int) {

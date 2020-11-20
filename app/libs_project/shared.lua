@@ -5376,8 +5376,8 @@ end
 __shared_base_event_EventHelper.levelNextTurn = function(world) 
   world:eventEmit("LEVEL_NEXT_TURN");
 end
-__shared_base_event_EventHelper.levelMoneyChange = function(world,count,tag) 
-  world:eventEmit("LEVEL_MONEY_CHANGE", _hx_o({__fields__={count=true,tag=true},count=count,tag=tag}));
+__shared_base_event_EventHelper.levelMoneyChange = function(world,count,tag,tagData) 
+  world:eventEmit("LEVEL_MONEY_CHANGE", _hx_o({__fields__={count=true,tag=true,tagData=true},count=count,tag=tag,tagData=tagData}));
 end
 __shared_base_event_EventHelper.levelManaChange = function(world,count,tag) 
   world:eventEmit("LEVEL_MANA_CHANGE", _hx_o({__fields__={count=true,tag=true},count=count,tag=tag}));
@@ -6335,8 +6335,9 @@ __shared_project_intent_processors_IntentLevelProcessor.prototype.processIntent 
     local price1 = self.world.levelModel.playerModel:unitGetPrice(unitType);
     local cost = amount * price1;
     if (self.world.levelModel.playerModel:canSpendMoney(cost)) then 
-      self.world.levelModel.playerModel:moneyChange(-cost, "spawn unit");
-      self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount);
+      if (self.world.levelModel.playerModel:unitsSpawnUnit(unitType, amount) == true) then 
+        self.world.levelModel.playerModel:moneyChange(-cost, "spawn unit");
+      end;
     else
       self:ask(Std.string("not enought money.Need ") .. Std.string(price1));
     end;
@@ -6906,7 +6907,7 @@ __shared_project_model_LevelModel.prototype.removeDeadUnits = function(self)
     if (unit.type ~= "CASTLE") then 
       __shared_base_event_EventHelper.levelUnitDied(self.world, unit.id);
       if (unitModel:getOwnerId() > 0) then 
-        self.world.levelModel.playerModel:moneyChange(unitModel:getReward(), "kill enemy");
+        self.world.levelModel.playerModel:moneyChange(unitModel:getReward(), "kill enemy", _hx_o({__fields__={unit_id=true},unit_id=unit.id}));
       end;
       self.battleUnitModels:remove(unitModel);
     end;
@@ -7321,13 +7322,15 @@ __shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unit
   if (self.world.levelModel:unitsSpawnUnit(0, unitType, amount)) then 
     self.world.speechBuilder:text(Std.string("spawn ") .. Std.string(unitType));
     self.world.levelModel:levelNextTurn();
+    do return true end;
   else
     self.world.speechBuilder:text(Std.string("cant spawn ") .. Std.string(unitType));
+    do return false end;
   end;
 end
 __shared_project_model_PlayerModel.prototype.modelRestore = function(self) 
 end
-__shared_project_model_PlayerModel.prototype.moneyChange = function(self,value,tag) 
+__shared_project_model_PlayerModel.prototype.moneyChange = function(self,value,tag,tagData) 
   local level = self.world:storageGet().level;
   if (level == nil) then 
     _G.error("no level model for playerModel:moneyChange",0);
@@ -7340,7 +7343,7 @@ __shared_project_model_PlayerModel.prototype.moneyChange = function(self,value,t
   end;
   local level1 = level.player;
   level1.money = level1.money + value;
-  __shared_base_event_EventHelper.levelMoneyChange(self.world, value, tag);
+  __shared_base_event_EventHelper.levelMoneyChange(self.world, value, tag, tagData);
 end
 __shared_project_model_PlayerModel.prototype.canSpendMoney = function(self,value) 
   local level = self.world:storageGet().level;
@@ -7908,8 +7911,7 @@ end
 __shared_project_model_units_ResourceUnitModel.prototype.unloadResources = function(self) 
   if (self:canUnload()) then 
     __shared_base_event_EventHelper.levelCaravanUnLoad(self.world, self.struct.id);
-    local tmp = self.world:storageGet().level.player;
-    tmp.money = tmp.money + self.struct.resources;
+    self.world.levelModel.playerModel:moneyChange(self.struct.resources, "caravan");
     self.struct.resources = 0;
   end;
 end
