@@ -4,6 +4,12 @@ local ManaPanel = require "models.view.resources.mana_panel"
 local MoneyPanel = require "models.view.resources.money_panel"
 local WORLD = require "models.world"
 local GUI = require "libs_project.gui.gui"
+local COLORS_UTILS = require "richtext.color"
+
+local COLORS = {
+    ENABLE = vmath.vector4(1),
+    DISABLE = COLORS_UTILS.parse_hex("#1a1a1a")
+}
 
 local Script = COMMON.new_n28s()
 
@@ -33,6 +39,7 @@ function Script:bind_vh()
         mana_panel = ManaPanel("mana_panel", WORLD),
         money_panel = MoneyPanel("money_panel", WORLD),
         btn_help = GUI.ButtonIconTest("btn_help"),
+        btn_speed = GUI.ButtonIconTest("btn_speed"),
         btn_skip = GUI.ButtonIconTest("btn_skip"),
         btn_spawn_knight = GUI.ButtonScale("btn_spawn_knight"),
         btn_spawn_archer = GUI.ButtonScale("btn_spawn_archer"),
@@ -54,7 +61,7 @@ function Script:bind_vh()
 end
 
 function Script:init()
-    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI,self)
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI, self)
     COMMON.input_acquire()
     self:bind_vh()
     self:init_gui()
@@ -74,8 +81,8 @@ function Script:change_tab(tab)
 end
 
 function Script:init_gui()
-    self.views.mana_panel:value_add(HAXE_WRAPPER.resources_get_mana(),"",true)
-    self.views.money_panel:value_add(HAXE_WRAPPER.resources_get_money(),"",true)
+    self.views.mana_panel:value_add(HAXE_WRAPPER.resources_get_mana(), "", true)
+    self.views.money_panel:value_add(HAXE_WRAPPER.resources_get_money(), "", true)
 
     self.scheduler = COMMON.RX.CooperativeScheduler.create()
     self.subscriptions = COMMON.RX.SubscriptionsStorage()
@@ -84,8 +91,8 @@ function Script:init_gui()
     end))
     self:storage_changed()
 
-    self.views.btn_web_monetization:set_input_listener(function ()
-       WORLD.web_monetization:on_icon_clicked()
+    self.views.btn_web_monetization:set_input_listener(function()
+        WORLD.web_monetization:on_icon_clicked()
     end)
 
     self.views.btn_help:set_input_listener(function()
@@ -137,6 +144,14 @@ function Script:init_gui()
         interactive_canvas.send_text_query("level.spawn.caravan")
     end)
 
+    self.views.btn_speed:set_input_listener(function()
+        if (HAXE_WRAPPER.web_monetization_is()) then
+            WORLD:game_speed_next()
+            gui.set_text(self.views.btn_speed.vh.lbl, "Speed:" .. WORLD:game_speed_get())
+        end
+
+    end)
+
     gui.set_text(self.vh.price_archer, HAXE_WRAPPER.level_player_unit_get_price("ARCHER"))
     gui.set_text(self.vh.price_knight, HAXE_WRAPPER.level_player_unit_get_price("KNIGHT"))
     gui.set_text(self.vh.price_spearman, HAXE_WRAPPER.level_player_unit_get_price("SPEARMAN"))
@@ -149,10 +164,17 @@ function Script:init_gui()
     gui.set_text(self.vh.price_cast_caravan, HAXE_WRAPPER.level_player_mage_get_price("CARAVAN"))
 end
 
+function Script:on_monetization_changed()
+    local web_monetization = WORLD.web_monetization.web_monetization
+    local color = web_monetization and COLORS.ENABLE or COLORS.DISABLE
+    gui.set_color(self.vh.icon_web_monetization,color)
+    gui.set_text(self.views.btn_speed.vh.lbl, "Speed:" .. WORLD:game_speed_get())
+end
+
 function Script:storage_changed()
     gui.set_text(self.vh.lbl_turn, "TURN:" .. (HAXE_WRAPPER.level_turn_get() + 1))
-   -- self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
-   -- self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
+    -- self.views.mana_panel:set_value(HAXE_WRAPPER.resources_get_mana())
+    -- self.views.money_panel:set_value(HAXE_WRAPPER.resources_get_money())
 
     gui.set_text(self.vh.price_cast_fireball, HAXE_WRAPPER.level_player_mage_get_price("FIREBALL"))
     gui.set_text(self.vh.price_cast_ice, HAXE_WRAPPER.level_player_mage_get_price("ICE"))
@@ -192,6 +214,7 @@ function Script:on_input(action_id, action)
 
     self.views.btn_skip:on_input(action_id, action)
     self.views.btn_change:on_input(action_id, action)
+    self.views.btn_speed:on_input(action_id, action)
 end
 
 COMMON.N28S.register(Script)
