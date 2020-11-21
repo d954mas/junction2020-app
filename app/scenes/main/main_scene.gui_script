@@ -29,6 +29,7 @@ function Script:bind_vh()
     self.views = {
         mana_panel = ManaPanel("mana_panel", WORLD),
         money_panel = MoneyPanel("money_panel", WORLD),
+        btn_help = GUI.ButtonIconTest("btn_help"),
         btn_skip = GUI.ButtonIconTest("btn_skip"),
         btn_spawn_knight = GUI.ButtonScale("btn_spawn_knight"),
         btn_spawn_archer = GUI.ButtonScale("btn_spawn_archer"),
@@ -77,6 +78,9 @@ function Script:init_gui()
     end))
     self:storage_changed()
 
+    self.views.btn_help:set_input_listener(function()
+        interactive_canvas.send_text_query("help.modal.show")
+    end)
     self.views.btn_spawn_knight:set_input_listener(function()
         interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
     end)
@@ -159,6 +163,8 @@ function Script:update(dt)
 end
 
 function Script:on_input(action_id, action)
+    self.views.btn_help:on_input(action_id, action)
+
     self.views.btn_spawn_knight:on_input(action_id, action)
     self.views.btn_spawn_archer:on_input(action_id, action)
     self.views.btn_spawn_spearman:on_input(action_id, action)

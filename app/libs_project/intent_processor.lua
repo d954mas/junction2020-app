@@ -107,6 +107,12 @@ function Processor:process(data)
     end
 end
 
+function Processor:get_scene_by_name_in_event(name)
+    if (name == "help") then
+        return SM.SCENES.HELP_MODAL
+    end
+end
+
 function Processor:process_events(events, data)
     for _, event in ipairs(events) do
         print("process event:" .. event.name .. " " .. JSON.encode(event.data))
@@ -182,6 +188,25 @@ function Processor:process_events(events, data)
             self.world.level_model:resources_change_gold(event.data)
         elseif event.name == "LEVEL_MANA_CHANGE" then
             self.world.level_model:resources_change_mana(event.data)
+        elseif event.name == "MODAL_SHOW" then
+            self.world.thread_sequence:add_action(function()
+                local name = self:get_scene_by_name_in_event(event.data.name)
+                if (name and not SM:scene_stack_have(name)) then
+                    while (SM:is_loading()) do coroutine.yield() end
+                    SM:show(name)
+                    while (SM:is_loading()) do coroutine.yield() end
+                end
+            end)
+        elseif event.name == "MODAL_HIDE" then
+            self.world.thread_sequence:add_action(function()
+                while (SM:is_loading()) do coroutine.yield() end
+                local name = self:get_scene_by_name_in_event(event.data.name)
+                if (name and SM:scene_get_top(name)) then
+                    while (SM:is_loading()) do coroutine.yield() end
+                    SM:back(name)
+                    while (SM:is_loading()) do coroutine.yield() end
+                end
+            end)
         end
     end
 end

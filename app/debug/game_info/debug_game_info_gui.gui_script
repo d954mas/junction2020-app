@@ -18,288 +18,287 @@ local BaseGui = require "libs_project.scripts.base_gui_script"
 local Script = COMMON.CLASS("GuiScript", BaseGui)
 
 function Script:bind_vh()
-	self.vh = {
-		node_root = gui.get_node("root"),
-		tts_playing = gui.get_node("tts_playing"),
-		lbl_user_info = gui.get_node("lbl_user_info"),
-		lbl_contexts = gui.get_node("lbl_contexts"),
-		lbl_response = gui.get_node("lbl_response"),
-		lbl_game_speed = gui.get_node("lbl_game_speed"),
-		list_user_info = gui.get_node("list_user_info/bg"),
-		lbl_time_server = gui.get_node("lbl_time_server"),
-		lbl_time_client_delta = gui.get_node("lbl_time_client_delta"),
-		lbl_time = gui.get_node("lbl_time"),
-		list_response = gui.get_node("list_response/bg"),
-		cheats_root = gui.get_node("cheats_root"),
-		cheats_root_buttons = gui.get_node("cheats_root/buttons"),
-		text_input = {
-			root = gui.get_node("text_input"),
-			input = {
-				root = gui.get_node("text_input/input/bg"),
-				name = "text_input/input"
-			},
-			input_btn_send = {
-				root = gui.get_node("text_input/input_btn_send/bg"),
-				name = "text_input/input_btn_send"
-			},
-		},
+    self.vh = {
+        node_root = gui.get_node("root"),
+        tts_playing = gui.get_node("tts_playing"),
+        lbl_user_info = gui.get_node("lbl_user_info"),
+        lbl_contexts = gui.get_node("lbl_contexts"),
+        lbl_response = gui.get_node("lbl_response"),
+        lbl_game_speed = gui.get_node("lbl_game_speed"),
+        list_user_info = gui.get_node("list_user_info/bg"),
+        lbl_time_server = gui.get_node("lbl_time_server"),
+        lbl_time_client_delta = gui.get_node("lbl_time_client_delta"),
+        lbl_time = gui.get_node("lbl_time"),
+        list_response = gui.get_node("list_response/bg"),
+        cheats_root = gui.get_node("cheats_root"),
+        cheats_root_buttons = gui.get_node("cheats_root/buttons"),
+        text_input = {
+            root = gui.get_node("text_input"),
+            input = {
+                root = gui.get_node("text_input/input/bg"),
+                name = "text_input/input"
+            },
+            input_btn_send = {
+                root = gui.get_node("text_input/input_btn_send/bg"),
+                name = "text_input/input_btn_send"
+            },
+        },
 
-		lbl_cpu = gui.get_node("lbl_cpu"),
-		lbl_memory = gui.get_node("lbl_memory"),
-		lbl_version = gui.get_node("lbl_version"),
-		lbl_tutorial = gui.get_node("lbl_tutorial"),
-		lbl_uuid = gui.get_node("lbl_uuid"),
-		lbl_dt = gui.get_node("lbl_dt"),
-	}
-	self.views = {
-		btn_storage = GUI.ButtonIconTest("btn_storage"),
-		btn_contexts = GUI.ButtonIconTest("btn_contexts"),
-		btn_response = GUI.ButtonIconTest("btn_response"),
-		btn_profile = GUI.ButtonIconTest("btn_profile"),
-		btn_debug_show = GUI.ButtonIconTest("btn_debug_show"),
-		btn_time_up = GUI.ButtonIconTest("btn_time_up"),
-		btn_time_down = GUI.ButtonIconTest("btn_time_down"),
-		btn_cheats = GUI.ButtonIconTest("btn_cheats"),
-		cheats = {
-			btn_enable = GUI.ButtonIconTest("cheats_root/btn_enable"),
-			btn_money_add = GUI.ButtonIconTest("cheats_root/buttons/btn_money_add"),
-			btn_mana_add = GUI.ButtonIconTest("cheats_root/buttons/btn_mana_add"),
-			btn_restore_hp = GUI.ButtonIconTest("cheats_root/buttons/btn_restore_hp"),
-			btn_kill_all_enemies = GUI.ButtonIconTest("cheats_root/buttons/btn_kill_all_enemies"),
-		}
-	}
+        lbl_cpu = gui.get_node("lbl_cpu"),
+        lbl_memory = gui.get_node("lbl_memory"),
+        lbl_version = gui.get_node("lbl_version"),
+        lbl_tutorial = gui.get_node("lbl_tutorial"),
+        lbl_uuid = gui.get_node("lbl_uuid"),
+        lbl_dt = gui.get_node("lbl_dt"),
+    }
+    self.views = {
+        btn_storage = GUI.ButtonIconTest("btn_storage"),
+        btn_contexts = GUI.ButtonIconTest("btn_contexts"),
+        btn_response = GUI.ButtonIconTest("btn_response"),
+        btn_profile = GUI.ButtonIconTest("btn_profile"),
+        btn_debug_show = GUI.ButtonIconTest("btn_debug_show"),
+        btn_time_up = GUI.ButtonIconTest("btn_time_up"),
+        btn_time_down = GUI.ButtonIconTest("btn_time_down"),
+        btn_cheats = GUI.ButtonIconTest("btn_cheats"),
+        cheats = {
+            btn_enable = GUI.ButtonIconTest("cheats_root/btn_enable"),
+            btn_money_add = GUI.ButtonIconTest("cheats_root/buttons/btn_money_add"),
+            btn_mana_add = GUI.ButtonIconTest("cheats_root/buttons/btn_mana_add"),
+            btn_restore_hp = GUI.ButtonIconTest("cheats_root/buttons/btn_restore_hp"),
+            btn_kill_all_enemies = GUI.ButtonIconTest("cheats_root/buttons/btn_kill_all_enemies"),
+        }
+    }
 
-	self.list_storage_data = {
-		"lbl_user_info"
-	}
-	self.list_response_data = {
-		"lbl_response"
-	}
+    self.list_storage_data = {
+        "lbl_user_info"
+    }
+    self.list_response_data = {
+        "lbl_response"
+    }
 
-	gui.set_enabled(self.vh.list_user_info, false)
-	gui.set_enabled(self.vh.list_response, false)
-	gui.set_enabled(self.vh.lbl_contexts, false)
-	gui.set_enabled(self.vh.cheats_root, false)
-	gui.set_enabled(self.vh.text_input.root, COMMON.CONSTANTS.SHOW_TEXT_INPUT)
+    gui.set_enabled(self.vh.list_user_info, false)
+    gui.set_enabled(self.vh.list_response, false)
+    gui.set_enabled(self.vh.lbl_contexts, false)
+    gui.set_enabled(self.vh.cheats_root, false)
+    gui.set_enabled(self.vh.text_input.root, COMMON.CONSTANTS.SHOW_TEXT_INPUT)
 
-	if(not COMMON.CONSTANTS.HTML5)then
-		gui.set_position(self.views.btn_debug_show.vh.root,vmath.vector3(1240,650,0))
-	end
+    if (not COMMON.CONSTANTS.HTML5) then
+        gui.set_position(self.views.btn_debug_show.vh.root, vmath.vector3(1184, 30, 0))
+    else
+        gui.set_enabled(self.views.btn_debug_show.vh.root, false)
+    end
 
-	self.views.btn_debug_show:set_input_listener(function()
-		interactive_canvas.send_text_query(INTENTS.INTENTS.DEBUG_TOGGLE);
-	end)
-	self.views.btn_storage:set_input_listener(function()
-		gui.set_enabled(self.vh.list_user_info, not gui.is_enabled(self.vh.list_user_info))
-	end)
-	self.views.btn_response:set_input_listener(function()
-		gui.set_enabled(self.vh.list_response, not gui.is_enabled(self.vh.list_response))
-	end)
-	self.views.btn_contexts:set_input_listener(function()
-		gui.set_enabled(self.vh.lbl_contexts, not gui.is_enabled(self.vh.lbl_contexts))
-	end)
-	self.views.btn_profile:set_input_listener(function()
-		self.views.btn_profile.show_profiler = not self.views.btn_profile.show_profiler
-		profiler.set_ui_vsync_wait_visible(false)
-		profiler.enable_ui(self.views.btn_profile.show_profiler)
-	end)
-	self.views.btn_time_up:set_input_listener(function()
-		local scale = 0.1
-		if self.speed_game >= 1 then
-			scale = 0.25
-		end
-		self.speed_game = self.speed_game + scale
-		self.speed_game_changed = true
-	end)
-	self.views.btn_time_down:set_input_listener(function()
-		local scale = 0.1
-		if self.speed_game > 1 then
-			scale = 0.25
-		end
-		self.speed_game = math.max(0.1, self.speed_game - scale)
-		self.speed_game_changed = true
-	end)
-	--region cheats
-	self.views.btn_cheats:set_input_listener(function()
-		gui.set_enabled(self.vh.cheats_root, not gui.is_enabled(self.vh.cheats_root))
-	end)
-	self.views.cheats.btn_enable:set_input_listener(function()
-		interactive_canvas.send_text_query(DEBUG_INFO.cheatsEnabled and INTENTS.INTENTS.CHEATS_DISABLE or INTENTS.INTENTS.CHEATS_ENABLE)
-	end)
-	self.views.cheats.btn_money_add:set_input_listener(function()
-		interactive_canvas.send_text_query("cheats.money.add")
-	end)
-	self.views.cheats.btn_mana_add:set_input_listener(function()
-		interactive_canvas.send_text_query("cheats.mana.add")
-	end)
-	self.views.cheats.btn_restore_hp:set_input_listener(function()
-		interactive_canvas.send_text_query("cheats.restore_hp")
-	end)
-	self.views.cheats.btn_kill_all_enemies:set_input_listener(function()
-		interactive_canvas.send_text_query("cheats.kill_all_enemies")
-	end)
+    self.views.btn_debug_show:set_input_listener(function()
+        interactive_canvas.send_text_query(INTENTS.INTENTS.DEBUG_TOGGLE);
+    end)
+    self.views.btn_storage:set_input_listener(function()
+        gui.set_enabled(self.vh.list_user_info, not gui.is_enabled(self.vh.list_user_info))
+    end)
+    self.views.btn_response:set_input_listener(function()
+        gui.set_enabled(self.vh.list_response, not gui.is_enabled(self.vh.list_response))
+    end)
+    self.views.btn_contexts:set_input_listener(function()
+        gui.set_enabled(self.vh.lbl_contexts, not gui.is_enabled(self.vh.lbl_contexts))
+    end)
+    self.views.btn_profile:set_input_listener(function()
+        self.views.btn_profile.show_profiler = not self.views.btn_profile.show_profiler
+        profiler.set_ui_vsync_wait_visible(false)
+        profiler.enable_ui(self.views.btn_profile.show_profiler)
+    end)
+    self.views.btn_time_up:set_input_listener(function()
+        local scale = 0.1
+        if self.speed_game >= 1 then
+            scale = 0.25
+        end
+        self.speed_game = self.speed_game + scale
+        self.speed_game_changed = true
+    end)
+    self.views.btn_time_down:set_input_listener(function()
+        local scale = 0.1
+        if self.speed_game > 1 then
+            scale = 0.25
+        end
+        self.speed_game = math.max(0.1, self.speed_game - scale)
+        self.speed_game_changed = true
+    end)
+    --region cheats
+    self.views.btn_cheats:set_input_listener(function()
+        gui.set_enabled(self.vh.cheats_root, not gui.is_enabled(self.vh.cheats_root))
+    end)
+    self.views.cheats.btn_enable:set_input_listener(function()
+        interactive_canvas.send_text_query(DEBUG_INFO.cheatsEnabled and INTENTS.INTENTS.CHEATS_DISABLE or INTENTS.INTENTS.CHEATS_ENABLE)
+    end)
+    self.views.cheats.btn_money_add:set_input_listener(function()
+        interactive_canvas.send_text_query("cheats.money.add")
+    end)
+    self.views.cheats.btn_mana_add:set_input_listener(function()
+        interactive_canvas.send_text_query("cheats.mana.add")
+    end)
+    self.views.cheats.btn_restore_hp:set_input_listener(function()
+        interactive_canvas.send_text_query("cheats.restore_hp")
+    end)
+    self.views.cheats.btn_kill_all_enemies:set_input_listener(function()
+        interactive_canvas.send_text_query("cheats.kill_all_enemies")
+    end)
 
 
-	
-	--endregion
+
+    --endregion
 end
 
 function Script:on_storage_changed()
-	local tutorial = ""
-	local current = HAXE_WRAPER.tutorial_get_active()
-	for _, def in ipairs(current) do
-		tutorial = tutorial .. string.format("%s part:%s\n", def.id, def.currentPart)
-	end
-	gui.set_text(self.vh.lbl_tutorial, "" or tutorial)
+    local tutorial = ""
+    local current = HAXE_WRAPER.tutorial_get_active()
+    for _, def in ipairs(current) do
+        tutorial = tutorial .. string.format("%s part:%s\n", def.id, def.currentPart)
+    end
+    gui.set_text(self.vh.lbl_tutorial, "" or tutorial)
 end
 
 function Script:init()
-	BaseGui.init(self)
-	gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.DEBUG)
-	COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.DEBUG_GUI,self)
-	self:bind_vh()
-	self.speed_game = 1
-	self.input = COMMON.INPUT()
-	self.input.acquire()
-	self.input:add(COMMON.HASHES.INPUT_TOGGLE_DEBUG_GAME_INFO_GUI, self.input_toggle_gui_visible, true)
-	self.show = true
-	self:input_toggle_gui_visible()
-	local ctx = lua_script_instance.Get()
-	self.subscription = COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):subscribe(
-			function()
-				local id = COMMON.CONTEXT:set_context_top_by_instance(ctx)
-				self:on_storage_changed()
-				COMMON.CONTEXT:remove_context_top(id)
-			end
-	)
+    BaseGui.init(self)
+    gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.DEBUG)
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.DEBUG_GUI, self)
+    self:bind_vh()
+    self.speed_game = 1
+    self.input = COMMON.INPUT()
+    self.input.acquire()
+    self.input:add(COMMON.HASHES.INPUT_TOGGLE_DEBUG_GAME_INFO_GUI, self.input_toggle_gui_visible, true)
+    self.show = true
+    self:input_toggle_gui_visible()
+    local ctx = lua_script_instance.Get()
+    self.subscription = COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):subscribe(
+            function()
+                local id = COMMON.CONTEXT:set_context_top_by_instance(ctx)
+                self:on_storage_changed()
+                COMMON.CONTEXT:remove_context_top(id)
+            end
+    )
 end
 
 function Script:update(dt)
-	gui.set_text(self.vh.lbl_dt,STRING_FORMAT("%0.2f", dt * 1000))
+    gui.set_text(self.vh.lbl_dt, STRING_FORMAT("%0.2f", dt * 1000))
 
-	if (not self._set_version and SPEECH.shared) then
-		gui.set_text(self.vh.lbl_version, "" or "version: " .. sys.get_config("project.version") .. " (" .. DEBUG_INFO.version_time .. " )")
-		gui.set_text(self.vh.lbl_uuid, string.format("uuid:%s", HAXE_WRAPER.user_get_uuid()))
-		self._set_version = true
-	end
+    if (not self._set_version and SPEECH.shared) then
+        gui.set_text(self.vh.lbl_version, "" or "version: " .. sys.get_config("project.version") .. " (" .. DEBUG_INFO.version_time .. " )")
+        gui.set_text(self.vh.lbl_uuid, string.format("uuid:%s", HAXE_WRAPER.user_get_uuid()))
+        self._set_version = true
+    end
 
-	DEBUG_INFO.update_frame(dt)
-	--gui.set_text(self.vh.lbl_speech_time, string.format("Speech:%s\nShared:%s\n         dt:%s", DEBUG_INFO.start_speech_time,
-		--	DEBUG_INFO.start_shared_time, DEBUG_INFO.speech_shared_dt_time))
+    DEBUG_INFO.update_frame(dt)
+    --gui.set_text(self.vh.lbl_speech_time, string.format("Speech:%s\nShared:%s\n         dt:%s", DEBUG_INFO.start_speech_time,
+    --	DEBUG_INFO.start_shared_time, DEBUG_INFO.speech_shared_dt_time))
 
-	if self.show then
-		DEBUG_INFO.update(dt)
-		DEBUG_INFO.update_contexts()
-		DEBUG_INFO.update_storage_info()
-		gui.set_enabled(self.vh.tts_playing, DEBUG_INFO.tts_playing)
-		gui.set_text(self.vh.lbl_user_info, DEBUG_INFO.storage_info)
-		gui.set_text(self.vh.lbl_contexts, DEBUG_INFO.contexts)
-		gui.set_text(self.vh.lbl_response, DEBUG_INFO.response_last)
-		gui.set_text(self.vh.lbl_time_server, "Time server:" .. DEBUG_INFO.time_server)
-		--gui.set_text(self.vh.lbl_google_info, "GOOGLE\nmode:" .. DEBUG_INFO.google.listening_mode .. "\ndata:" .. JSON.encode(DEBUG_INFO.google.phrase_matched))
-		gui.set_text(self.vh.lbl_time_client_delta, "Time delta:" .. DEBUG_INFO.time_client_delta)
-		gui.set_text(self.vh.lbl_time, "Time:" .. DEBUG_INFO.time)
-		gui.set_text(self.vh.lbl_game_speed, string.format("Speed:%.2f", self.speed_game))
-		gui.set_text(gui.get_node("cheats_root/btn_enable/lbl"), DEBUG_INFO.cheatsEnabled and "Disable" or "Enable")
-		self:gui_list_user_info_update_size()
-		self:gui_list_response_update_size()
+    if self.show then
+        DEBUG_INFO.update(dt)
+        DEBUG_INFO.update_contexts()
+        DEBUG_INFO.update_storage_info()
+        gui.set_enabled(self.vh.tts_playing, DEBUG_INFO.tts_playing)
+        gui.set_text(self.vh.lbl_user_info, DEBUG_INFO.storage_info)
+        gui.set_text(self.vh.lbl_contexts, DEBUG_INFO.contexts)
+        gui.set_text(self.vh.lbl_response, DEBUG_INFO.response_last)
+        gui.set_text(self.vh.lbl_time_server, "Time server:" .. DEBUG_INFO.time_server)
+        --gui.set_text(self.vh.lbl_google_info, "GOOGLE\nmode:" .. DEBUG_INFO.google.listening_mode .. "\ndata:" .. JSON.encode(DEBUG_INFO.google.phrase_matched))
+        gui.set_text(self.vh.lbl_time_client_delta, "Time delta:" .. DEBUG_INFO.time_client_delta)
+        gui.set_text(self.vh.lbl_time, "Time:" .. DEBUG_INFO.time)
+        gui.set_text(self.vh.lbl_game_speed, string.format("Speed:%.2f", self.speed_game))
+        gui.set_text(gui.get_node("cheats_root/btn_enable/lbl"), DEBUG_INFO.cheatsEnabled and "Disable" or "Enable")
+        self:gui_list_user_info_update_size()
+        self:gui_list_response_update_size()
 
-		gui.set_enabled(self.vh.cheats_root_buttons, DEBUG_INFO.cheatsEnabled)
-		gui.set_text(self.vh.lbl_cpu, "Cpu:" .. string.format("%.2f", profiler.get_cpu_usage()))
-		gui.set_text(self.vh.lbl_memory, "Mem:" .. string.format("%.2f Mb", profiler.get_memory_usage() / 1024 / 1024))
-	end
+        gui.set_enabled(self.vh.cheats_root_buttons, DEBUG_INFO.cheatsEnabled)
+        gui.set_text(self.vh.lbl_cpu, "Cpu:" .. string.format("%.2f", profiler.get_cpu_usage()))
+        gui.set_text(self.vh.lbl_memory, "Mem:" .. string.format("%.2f Mb", profiler.get_memory_usage() / 1024 / 1024))
+    end
 
-	local scene = SM.stack:peek()
-	if scene and scene ~= self.scene_current or self.speed_game_changed then
-		self.scene_current = scene
-		self.speed_game_changed = false
-		COMMON.GLOBAL.speed_game = self.speed_game
-		msg.post(scene._url, "set_time_step", { factor = self.speed_game, mode = 0 })
-	end
+    local scene = SM.stack:peek()
+    if scene and scene ~= self.scene_current or self.speed_game_changed then
+        self.scene_current = scene
+        self.speed_game_changed = false
+        COMMON.GLOBAL.speed_game = self.speed_game
+        msg.post(scene._url, "set_time_step", { factor = self.speed_game, mode = 0 })
+    end
 end
 
 function Script:gui_list_user_info_update_size()
-	local size = gui.get_text_metrics_from_node(self.vh.lbl_user_info)
-	local current_size = gui.get_size(self.vh.lbl_user_info)
-	local new_size_height = math.ceil(size.height * gui.get_scale(self.vh.lbl_user_info).y + 40)
-	if current_size.y ~= new_size_height then
-		gui.set_size(self.vh.lbl_user_info, vmath.vector3(current_size.x, new_size_height, 0))
-		local list = GOOEY.static_list("list_user_info", "list_user_info/stencil", self.list_storage_data, nil, nil, nil, function()
-		end)
-		list.items = nil
-		GOOEY.static_list("list_user_info", "list_user_info/stencil", self.list_storage_data, nil, nil, nil, function()
-		end)
-	end
+    local size = gui.get_text_metrics_from_node(self.vh.lbl_user_info)
+    local current_size = gui.get_size(self.vh.lbl_user_info)
+    local new_size_height = math.ceil(size.height * gui.get_scale(self.vh.lbl_user_info).y + 40)
+    if current_size.y ~= new_size_height then
+        gui.set_size(self.vh.lbl_user_info, vmath.vector3(current_size.x, new_size_height, 0))
+        local list = GOOEY.static_list("list_user_info", "list_user_info/stencil", self.list_storage_data, nil, nil, nil, function()
+        end)
+        list.items = nil
+        GOOEY.static_list("list_user_info", "list_user_info/stencil", self.list_storage_data, nil, nil, nil, function()
+        end)
+    end
 end
 
 function Script:gui_list_response_update_size()
-	local size = gui.get_text_metrics_from_node(self.vh.lbl_response)
-	local current_size = gui.get_size(self.vh.lbl_response)
-	local new_size_height = math.ceil(size.height * gui.get_scale(self.vh.lbl_response).y + 40)
-	if current_size.y ~= new_size_height then
-		gui.set_size(self.vh.lbl_response, vmath.vector3(current_size.x, new_size_height, 0))
-		local list = GOOEY.static_list("list_response", "list_response/stencil", self.list_response_data, nil, nil, nil, function()
-		end)
-		list.items = nil
-		GOOEY.static_list("list_response", "list_response/stencil", self.list_response_data, nil, nil, nil, function()
-		end)
-	end
+    local size = gui.get_text_metrics_from_node(self.vh.lbl_response)
+    local current_size = gui.get_size(self.vh.lbl_response)
+    local new_size_height = math.ceil(size.height * gui.get_scale(self.vh.lbl_response).y + 40)
+    if current_size.y ~= new_size_height then
+        gui.set_size(self.vh.lbl_response, vmath.vector3(current_size.x, new_size_height, 0))
+        local list = GOOEY.static_list("list_response", "list_response/stencil", self.list_response_data, nil, nil, nil, function()
+        end)
+        list.items = nil
+        GOOEY.static_list("list_response", "list_response/stencil", self.list_response_data, nil, nil, nil, function()
+        end)
+    end
 end
 
 function Script:final()
-	COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.DEBUG_GUI)
-	self.input.release()
-	self.subscription:unsubscribe()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.DEBUG_GUI)
+    self.input.release()
+    self.subscription:unsubscribe()
 end
 
 function Script:input_toggle_gui_visible()
-	self.show = not self.show
-	gui.set_enabled(self.vh.node_root, self.show)
-	self.input.acquire()
+    self.show = not self.show
+    gui.set_enabled(self.vh.node_root, self.show)
+    self.input.acquire()
 end
 
 function Script:on_input(action_id, action)
-	self.input:on_input(self, action_id, action)
-	self.views.btn_debug_show:on_input(action_id, action)
-	local result = false
+    self.input:on_input(self, action_id, action)
+    self.views.btn_debug_show:on_input(action_id, action)
+    local result = false
 
+    if (self.show) then
+        result = result or self.views.btn_storage:on_input(action_id, action)
+        result = result or self.views.btn_response:on_input(action_id, action)
+        result = result or self.views.btn_contexts:on_input(action_id, action)
+        result = result or self.views.btn_profile:on_input(action_id, action)
+        result = result or self.views.btn_time_up:on_input(action_id, action)
+        result = result or self.views.btn_time_down:on_input(action_id, action)
+        result = result or self.views.btn_cheats:on_input(action_id, action)
 
-	if (self.show) then
-		result = result or self.views.btn_storage:on_input(action_id, action)
-		result = result or self.views.btn_response:on_input(action_id, action)
-		result = result or self.views.btn_contexts:on_input(action_id, action)
-		result = result or self.views.btn_profile:on_input(action_id, action)
-		result = result or self.views.btn_time_up:on_input(action_id, action)
-		result = result or self.views.btn_time_down:on_input(action_id, action)
-		result = result or self.views.btn_cheats:on_input(action_id, action)
+        result = result or self.views.cheats.btn_enable:on_input(action_id, action)
+        result = result or self.views.cheats.btn_kill_all_enemies:on_input(action_id, action)
+        result = result or self.views.cheats.btn_mana_add:on_input(action_id, action)
+        result = result or self.views.cheats.btn_money_add:on_input(action_id, action)
+        result = result or self.views.cheats.btn_restore_hp:on_input(action_id, action)
 
-		result = result or self.views.cheats.btn_enable:on_input(action_id, action)
-		result = result or self.views.cheats.btn_kill_all_enemies:on_input(action_id, action)
-		result = result or self.views.cheats.btn_mana_add:on_input(action_id, action)
-		result = result or self.views.cheats.btn_money_add:on_input(action_id, action)
-		result = result or self.views.cheats.btn_restore_hp:on_input(action_id, action)
+        if (DEBUG_INFO.cheatsEnabled) then
+            --result = result or self.views.cheats.btn_attack:on_input(action_id, action)
 
-		if (DEBUG_INFO.cheatsEnabled) then
-			--result = result or self.views.cheats.btn_attack:on_input(action_id, action)
-			
-		end
+        end
 
-
-
-		GOOEY.static_list("list_user_info", "list_user_info/stencil", self.list_storage_data, action_id, action, nil, function()
-		end)
-		GOOEY.static_list("list_response", "list_response/stencil", self.list_response_data, action_id, action, nil, function()
-		end)
-	end
-	local input = GOOEY_DIRTY.input(self.vh.text_input.input.name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, { empty_text = "" })
-	GOOEY_DIRTY.button(self.vh.text_input.input_btn_send.name, action_id, action, function()
-		local text = input.current_text
-		if text ~= "" then
-			input.set_text("")
-			interactive_canvas.send_text_query(text)
-		end
-	end)
-	return result
+        GOOEY.static_list("list_user_info", "list_user_info/stencil", self.list_storage_data, action_id, action, nil, function()
+        end)
+        GOOEY.static_list("list_response", "list_response/stencil", self.list_response_data, action_id, action, nil, function()
+        end)
+    end
+    local input = GOOEY_DIRTY.input(self.vh.text_input.input.name, gui.KEYBOARD_TYPE_DEFAULT, action_id, action, { empty_text = "" })
+    GOOEY_DIRTY.button(self.vh.text_input.input_btn_send.name, action_id, action, function()
+        local text = input.current_text
+        if text ~= "" then
+            input.set_text("")
+            interactive_canvas.send_text_query(text)
+        end
+    end)
+    return result
 end
 
 COMMON.N28S.register(Script)
