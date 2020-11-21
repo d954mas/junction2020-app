@@ -5367,6 +5367,12 @@ end
 
 __shared_base_event_EventHelper.new = {}
 __shared_base_event_EventHelper.__name__ = true
+__shared_base_event_EventHelper.modalShow = function(world,name) 
+  world:eventEmit("MODAL_SHOW", _hx_o({__fields__={name=true},name=name}));
+end
+__shared_base_event_EventHelper.modalHide = function(world,name) 
+  world:eventEmit("MODAL_HIDE", _hx_o({__fields__={name=true},name=name}));
+end
 __shared_base_event_EventHelper.levelNew = function(world) 
   world:eventEmit("LEVEL_NEW");
 end
@@ -6146,6 +6152,10 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("simple.spell.ice", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("simple.spell.upgrade_mana", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("simple.spell.upgrade_caravan", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("help.modal.show", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("help.modal.hide", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("help.modal.prev", _hx_tab_array({[0]="help_modal"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("help.modal.next", _hx_tab_array({[0]="help_modal"}, 1));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("lose.modal.restart", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("win.modal.restart", true);
@@ -6381,7 +6391,19 @@ end
 __shared_project_intent_processors_IntentModalProcessor.__name__ = true
 __shared_project_intent_processors_IntentModalProcessor.prototype = _hx_a();
 __shared_project_intent_processors_IntentModalProcessor.prototype.processIntent = function(self,intent,data) 
-  if (intent) == "lose.modal.restart" then 
+  if (intent) == "help.modal.hide" then 
+    self.world:contextDelete("help_modal");
+    __shared_base_event_EventHelper.modalHide(self.world, "help");
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "help.modal.next" then 
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "help.modal.prev" then 
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "help.modal.show" then 
+    self.world:contextChange("help_modal");
+    __shared_base_event_EventHelper.modalShow(self.world, "help");
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "lose.modal.restart" then 
     self:ask("restart");
     self.world.levelModel:restart();
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;

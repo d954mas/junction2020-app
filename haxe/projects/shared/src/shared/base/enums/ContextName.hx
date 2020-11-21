@@ -6,4 +6,5 @@ abstract ContextName(String) {
     var CHEATS = "cheats";
     var LOSE_MODAL = "lose_modal";
     var WIN_MODAL = "win_modal";
+    var HELP_MODAL = "help_modal";
 }

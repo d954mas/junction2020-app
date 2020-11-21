@@ -33,9 +33,20 @@ enum abstract ModelEventName(String) {
     var LEVEL_CAST_SPELL_START;
     var LEVEL_CAST_SPELL_END;
     var LEVEL_SPELL_ICE_END;
+
+    var MODAL_SHOW;
+    var MODAL_HIDE;
 }
 
 class EventHelper {
+
+    public static function modalShow(world:World, name:String):Void {
+        world.eventEmit(MODAL_SHOW, {name:name});
+    }
+
+    public static function modalHide(world:World, name:String):Void {
+        world.eventEmit(MODAL_HIDE, {name:name});
+    }
 
     public static function levelNew(world:World):Void {
         world.eventEmit(LEVEL_NEW);

@@ -47,6 +47,13 @@ enum abstract Intent(String) {
 
     var LOSE_MODAL_RESTART = "lose.modal.restart";
     var WIN_MODAL_RESTART = "win.modal.restart";
+
+
+    var HELP_MODAL_SHOW = "help.modal.show";
+    var HELP_MODAL_HIDE = "help.modal.hide";
+    var HELP_MODAL_NEXT = "help.modal.next";
+    var HELP_MODAL_PREV = "help.modal.prev";
+
 }
 
 typedef ModalCloseIntent = {
@@ -103,6 +110,13 @@ var intent:Intent;
         intentContexts[Intent.SIMPLE_SPELL_ICE] = [];
         intentContexts[Intent.SIMPLE_SPELL_UPGRADE_MANA] = [];
         intentContexts[Intent.SIMPLE_SPELL_UPGRADE_CARAVAN] = [];
+
+
+        intentContexts[Intent.HELP_MODAL_SHOW] = [];
+        intentContexts[Intent.HELP_MODAL_HIDE] = [];
+        intentContexts[Intent.HELP_MODAL_PREV] = [ContextName.HELP_MODAL];
+        intentContexts[Intent.HELP_MODAL_NEXT] = [ContextName.HELP_MODAL];
+
 
 
         ignoreTutorialCheck.set(Intent.MAIN_WELCOME, true);
