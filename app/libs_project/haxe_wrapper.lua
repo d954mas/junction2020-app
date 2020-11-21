@@ -134,6 +134,10 @@ end
 function M.resources_get_mana()
     return M.get_world().storage.level.player.mana
 end
+
+function M.web_monetization_is()
+    return M.get_world():webMonetizationIs()
+end
 return M
 
 

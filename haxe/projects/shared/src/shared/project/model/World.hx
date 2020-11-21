@@ -229,4 +229,8 @@ class World extends WorldBaseModel<StorageStruct> {
     public function getIntentIdx():Int {
         return storage.stat.intentIdx;
     }
+
+    public function webMonetizationIs():Bool {
+        return storage.profile.webMonetization;
+    }
 }

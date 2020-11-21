@@ -54,6 +54,10 @@ enum abstract Intent(String) {
     var HELP_MODAL_NEXT = "help.modal.next";
     var HELP_MODAL_PREV = "help.modal.prev";
 
+    //emulate web monetization on off
+    var WEB_MONETIZATION_DEBUG_DISABLE = "web_monetization.debug.disable";
+    var WEB_MONETIZATION_DEBUG_ENABLE = "web_monetization.debug.enable";
+
 }
 
 typedef ModalCloseIntent = {
@@ -90,10 +94,13 @@ var intent:Intent;
         intentContexts[Intent.DEBUG_TOGGLE] = [ContextName.DEV];
         intentContexts[Intent.CHEATS_ENABLE] = [ContextName.DEV];
         intentContexts[Intent.CHEATS_DISABLE] = [ContextName.DEV];
-        intentContexts[Intent.CHEATS_MANA_ADD] = [ContextName.DEV];
-        intentContexts[Intent.CHEATS_MONEY_ADD] = [ContextName.DEV];
-        intentContexts[Intent.CHEATS_KILL_ALL_ENEMIES] = [ContextName.DEV];
-        intentContexts[Intent.CHEATS_RESTORE_HP] = [ContextName.DEV];
+        intentContexts[Intent.CHEATS_MANA_ADD] = [ContextName.DEV,ContextName.CHEATS];
+        intentContexts[Intent.CHEATS_MONEY_ADD] = [ContextName.DEV,ContextName.CHEATS];
+        intentContexts[Intent.CHEATS_KILL_ALL_ENEMIES] = [ContextName.DEV,ContextName.CHEATS];
+        intentContexts[Intent.CHEATS_RESTORE_HP] = [ContextName.DEV,ContextName.CHEATS];
+
+        intentContexts[Intent.WEB_MONETIZATION_DEBUG_DISABLE] = [ContextName.CHEATS];
+        intentContexts[Intent.WEB_MONETIZATION_DEBUG_ENABLE] = [ContextName.CHEATS];
 
 
         intentContexts[Intent.TUTORIAL_NO] = [];
@@ -116,6 +123,8 @@ var intent:Intent;
         intentContexts[Intent.HELP_MODAL_HIDE] = [];
         intentContexts[Intent.HELP_MODAL_PREV] = [ContextName.HELP_MODAL];
         intentContexts[Intent.HELP_MODAL_NEXT] = [ContextName.HELP_MODAL];
+
+
 
 
 

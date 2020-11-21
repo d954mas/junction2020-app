@@ -3,6 +3,7 @@ local SPEECH = require "libs_project.speech"
 local IntentProcessor = require "libs_project.intent_processor"
 local ACTIONS = require "libs.actions.actions"
 local Level = require "models.level"
+local WebMonetization = require "models.web_monetization"
 ---@class World
 local World = COMMON.class("World")
 
@@ -18,6 +19,7 @@ function World:initialize()
 	self.subscription = COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STORAGE_UPDATED):go(self.scheduler):subscribe(function()
 		self:storage_changed()
 	end)
+	self.web_monetization = WebMonetization(self)
 
 	---@type nil|Level
 	self.level_model = nil
@@ -34,9 +36,11 @@ function World:level_restart()
 end
 
 function World:update(dt)
+	self.web_monetization:update(dt)
 	if(self.level_model)then
 		self.level_model:update(dt)
 	end
+
 	self.thread:update(dt)
 	self.scheduler:update(dt)
 end

@@ -6136,10 +6136,12 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("debug.toggle", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.enable", _hx_tab_array({[0]="dev"}, 1));
   __shared_project_enums_Intents.intentContexts:set("cheats.disable", _hx_tab_array({[0]="dev"}, 1));
-  __shared_project_enums_Intents.intentContexts:set("cheats.mana.add", _hx_tab_array({[0]="dev"}, 1));
-  __shared_project_enums_Intents.intentContexts:set("cheats.money.add", _hx_tab_array({[0]="dev"}, 1));
-  __shared_project_enums_Intents.intentContexts:set("cheats.kill_all_enemies", _hx_tab_array({[0]="dev"}, 1));
-  __shared_project_enums_Intents.intentContexts:set("cheats.restore_hp", _hx_tab_array({[0]="dev"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("cheats.mana.add", _hx_tab_array({[0]="dev", "cheats"}, 2));
+  __shared_project_enums_Intents.intentContexts:set("cheats.money.add", _hx_tab_array({[0]="dev", "cheats"}, 2));
+  __shared_project_enums_Intents.intentContexts:set("cheats.kill_all_enemies", _hx_tab_array({[0]="dev", "cheats"}, 2));
+  __shared_project_enums_Intents.intentContexts:set("cheats.restore_hp", _hx_tab_array({[0]="dev", "cheats"}, 2));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.debug.disable", _hx_tab_array({[0]="cheats"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.debug.enable", _hx_tab_array({[0]="cheats"}, 1));
   __shared_project_enums_Intents.intentContexts:set("tutorial.no", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("tutorial.yes", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.spawn.caravan", _hx_tab_array({}, 0));
@@ -7746,6 +7748,9 @@ end
 __shared_project_model_World.prototype.getIntentIdx = function(self) 
   do return self.storage.stat.intentIdx end
 end
+__shared_project_model_World.prototype.webMonetizationIs = function(self) 
+  do return self.storage.profile.webMonetization end
+end
 
 __shared_project_model_World.prototype.__class__ =  __shared_project_model_World
 __shared_project_model_World.__super__ = __shared_base_model_WorldBaseModel
@@ -7950,7 +7955,7 @@ __shared_project_storage_Storage.initNewStorage = function(data,force)
     force = true;
   end;
   if ((data.stat == nil) or force) then 
-    data.stat = _hx_o({__fields__={version=true,startGameCounter=true,intentIdx=true,platform=true,device=true,dayAfterInstall=true,gameConfigVersion=true,gameLocaleVersion=true,gameSharedVersion=true,gameBackendVersion=true,userLevel=true},version=3,startGameCounter=0,intentIdx=0,platform="sber",device="sberbox",dayAfterInstall=0,gameConfigVersion="",gameLocaleVersion="",gameSharedVersion="",gameBackendVersion="",userLevel=1});
+    data.stat = _hx_o({__fields__={version=true,startGameCounter=true,intentIdx=true,platform=true,device=true,dayAfterInstall=true,gameConfigVersion=true,gameLocaleVersion=true,gameSharedVersion=true,gameBackendVersion=true,userLevel=true},version=4,startGameCounter=0,intentIdx=0,platform="google",device="google",dayAfterInstall=0,gameConfigVersion="",gameLocaleVersion="",gameSharedVersion="",gameBackendVersion="",userLevel=1});
     data.iap = _hx_o({__fields__={current_iap=true,skuGoogle=true},current_iap="",skuGoogle=nil});
     local uuid = Uuid.v4();
     if ((data.profile ~= nil) and (data.profile.uuid ~= nil)) then 
@@ -7982,7 +7987,7 @@ __shared_project_storage_Storage.initNewStorage = function(data,force)
     if ((data.profile ~= nil) and (data.profile.firstLaunchTimestamp ~= nil)) then 
       firstLaunchTimestamp = data.profile.firstLaunchTimestamp;
     end;
-    data.profile = _hx_o({__fields__={cheatsEnabled=true,uuid=true,tag=true,isDev=true,conversationIdAtStart=true,conversationIdCurrent=true,currentVersion=true,dtdId=true,firstLaunchTimestamp=true},cheatsEnabled=false,uuid=uuid,tag=tag,isDev=isDev,conversationIdAtStart=idAtStart,conversationIdCurrent=idCurrent,currentVersion="",dtdId=Uuid.v4(),firstLaunchTimestamp=firstLaunchTimestamp});
+    data.profile = _hx_o({__fields__={cheatsEnabled=true,uuid=true,tag=true,isDev=true,conversationIdAtStart=true,conversationIdCurrent=true,currentVersion=true,dtdId=true,firstLaunchTimestamp=true,webMonetization=true},cheatsEnabled=false,uuid=uuid,tag=tag,isDev=isDev,conversationIdAtStart=idAtStart,conversationIdCurrent=idCurrent,currentVersion="",dtdId=Uuid.v4(),firstLaunchTimestamp=firstLaunchTimestamp,webMonetization=false});
     data.timers = _hx_o({__fields__={clientDeltaTime=true,serverLastTime=true,time=true,timerDelta=true},clientDeltaTime=0,serverLastTime=0,time=0,timerDelta=0});
     data.level = nil;
     data.serverStruct = _hx_e();
@@ -7995,10 +8000,10 @@ __shared_project_storage_Storage.migrations = function(data)
     __shared_project_storage_Storage.initNewStorage(data);
     do return end;
   end;
-  if (data.stat.version < 3) then 
+  if (data.stat.version < 4) then 
     __shared_project_storage_Storage.initNewStorage(data, true);
   end;
-  data.stat.version = 3;
+  data.stat.version = 4;
 end
 __shared_project_storage_Storage.restore = function(data) 
   local result = __haxe_Json.parse(data);

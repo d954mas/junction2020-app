@@ -68,6 +68,8 @@ var conversationIdAtStart:String;
 var conversationIdCurrent:String;
 var currentVersion:String;
 var firstLaunchTimestamp:Null<Int>;
+
+var webMonetization:Bool;
 }
 
 typedef ContinuousMatchConfigExpectedPhraseStruct = {
@@ -188,7 +190,7 @@ typedef ServerStruct = {
 
 //endregion
 class Storage {
-    private static inline var VERSION:Int = 3;
+    private static inline var VERSION:Int = 4;
 
     public static function initNewStorage(data:StorageStruct, force = true) {
         if (data.stat == null || force) {
@@ -196,8 +198,8 @@ class Storage {
                 version : VERSION,
                 startGameCounter:0,
                 intentIdx:0,
-                platform:"sber",
-                device:"sberbox",
+                platform:"google",
+                device:"google",
                 dayAfterInstall:0,
                 gameConfigVersion:"",
                 gameLocaleVersion:"",
@@ -249,6 +251,7 @@ class Storage {
                 currentVersion:"",
                 dtdId:dtdId,
                 firstLaunchTimestamp:firstLaunchTimestamp,
+                webMonetization:false
             }
             data.timers = {
                 clientDeltaTime:0,
@@ -270,7 +273,7 @@ class Storage {
             return;
         }
         //reset all data
-        if (data.stat.version < 3) {
+        if (data.stat.version < 4) {
             initNewStorage(data, true);
         }
 

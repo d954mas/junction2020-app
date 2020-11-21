@@ -1,9 +1,9 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1605954863965.7,
-          "clientDeltaTime": 0,
-          "serverLastTime": 1605954863965.7
+          "time": 1605988680912.3,
+          "serverLastTime": 1605988680912.3,
+          "clientDeltaTime": 0
      },
      "version": {
           "server": "dev",
@@ -15,38 +15,22 @@
      },
      "user": {
           "verification": "",
-          "locale": "en",
           "name": "name",
+          "locale": "en",
           "permisions":           {}
-     },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "84c09f84-a224-4781-96d0-5108663b963c",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "isDev": true,
-          "cheatsEnabled": true,
-          "conversationIdCurrent": "1111"
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 3,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 3140,
-          "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "sberbox",
-          "userLevel": 1,
-          "platform": "sber",
-          "gameConfigVersion": ""
      },
      "level": {
           "ice": 0,
           "lose": false,
+          "mageLevels": {
+               "ICE": 0,
+               "FIREBALL": 0,
+               "CARAVAN": 0,
+               "MANA": 0
+          },
+          "turnEnemyAI": 0,
+          "caravans":           [],
+          "unitIdx": 3,
           "enemy": {
                "unitLevels": {
                     "MAGE": 1,
@@ -56,17 +40,8 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "unitQueue":                [],
-               "id": 1
-          },
-          "turnEnemyAI": 0,
-          "caravans":           [],
-          "unitIdx": 3,
-          "mageLevels": {
-               "ICE": 0,
-               "FIREBALL": 0,
-               "CARAVAN": 0,
-               "MANA": 0
+               "id": 1,
+               "unitQueue":                []
           },
           "units": [
                {
@@ -75,8 +50,8 @@
                     "hp": 20,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "hpLvl": 0,
                     "type": "CASTLE",
+                    "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 0
                },
@@ -86,8 +61,8 @@
                     "hp": 20,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
-                    "hpLvl": 0,
                     "type": "CASTLE",
+                    "hpLvl": 0,
                     "ownerId": 0,
                     "reward": 0
                },
@@ -97,8 +72,8 @@
                     "hp": 20,
                     "roadPartIdx": 13000,
                     "attackLvl": 0,
-                    "hpLvl": 0,
                     "type": "CASTLE",
+                    "hpLvl": 0,
                     "ownerId": 1,
                     "reward": 0
                }
@@ -115,8 +90,8 @@
                "mana": 60,
                "id": 0,
                "money": 150,
-               "caravanLevel": 1,
-               "unitQueue":                []
+               "unitQueue":                [],
+               "caravanLevel": 1
           },
           "roads": [
                [
@@ -206,6 +181,32 @@
                }
           ],
           "caravanIdx": 0
+     },
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "222f0ac3-7b80-441c-9e98-ed0adbb779d7",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "cheatsEnabled": false,
+          "isDev": true,
+          "webMonetization": false,
+          "conversationIdCurrent": "1111"
+     },
+     "stat": {
+          "startGameCounter": 0,
+          "version": 4,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 18,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "google",
+          "userLevel": 1,
+          "platform": "google",
+          "gameConfigVersion": ""
      },
      "iap": {
           "current_iap": ""

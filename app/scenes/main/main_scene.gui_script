@@ -2,7 +2,7 @@ local COMMON = require "libs.common"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local ManaPanel = require "models.view.resources.mana_panel"
 local MoneyPanel = require "models.view.resources.money_panel"
-local WORLD = require "libs_project.words"
+local WORLD = require "models.world"
 local GUI = require "libs_project.gui.gui"
 
 local Script = COMMON.new_n28s()
@@ -11,6 +11,9 @@ function Script:bind_vh()
     self.vh = {
         root = gui.get_node("root"),
         lbl_turn = gui.get_node("lbl_turn"),
+
+        icon_web_monetization = gui.get_node("icon_web_monetization"),
+
         price_knight = gui.get_node("btn_spawn_knight/lbl_price"),
         price_archer = gui.get_node("btn_spawn_archer/lbl_price"),
         price_spearman = gui.get_node("btn_spawn_spearman/lbl_price"),
@@ -45,6 +48,8 @@ function Script:bind_vh()
         btn_send_caravan = GUI.ButtonScale("btn_send_caravan"),
 
         btn_change = GUI.ButtonIconTest("btn_change"),
+
+        btn_web_monetization = GUI.ButtonScale("icon_web_monetization")
     }
 end
 
@@ -54,6 +59,7 @@ function Script:init()
     self:bind_vh()
     self:init_gui()
     self:change_tab("units")
+    WORLD.web_monetization:on_changed()--game is loading check all
 end
 
 function Script:change_tab(tab)
@@ -77,6 +83,10 @@ function Script:init_gui()
         self:storage_changed()
     end))
     self:storage_changed()
+
+    self.views.btn_web_monetization:set_input_listener(function ()
+       WORLD.web_monetization:on_icon_clicked()
+    end)
 
     self.views.btn_help:set_input_listener(function()
         interactive_canvas.send_text_query("help.modal.show")
@@ -163,6 +173,8 @@ function Script:update(dt)
 end
 
 function Script:on_input(action_id, action)
+    self.views.btn_web_monetization:on_input(action_id, action)
+
     self.views.btn_help:on_input(action_id, action)
 
     self.views.btn_spawn_knight:on_input(action_id, action)
