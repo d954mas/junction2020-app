@@ -66,6 +66,8 @@ function Script:bind_vh()
             btn_mana_add = GUI.ButtonIconTest("cheats_root/buttons/btn_mana_add"),
             btn_restore_hp = GUI.ButtonIconTest("cheats_root/buttons/btn_restore_hp"),
             btn_kill_all_enemies = GUI.ButtonIconTest("cheats_root/buttons/btn_kill_all_enemies"),
+            btn_web_monetization_enable = GUI.ButtonIconTest("cheats_root/buttons/btn_web_monetization_enable"),
+            btn_web_monetization_disable = GUI.ButtonIconTest("cheats_root/buttons/btn_web_monetization_disable"),
         }
     }
 
@@ -87,6 +89,7 @@ function Script:bind_vh()
     else
         gui.set_enabled(self.views.btn_debug_show.vh.root, false)
     end
+
 
     self.views.btn_debug_show:set_input_listener(function()
         interactive_canvas.send_text_query(INTENTS.INTENTS.DEBUG_TOGGLE);
@@ -139,6 +142,13 @@ function Script:bind_vh()
     end)
     self.views.cheats.btn_kill_all_enemies:set_input_listener(function()
         interactive_canvas.send_text_query("cheats.kill_all_enemies")
+    end)
+
+    self.views.cheats.btn_web_monetization_enable:set_input_listener(function()
+        interactive_canvas.send_text_query("web_monetization.debug.enable")
+    end)
+    self.views.cheats.btn_web_monetization_disable:set_input_listener(function()
+        interactive_canvas.send_text_query("web_monetization.debug.disable")
     end)
 
 
@@ -279,6 +289,8 @@ function Script:on_input(action_id, action)
         result = result or self.views.cheats.btn_mana_add:on_input(action_id, action)
         result = result or self.views.cheats.btn_money_add:on_input(action_id, action)
         result = result or self.views.cheats.btn_restore_hp:on_input(action_id, action)
+        result = result or self.views.cheats.btn_web_monetization_disable:on_input(action_id, action)
+        result = result or self.views.cheats.btn_web_monetization_enable:on_input(action_id, action)
 
         if (DEBUG_INFO.cheatsEnabled) then
             --result = result or self.views.cheats.btn_attack:on_input(action_id, action)

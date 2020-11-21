@@ -99,8 +99,8 @@ var intent:Intent;
         intentContexts[Intent.CHEATS_KILL_ALL_ENEMIES] = [ContextName.DEV,ContextName.CHEATS];
         intentContexts[Intent.CHEATS_RESTORE_HP] = [ContextName.DEV,ContextName.CHEATS];
 
-        intentContexts[Intent.WEB_MONETIZATION_DEBUG_DISABLE] = [ContextName.CHEATS];
-        intentContexts[Intent.WEB_MONETIZATION_DEBUG_ENABLE] = [ContextName.CHEATS];
+        intentContexts[Intent.WEB_MONETIZATION_DEBUG_DISABLE] = [];
+        intentContexts[Intent.WEB_MONETIZATION_DEBUG_ENABLE] = [];
 
 
         intentContexts[Intent.TUTORIAL_NO] = [];

@@ -35,6 +35,12 @@ class IntentCheatsProcessor extends IntentSubProcessor {
             case Intent.CHEATS_KILL_ALL_ENEMIES:
                 ask(i18n.tr("kill all enemies"));
                 return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
+            case Intent.WEB_MONETIZATION_DEBUG_ENABLE:
+                world.storageGet().profile.webMonetization = true;
+                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
+            case Intent.WEB_MONETIZATION_DEBUG_DISABLE:
+                world.storageGet().profile.webMonetization = false;
+                return baseProcessor.getResult( {code : ModelOutputResultCode.SUCCESS});
             default: return null;
         }
         throw "no return for intent:" + intent;

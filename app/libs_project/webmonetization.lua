@@ -1,4 +1,5 @@
 local COMMON = require "libs.common"
+local SPEECH = require "libs_project.speech"
 local M = {}
 
 function M.init()
@@ -8,13 +9,9 @@ function M.init()
         print("event:" .. event)
         pprint(details)
         if event == webmonetization.EVENT_PENDING then
-            print("The user is trying to make a first payment")
         elseif event == webmonetization.EVENT_START then
-            print("The user has started paying")
         elseif event == webmonetization.EVENT_PROGRESS then
-            print("The user is still paying")
         elseif event == webmonetization.EVENT_STOP then
-            print("The user has stopped paying")
         end
     end)
 end

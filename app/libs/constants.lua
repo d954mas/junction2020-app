@@ -65,7 +65,7 @@ M.SHOP_TABS = {
 }
 
 M.WEBMONETIZATION = {
-    DEFAULT_IS_ENABLE = true
+    DEFAULT_IS_ENABLE = false
 }
 
 return M

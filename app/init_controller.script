@@ -40,7 +40,8 @@ end
 
 function Script:init()
     WEB_MONETIZATION.init()
-    print("is monetized:" .. tostring(WEB_MONETIZATION.is_monetized()))
+
+
     CAMERAS:init()
     self.thread = COMMON.ThreadManager()
     self.subscription = COMMON.RX.SubscriptionsStorage()
@@ -78,6 +79,9 @@ function Script:init()
                     COMMON.COROUTINES.coroutine_wait(0.25)
                 end
             end)
+
+            COMMON.COROUTINES.coroutine_wait(0.1)
+            interactive_canvas.send_text_query(WEB_MONETIZATION.is_monetized() and "web_monetization.debug.enable" or "web_monetization.debug.disable")
         end)
     else
         self.test_runner = require("tests.tests") -- run tests

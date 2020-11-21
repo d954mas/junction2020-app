@@ -6140,8 +6140,8 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("cheats.money.add", _hx_tab_array({[0]="dev", "cheats"}, 2));
   __shared_project_enums_Intents.intentContexts:set("cheats.kill_all_enemies", _hx_tab_array({[0]="dev", "cheats"}, 2));
   __shared_project_enums_Intents.intentContexts:set("cheats.restore_hp", _hx_tab_array({[0]="dev", "cheats"}, 2));
-  __shared_project_enums_Intents.intentContexts:set("web_monetization.debug.disable", _hx_tab_array({[0]="cheats"}, 1));
-  __shared_project_enums_Intents.intentContexts:set("web_monetization.debug.enable", _hx_tab_array({[0]="cheats"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.debug.disable", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.debug.enable", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("tutorial.no", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("tutorial.yes", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("level.spawn.caravan", _hx_tab_array({}, 0));
@@ -6277,6 +6277,12 @@ __shared_project_intent_processors_IntentCheatsProcessor.prototype.processIntent
     if (not self.world:isDev()) then 
       _G.error("cheats only work in dev mode",0);
     end;
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "web_monetization.debug.disable" then 
+    self.world:storageGet().profile.webMonetization = false;
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "web_monetization.debug.enable" then 
+    self.world:storageGet().profile.webMonetization = true;
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;else
   do return nil end; end;
 end
