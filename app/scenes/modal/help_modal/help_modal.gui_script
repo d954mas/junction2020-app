@@ -1,0 +1,49 @@
+local COMMON = require "libs.common"
+local GUI = require "libs_project.gui.gui"
+
+local Script = COMMON.new_n28s()
+
+function Script:bind_vh()
+    self.vh = {
+        root = gui.get_node("root"),
+    }
+    self.views = {
+        btn_close = GUI.ButtonIconTest("btn_close"),
+        btn_prev = GUI.ButtonIconTest("btn_prev"),
+        btn_next = GUI.ButtonIconTest("btn_next"),
+    }
+end
+
+function Script:init()
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.HELP_MODAL_GUI)
+    COMMON.input_acquire()
+    self:bind_vh()
+    self:init_gui()
+end
+
+function Script:init_gui()
+    gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.MODAL_5)
+    self.views.btn_close:set_input_listener(function()
+        interactive_canvas.send_text_query("help.modal.hide")
+    end)
+    self.views.btn_next:set_input_listener(function()
+        interactive_canvas.send_text_query("help.modal.next")
+    end)
+    self.views.btn_prev:set_input_listener(function()
+        interactive_canvas.send_text_query("help.modal.prev")
+    end)
+end
+
+function Script:final()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.HELP_MODAL_GUI)
+    COMMON.input_release()
+end
+
+
+function Script:on_input(action_id, action)
+    self.views.btn_close:on_input(action_id, action)
+    self.views.btn_next:on_input(action_id, action)
+    self.views.btn_prev:on_input(action_id, action)
+end
+
+COMMON.N28S.register(Script)
