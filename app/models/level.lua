@@ -66,6 +66,11 @@ function Level:animation_turn_start()
     while (self.animation_sequence.current ~= nil) do
         self.animation_sequence:update(0.33)
     end
+
+    self.world.turn_is_active = true
+    local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+    ctx.data:on_turn_start()
+    ctx:remove()
 end
 
 function Level:animation_spell_start(type)
@@ -215,6 +220,10 @@ function Level:animation_turn_end()
         while (self.animation_sequence.current ~= nil) do
             coroutine.yield()
         end
+        self.world.turn_is_active = false
+        local ctx = COMMON.CONTEXT:set_context_top_by_name(COMMON.CONTEXT.NAMES.MAIN_SCENE_GUI)
+        ctx.data:on_turn_end()
+        ctx:remove()
     end)
 end
 

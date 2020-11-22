@@ -21,9 +21,14 @@ function World:initialize()
     end)
     self.web_monetization = WebMonetization(self)
     self.game_speed = 1
+    self.turn_is_active = false
 
     ---@type nil|Level
     self.level_model = nil
+end
+
+function World:user_is_can_act()
+    return not self.turn_is_active and self.level_model.animation_sequence:is_empty()
 end
 
 function World:level_new()

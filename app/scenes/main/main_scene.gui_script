@@ -40,7 +40,7 @@ function Script:bind_vh()
         money_panel = MoneyPanel("money_panel", WORLD),
         btn_help = GUI.ButtonIconTest("btn_help"),
         btn_speed = GUI.ButtonIconTest("btn_speed"),
-        btn_skip = GUI.ButtonIconTest("btn_skip"),
+        btn_skip = GUI.ButtonScale("btn_skip"),
         btn_spawn_knight = GUI.ButtonScale("btn_spawn_knight"),
         btn_spawn_archer = GUI.ButtonScale("btn_spawn_archer"),
         btn_spawn_spearman = GUI.ButtonScale("btn_spawn_spearman"),
@@ -54,10 +54,11 @@ function Script:bind_vh()
 
         btn_send_caravan = GUI.ButtonScale("btn_send_caravan"),
 
-        btn_change = GUI.ButtonIconTest("btn_change"),
+        btn_change = GUI.ButtonScale("btn_change"),
 
         btn_web_monetization = GUI.ButtonScale("icon_web_monetization")
     }
+
 end
 
 function Script:init()
@@ -69,14 +70,23 @@ function Script:init()
     WORLD.web_monetization:on_changed()--game is loading check all
 end
 
+function Script:on_turn_start()
+    gui.play_flipbook(gui.get_node(self.views.btn_skip.template_name .. "/icon"),"button_skip_off")
+end
+function Script:on_turn_end()
+    gui.play_flipbook(gui.get_node(self.views.btn_skip.template_name .. "/icon"),"button_skip_on")
+end
+
 function Script:change_tab(tab)
     self.tab = tab
     if (tab == "units") then
         gui.set_enabled(self.vh.panel_mage, false)
         gui.set_enabled(self.vh.panel_units, true)
+        gui.play_flipbook(gui.get_node(self.views.btn_change.template_name .. "/" .. "icon"),"button_units_skills_1")
     elseif (tab == "skills") then
         gui.set_enabled(self.vh.panel_mage, true)
         gui.set_enabled(self.vh.panel_units, false)
+        gui.play_flipbook(gui.get_node(self.views.btn_change.template_name .. "/" .. "icon"),"button_units_skills_2")
     end
 end
 
