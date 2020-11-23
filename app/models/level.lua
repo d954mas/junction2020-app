@@ -45,6 +45,12 @@ function Level:initialize(world)
     CAMERAS.battle_camera:set_position(vmath.vector3((640 or self.views.castles[#self.views.castles - 1].castle_pos.x) + 116, 340, 0))
 end
 
+function Level:skip_to_next_turn()
+    while (self.animation_sequence.current ~= nil) do
+        self.animation_sequence:update(0.33)
+    end
+end
+
 function Level:animation_turn_start()
     self.threads = {
         die = ACTIONS.Parallel(),

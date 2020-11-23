@@ -109,26 +109,43 @@ function Script:init_gui()
         interactive_canvas.send_text_query("help.modal.show")
     end)
     self.views.btn_spawn_knight:set_input_listener(function()
-        interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
+        end
     end)
     self.views.btn_skip:set_input_listener(function()
-        interactive_canvas.send_text_query("level.turn.skip")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.turn.skip")
+        else
+            --skip current turn animations
+            WORLD.level_model:skip_to_next_turn()
+        end
     end)
     self.views.btn_spawn_archer:set_input_listener(function()
-        interactive_canvas.send_text_query("level.spawn.unit ARCHER")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.spawn.unit ARCHER")
+        end
     end)
     self.views.btn_spawn_spearman:set_input_listener(function()
-        interactive_canvas.send_text_query("level.spawn.unit SPEARMAN")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.spawn.unit SPEARMAN")
+        end
     end)
     self.views.btn_spawn_mage:set_input_listener(function()
-        interactive_canvas.send_text_query("level.spawn.unit MAGE")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.spawn.unit MAGE")
+        end
     end)
     self.views.btn_spawn_shield:set_input_listener(function()
-        interactive_canvas.send_text_query("level.spawn.unit SHIELD")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.spawn.unit SHIELD")
+        end
     end)
 
     self.views.btn_cast_fireball:set_input_listener(function()
-        interactive_canvas.send_text_query("level.cast FIREBALL")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.cast FIREBALL")
+        end
     end)
     self.views.btn_change:set_input_listener(function()
         if (self.tab == "units") then
@@ -139,19 +156,27 @@ function Script:init_gui()
     end)
 
     self.views.btn_cast_ice:set_input_listener(function()
-        interactive_canvas.send_text_query("level.cast ICE")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.cast ICE")
+        end
     end)
 
     self.views.btn_cast_mana:set_input_listener(function()
-        interactive_canvas.send_text_query("level.cast MANA")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.cast MANA")
+        end
     end)
 
     self.views.btn_cast_caravan:set_input_listener(function()
-        interactive_canvas.send_text_query("level.cast CARAVAN")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.cast CARAVAN")
+        end
     end)
 
     self.views.btn_send_caravan:set_input_listener(function()
-        interactive_canvas.send_text_query("level.spawn.caravan")
+        if(WORLD:user_is_can_act())then
+            interactive_canvas.send_text_query("level.spawn.caravan")
+        end
     end)
 
     self.views.btn_speed:set_input_listener(function()

@@ -28,7 +28,7 @@ function World:initialize()
 end
 
 function World:user_is_can_act()
-    return not self.turn_is_active and self.level_model.animation_sequence:is_empty()
+    return not self.turn_is_active
 end
 
 function World:level_new()
