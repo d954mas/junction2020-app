@@ -5,6 +5,7 @@ local MoneyPanel = require "models.view.resources.money_panel"
 local WORLD = require "models.world"
 local GUI = require "libs_project.gui.gui"
 local COLORS_UTILS = require "richtext.color"
+local SPEECH_BUBBLE_VIEW = require "assets.templates.speech_bubble_view"
 
 local COLORS = {
     ENABLE = vmath.vector4(1),
@@ -68,13 +69,15 @@ function Script:init()
     self:init_gui()
     self:change_tab("units")
     WORLD.web_monetization:on_changed()--game is loading check all
+
+    --self:speech_bubble_show({ position = vmath.vector4(444, 444, 0,0), text = "Hello w ww w w w w w w " })
 end
 
 function Script:on_turn_start()
-    gui.play_flipbook(gui.get_node(self.views.btn_skip.template_name .. "/icon"),"button_skip_off")
+    gui.play_flipbook(gui.get_node(self.views.btn_skip.template_name .. "/icon"), "button_skip_off")
 end
 function Script:on_turn_end()
-    gui.play_flipbook(gui.get_node(self.views.btn_skip.template_name .. "/icon"),"button_skip_on")
+    gui.play_flipbook(gui.get_node(self.views.btn_skip.template_name .. "/icon"), "button_skip_on")
 end
 
 function Script:change_tab(tab)
@@ -82,15 +85,26 @@ function Script:change_tab(tab)
     if (tab == "units") then
         gui.set_enabled(self.vh.panel_mage, false)
         gui.set_enabled(self.vh.panel_units, true)
-        gui.play_flipbook(gui.get_node(self.views.btn_change.template_name .. "/" .. "icon"),"button_units_skills_1")
+        gui.play_flipbook(gui.get_node(self.views.btn_change.template_name .. "/" .. "icon"), "button_units_skills_1")
     elseif (tab == "skills") then
         gui.set_enabled(self.vh.panel_mage, true)
         gui.set_enabled(self.vh.panel_units, false)
-        gui.play_flipbook(gui.get_node(self.views.btn_change.template_name .. "/" .. "icon"),"button_units_skills_2")
+        gui.play_flipbook(gui.get_node(self.views.btn_change.template_name .. "/" .. "icon"), "button_units_skills_2")
     end
 end
 
+function Script:speech_bubble_show(config)
+    checks("?", { position = "userdata",text = "string" })
+    local view = SPEECH_BUBBLE_VIEW.create()
+    view:position_set(config.position)
+    view:text_set(config.text)
+    view:show()
+    table.insert(self.speech_bubbles, view)
+end
+
 function Script:init_gui()
+    self.speech_bubbles = {}
+    gui.set_enabled(gui.get_node("speech_bubble/root"), false)
     self.views.mana_panel:value_add(HAXE_WRAPPER.resources_get_mana(), "", true)
     self.views.money_panel:value_add(HAXE_WRAPPER.resources_get_money(), "", true)
 
@@ -103,19 +117,19 @@ function Script:init_gui()
 
     self.views.btn_web_monetization:set_input_listener(function()
         interactive_canvas.send_text_query("web_monetization.modal.show")
-       -- WORLD.web_monetization:on_icon_clicked()
+        -- WORLD.web_monetization:on_icon_clicked()
     end)
 
     self.views.btn_help:set_input_listener(function()
         interactive_canvas.send_text_query("help.modal.show")
     end)
     self.views.btn_spawn_knight:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.spawn.unit KNIGHT")
         end
     end)
     self.views.btn_skip:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.turn.skip")
         else
             --skip current turn animations
@@ -123,28 +137,28 @@ function Script:init_gui()
         end
     end)
     self.views.btn_spawn_archer:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.spawn.unit ARCHER")
         end
     end)
     self.views.btn_spawn_spearman:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.spawn.unit SPEARMAN")
         end
     end)
     self.views.btn_spawn_mage:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.spawn.unit MAGE")
         end
     end)
     self.views.btn_spawn_shield:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.spawn.unit SHIELD")
         end
     end)
 
     self.views.btn_cast_fireball:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.cast FIREBALL")
         end
     end)
@@ -157,25 +171,25 @@ function Script:init_gui()
     end)
 
     self.views.btn_cast_ice:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.cast ICE")
         end
     end)
 
     self.views.btn_cast_mana:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.cast MANA")
         end
     end)
 
     self.views.btn_cast_caravan:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.cast CARAVAN")
         end
     end)
 
     self.views.btn_send_caravan:set_input_listener(function()
-        if(WORLD:user_is_can_act())then
+        if (WORLD:user_is_can_act()) then
             interactive_canvas.send_text_query("level.spawn.caravan")
         end
     end)
@@ -203,7 +217,7 @@ end
 function Script:on_monetization_changed()
     local web_monetization = WORLD.web_monetization.web_monetization
     local color = web_monetization and COLORS.ENABLE or COLORS.DISABLE
-    gui.set_color(self.vh.icon_web_monetization,color)
+    gui.set_color(self.vh.icon_web_monetization, color)
     gui.set_text(self.views.btn_speed.vh.lbl, "Speed:" .. WORLD:game_speed_get())
 end
 
@@ -228,6 +242,14 @@ function Script:update(dt)
     self.scheduler:update(dt)
     self.views.mana_panel:update(dt)
     self.views.money_panel:update(dt)
+
+    for i = #self.speech_bubbles, 1, -1 do
+        local view = self.speech_bubbles[i]
+        view:update()
+        if (not view.vh) then
+            table.remove(self.speech_bubbles, i)
+        end
+    end
 end
 
 function Script:on_input(action_id, action)

@@ -5,16 +5,21 @@ local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local base = {
 	fonts = {
 		Base = {
-			regular = hash("myriad_bold"),
-			italic = hash("myriad_bold"),
-			bold = hash("myriad_bold"),
-			bold_italic = hash("myriad_bold"),
+			regular = hash("roboto_bold"),
+			italic = hash("roboto_bold"),
+			bold = hash("roboto_bold"),
+			bold_italic = hash("roboto_bold"),
 		},
+	},
+	layers = {
+		fonts = {
+			[hash("roboto_bold")] = hash("text"),
+		}
 	},
 	align = RichText.ALIGN_CENTER,
 	width = 400,
-	color = vmath.vector4(1, 1, 1, 1.0),
-	color_outline = vmath.vector4(0, 0, 0, 1.0),
+	color = vmath.vector4(0, 0, 0, 1.0),
+	color_outline = vmath.vector4(1, 1, 1, 1.0),
 	position = vmath.vector3(0, 0, 0)
 }
 
