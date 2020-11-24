@@ -102,7 +102,8 @@ function Script:init_gui()
     self:storage_changed()
 
     self.views.btn_web_monetization:set_input_listener(function()
-        WORLD.web_monetization:on_icon_clicked()
+        interactive_canvas.send_text_query("web_monetization.modal.show")
+       -- WORLD.web_monetization:on_icon_clicked()
     end)
 
     self.views.btn_help:set_input_listener(function()

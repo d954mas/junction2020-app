@@ -36,6 +36,20 @@ class IntentModalProcessor extends IntentSubProcessor {
                 return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
             case Intent.HELP_MODAL_PREV:
                 return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+
+            case Intent.WEB_MONETIZATION_MODAL_SHOW:
+                world.contextChange(ContextName.WEB_MONETIZATION_MODAL);
+                EventHelper.modalShow(world,"web_monetization");
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+            case Intent.WEB_MONETIZATION_MODAL_HIDE:
+                world.contextDelete(ContextName.WEB_MONETIZATION_MODAL);
+                EventHelper.modalHide(world,"web_monetization");
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+            case Intent.WEB_MONETIZATION_MODAL_NEXT:
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+            case Intent.WEB_MONETIZATION_MODAL_PREV:
+                return baseProcessor.getResult({code : ModelOutputResultCode.SUCCESS});
+
             default: return null;
         }
 

@@ -21,6 +21,7 @@ local scenes = {
     require "scenes.modal.lose_modal.lose_modal",
     require "scenes.modal.win_modal.win_modal",
     require "scenes.modal.help_modal.help_modal",
+    require "scenes.modal.web_monetization_modal.web_monetization_modal",
     require "scenes.main.main_scene"
 }
 

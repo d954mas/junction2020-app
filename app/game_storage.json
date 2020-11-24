@@ -1,9 +1,9 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1606069751798.9,
+          "time": 1606230856897.7,
           "clientDeltaTime": 0,
-          "serverLastTime": 1606069751798.9
+          "serverLastTime": 1606230856897.7
      },
      "version": {
           "server": "dev",
@@ -15,22 +15,13 @@
      },
      "user": {
           "verification": "",
-          "name": "name",
           "locale": "en",
+          "name": "name",
           "permisions":           {}
      },
      "level": {
           "ice": 0,
           "lose": false,
-          "mageLevels": {
-               "ICE": 0,
-               "FIREBALL": 0,
-               "CARAVAN": 0,
-               "MANA": 0
-          },
-          "turnEnemyAI": 7,
-          "caravans":           [],
-          "unitIdx": 7,
           "enemy": {
                "unitLevels": {
                     "MAGE": 1,
@@ -40,8 +31,17 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "id": 1,
-               "unitQueue":                []
+               "unitQueue":                [],
+               "id": 1
+          },
+          "turnEnemyAI": 0,
+          "caravans":           [],
+          "unitIdx": 3,
+          "mageLevels": {
+               "ICE": 0,
+               "FIREBALL": 0,
+               "CARAVAN": 0,
+               "MANA": 0
           },
           "units": [
                {
@@ -50,19 +50,19 @@
                     "hp": 20,
                     "roadPartIdx": 0,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 0,
                     "reward": 0
                },
                {
                     "id": 1,
                     "attackRange": 1,
-                    "hp": 18,
+                    "hp": 20,
                     "roadPartIdx": 7000,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 0,
                     "reward": 0
                },
@@ -72,43 +72,10 @@
                     "hp": 20,
                     "roadPartIdx": 13000,
                     "attackLvl": 0,
-                    "type": "CASTLE",
                     "hpLvl": 0,
+                    "type": "CASTLE",
                     "ownerId": 1,
                     "reward": 0
-               },
-               {
-                    "id": 4,
-                    "attackRange": 1,
-                    "hp": 2,
-                    "roadPartIdx": 9000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "KNIGHT",
-                    "ownerId": 1,
-                    "reward": 50
-               },
-               {
-                    "id": 5,
-                    "attackRange": 2,
-                    "hp": 2,
-                    "roadPartIdx": 11000,
-                    "attackLvl": 0,
-                    "hpLvl": 0,
-                    "type": "ARCHER",
-                    "ownerId": 1,
-                    "reward": 75
-               },
-               {
-                    "id": 6,
-                    "attackRange": 1,
-                    "hp": 3,
-                    "roadPartIdx": 7000,
-                    "attackLvl": 1,
-                    "type": "SPEARMAN",
-                    "hpLvl": 1,
-                    "ownerId": 0,
-                    "reward": 150
                }
           ],
           "player": {
@@ -120,11 +87,11 @@
                     "KNIGHT": 1,
                     "ARCHER": 1
                },
-               "mana": 100,
+               "mana": 60,
                "id": 0,
-               "money": 160,
-               "unitQueue":                [],
-               "caravanLevel": 1
+               "money": 150,
+               "caravanLevel": 1,
+               "unitQueue":                []
           },
           "roads": [
                [
@@ -198,7 +165,7 @@
                     }
                ]
           ],
-          "turn": 7,
+          "turn": 0,
           "castles": [
                {
                     "unitId": 0,
@@ -233,7 +200,7 @@
           "version": 4,
           "dayAfterInstall": 0,
           "gameLocaleVersion": "",
-          "intentIdx": 154,
+          "intentIdx": 239,
           "gameBackendVersion": "",
           "gameSharedVersion": "",
           "device": "google",

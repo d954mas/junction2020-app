@@ -7,4 +7,5 @@ abstract ContextName(String) {
     var LOSE_MODAL = "lose_modal";
     var WIN_MODAL = "win_modal";
     var HELP_MODAL = "help_modal";
+    var WEB_MONETIZATION_MODAL = "web_monetization_modal";
 }

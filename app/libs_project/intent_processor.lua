@@ -110,6 +110,8 @@ end
 function Processor:get_scene_by_name_in_event(name)
     if (name == "help") then
         return SM.SCENES.HELP_MODAL
+    elseif (name == "web_monetization") then
+        return SM.SCENES.WEB_MONETIZATION_MODAL
     end
 end
 

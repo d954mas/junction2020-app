@@ -54,6 +54,11 @@ enum abstract Intent(String) {
     var HELP_MODAL_NEXT = "help.modal.next";
     var HELP_MODAL_PREV = "help.modal.prev";
 
+    var WEB_MONETIZATION_MODAL_SHOW = "web_monetization.modal.show";
+    var WEB_MONETIZATION_MODAL_HIDE = "web_monetization.modal.hide";
+    var WEB_MONETIZATION_MODAL_NEXT = "web_monetization.modal.next";
+    var WEB_MONETIZATION_MODAL_PREV = "web_monetization.modal.prev";
+
     //emulate web monetization on off
     var WEB_MONETIZATION_DEBUG_DISABLE = "web_monetization.debug.disable";
     var WEB_MONETIZATION_DEBUG_ENABLE = "web_monetization.debug.enable";
@@ -120,9 +125,14 @@ var intent:Intent;
 
 
         intentContexts[Intent.HELP_MODAL_SHOW] = [];
-        intentContexts[Intent.HELP_MODAL_HIDE] = [];
+        intentContexts[Intent.HELP_MODAL_HIDE] = [ContextName.HELP_MODAL];
         intentContexts[Intent.HELP_MODAL_PREV] = [ContextName.HELP_MODAL];
         intentContexts[Intent.HELP_MODAL_NEXT] = [ContextName.HELP_MODAL];
+
+        intentContexts[Intent.WEB_MONETIZATION_MODAL_SHOW] = [];
+        intentContexts[Intent.WEB_MONETIZATION_MODAL_HIDE] = [];
+        intentContexts[Intent.WEB_MONETIZATION_MODAL_PREV] = [ContextName.WEB_MONETIZATION_MODAL];
+        intentContexts[Intent.WEB_MONETIZATION_MODAL_NEXT] = [ContextName.WEB_MONETIZATION_MODAL];
 
 
 

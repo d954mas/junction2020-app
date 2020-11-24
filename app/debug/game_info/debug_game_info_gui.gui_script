@@ -85,7 +85,7 @@ function Script:bind_vh()
     gui.set_enabled(self.vh.text_input.root, COMMON.CONSTANTS.SHOW_TEXT_INPUT)
 
     if (not COMMON.CONSTANTS.HTML5) then
-        gui.set_position(self.views.btn_debug_show.vh.root, vmath.vector3(1184, 30, 0))
+        gui.set_position(self.views.btn_debug_show.vh.root, vmath.vector3(1045, 30, 0))
     else
         gui.set_enabled(self.views.btn_debug_show.vh.root, false)
     end

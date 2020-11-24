@@ -7,7 +7,8 @@ sm.SCENES = {
     MAIN = "MainScene",
     LOSE_MODAL = "LoseModal",
     WIN_MODAL = "WinModal",
-    HELP_MODAL = "HelpModal"
+    HELP_MODAL = "HelpModal",
+    WEB_MONETIZATION_MODAL = "WebMonetizationModal"
 }
 
 return sm

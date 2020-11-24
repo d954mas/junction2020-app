@@ -6155,9 +6155,13 @@ __shared_project_enums_Intents.init = function()
   __shared_project_enums_Intents.intentContexts:set("simple.spell.upgrade_mana", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("simple.spell.upgrade_caravan", _hx_tab_array({}, 0));
   __shared_project_enums_Intents.intentContexts:set("help.modal.show", _hx_tab_array({}, 0));
-  __shared_project_enums_Intents.intentContexts:set("help.modal.hide", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("help.modal.hide", _hx_tab_array({[0]="help_modal"}, 1));
   __shared_project_enums_Intents.intentContexts:set("help.modal.prev", _hx_tab_array({[0]="help_modal"}, 1));
   __shared_project_enums_Intents.intentContexts:set("help.modal.next", _hx_tab_array({[0]="help_modal"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.modal.show", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.modal.hide", _hx_tab_array({}, 0));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.modal.prev", _hx_tab_array({[0]="web_monetization_modal"}, 1));
+  __shared_project_enums_Intents.intentContexts:set("web_monetization.modal.next", _hx_tab_array({[0]="web_monetization_modal"}, 1));
   __shared_project_enums_Intents.ignoreTutorialCheck:set("main.welcome", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("lose.modal.restart", true);
   __shared_project_enums_Intents.ignoreTutorialCheck:set("win.modal.restart", true);
@@ -6414,6 +6418,18 @@ __shared_project_intent_processors_IntentModalProcessor.prototype.processIntent 
   elseif (intent) == "lose.modal.restart" then 
     self:ask("restart");
     self.world.levelModel:restart();
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "web_monetization.modal.hide" then 
+    self.world:contextDelete("web_monetization_modal");
+    __shared_base_event_EventHelper.modalHide(self.world, "web_monetization");
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "web_monetization.modal.next" then 
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "web_monetization.modal.prev" then 
+    do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
+  elseif (intent) == "web_monetization.modal.show" then 
+    self.world:contextChange("web_monetization_modal");
+    __shared_base_event_EventHelper.modalShow(self.world, "web_monetization");
     do return self.baseProcessor:getResult(_hx_o({__fields__={code=true},code="SUCCESS"})) end;
   elseif (intent) == "win.modal.restart" then 
     self:ask("restart");
