@@ -39,7 +39,7 @@ function Lbl:set_text(text)
     RICHTEXT.DEFAULT_ALIGN = nil
 
     if (self.center_v) then
-        gui.set_position(self.root_node, vmath.vector3(0, self.text_metrics.height / 2, 0))
+        gui.set_position(self.root_node, vmath.vector3(0, self.text_metrics.height / 4, 0))
     else
         gui.set_position(self.root_node, vmath.vector3(0))
     end

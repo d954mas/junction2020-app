@@ -70,7 +70,10 @@ function Script:init()
     self:change_tab("units")
     WORLD.web_monetization:on_changed()--game is loading check all
 
-    --self:speech_bubble_show({ position = vmath.vector4(444, 444, 0,0), text = "Hello w ww w w w w w w " })
+   -- self:speech_bubble_show({ position = vmath.vector4(200, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = false, top = false} })
+   -- self:speech_bubble_show({ position = vmath.vector4(820, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = true, top = false} })
+   -- self:speech_bubble_show({ position = vmath.vector4(200, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = false, top = true} })
+  --  self:speech_bubble_show({ position = vmath.vector4(820, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = true, top = true} })
 end
 
 function Script:on_turn_start()
@@ -94,8 +97,8 @@ function Script:change_tab(tab)
 end
 
 function Script:speech_bubble_show(config)
-    checks("?", { position = "userdata",text = "string" })
-    local view = SPEECH_BUBBLE_VIEW.create()
+    checks("?", { position = "userdata",text = "string", config = "table" })
+    local view = SPEECH_BUBBLE_VIEW.create(config.config)
     view:position_set(config.position)
     view:text_set(config.text)
     view:show()
