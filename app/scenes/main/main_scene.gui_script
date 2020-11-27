@@ -6,6 +6,7 @@ local WORLD = require "models.world"
 local GUI = require "libs_project.gui.gui"
 local COLORS_UTILS = require "richtext.color"
 local SPEECH_BUBBLE_VIEW = require "assets.templates.speech_bubble_view"
+local ACTIONS = require "libs.actions.actions"
 
 local COLORS = {
     ENABLE = vmath.vector4(1),
@@ -57,7 +58,9 @@ function Script:bind_vh()
 
         btn_change = GUI.ButtonScale("btn_change"),
 
-        btn_web_monetization = GUI.ButtonScale("icon_web_monetization")
+        btn_web_monetization = GUI.ButtonScale("icon_web_monetization"),
+
+        tooltips = {}
     }
 
 end
@@ -68,12 +71,16 @@ function Script:init()
     self:bind_vh()
     self:init_gui()
     self:change_tab("units")
+    self.tooltips_animation = ACTIONS.Parallel()
+    self.tooltips_animation.drop_empty = false
     WORLD.web_monetization:on_changed()--game is loading check all
 
-   -- self:speech_bubble_show({ position = vmath.vector4(200, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = false, top = false} })
-   -- self:speech_bubble_show({ position = vmath.vector4(820, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = true, top = false} })
-   -- self:speech_bubble_show({ position = vmath.vector4(200, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = false, top = true} })
-  --  self:speech_bubble_show({ position = vmath.vector4(820, 400, 0,0), text = "Hello w ww w w w w w w ",config = {left = true, top = true} })
+
+    self:tooltip_show({ name = "test", position = vmath.vector4(200, 0, 0, 0), text = "Hello w ww w w w w w w ", config = { left = false, top = false } })
+    --self:speech_bubble_show({ position = vmath.vector4(200, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = false, top = false } })
+    self:speech_bubble_show({ position = vmath.vector4(820, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = true, top = false } })
+    self:speech_bubble_show({ position = vmath.vector4(200, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = false, top = true } })
+    self:speech_bubble_show({ position = vmath.vector4(820, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = true, top = true } })
 end
 
 function Script:on_turn_start()
@@ -96,12 +103,42 @@ function Script:change_tab(tab)
     end
 end
 
+function Script:tooltip_show(config)
+    checks("?", { name = "string", position = "userdata", text = "string", config = "table" })
+    assert(config.name)
+    if (self.views.tooltips[config.name]) then
+        self.views.tooltips[config.name].time = self.views.tooltips[config.name] + 1
+    else
+        local view = SPEECH_BUBBLE_VIEW.create(config.config)
+        self.views.tooltips[config.name] = { time = 2, view = view }
+        view:position_set(assert(config.position))
+        view:text_set(assert(config.text))
+        local action = ACTIONS.Sequence()
+        action:add_action(view:animation_show())
+        action:add_action(function()
+            local dt = 0
+            while dt < self.views.tooltips[config.name].time do
+                dt = dt + coroutine.yield()
+            end
+            self.views.tooltips[config.name] = nil
+        end)
+        action:add_action(view:animation_hide())
+        action:add_action(function()
+            view:dispose()
+        end)
+        self.tooltips_animation:add_action(action)
+    end
+
+
+end
+
 function Script:speech_bubble_show(config)
-    checks("?", { position = "userdata",text = "string", config = "table" })
+    checks("?", { position = "userdata", text = "string", config = "table" })
     local view = SPEECH_BUBBLE_VIEW.create(config.config)
     view:position_set(config.position)
     view:text_set(config.text)
-    view:show()
+    gui.set_enabled(view.vh.root,true)
+    gui.set_scale(view.vh.root,vmath.vector3(1))
     table.insert(self.speech_bubbles, view)
 end
 
@@ -242,6 +279,7 @@ function Script:final()
 end
 
 function Script:update(dt)
+    self.tooltips_animation:update(dt)
     self.scheduler:update(dt)
     self.views.mana_panel:update(dt)
     self.views.money_panel:update(dt)

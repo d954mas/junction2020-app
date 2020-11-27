@@ -1,5 +1,7 @@
 local COMMON = require "libs.common"
 local RichtextLbl = require "libs_project.gui.richtext_lbl"
+local ACTIONS = require "libs.actions.actions"
+local TWEEN = require "libs.tween"
 
 ---@class SpeechBubbleView
 local SpeechBubbleView = COMMON.class("SpeechBubbleView")
@@ -9,7 +11,7 @@ function SpeechBubbleView:initialize(nodes, config)
     self.config = assert(config)
     self.rich_text = nil
     self:bind_vh()
-
+    gui.set_scale(self.vh.root, vmath.vector3(0.00001))
     self:gui_check_direction()
 end
 
@@ -18,7 +20,8 @@ function SpeechBubbleView:gui_check_direction()
     local dy = 80
     local dx = 90
     local size = gui.get_size(self.vh.bubble)
-    local pos = vmath.vector3(size.x / 2 - dx, size.y / 2, 0)
+    local pos = vmath.vector3(-size.x / 2 + dx, size.y / 2, 0)
+    pprint(pos)
     local text_pos = vmath.vector3(0, 35.5, 0)
     pprint(self.config)
 
@@ -78,11 +81,26 @@ function SpeechBubbleView:update()
 
 end
 
-function SpeechBubbleView:show()
-    gui.set_enabled(self.vh.root, true)
+function SpeechBubbleView:animation_show()
+    local action = ACTIONS.Sequence()
+    action:add_action(function()
+        gui.set_enabled(self.vh.root, true)
+    end)
+    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "scale",
+                                      easing = TWEEN.easing.linear, v3 = true, from = vmath.vector3(0.0001), to = vmath.vector3(1),
+                                      time = 0.5 })
+    return action
 end
 
-function SpeechBubbleView:hide()
+function SpeechBubbleView:animation_hide()
+    local action = ACTIONS.Sequence()
+    action:add_action(ACTIONS.Tween { object = self.vh.root, property = "scale",
+                                      easing = TWEEN.easing.linear, v3 = true, from = vmath.vector3(1), to = vmath.vector3(0.0001),
+                                      time = 0.5 })
+    action:add_action(function()
+        gui.set_enabled(self.vh.root, false)
+    end)
+    return action
 
 end
 
