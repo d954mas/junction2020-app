@@ -28,7 +28,7 @@ local TYPE_CONFIGS = {
     [View.TYPES.CANNON_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_cannon_player_factory"), scale = 1, y_top = 20 },
     [View.TYPES.CANNON_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_cannon_enemy_factory"), scale = 1, y_top = 20 },
     [View.TYPES.ARROW_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_arrow_player_factory"), scale = 1, y_top = 90, rotation = true },
-    [View.TYPES.ARROW_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_arrow_enemy_factory"), scale = 1, y_top = 90 },
+    [View.TYPES.ARROW_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_arrow_enemy_factory"), scale = 1, y_top = 90, rotation = true },
     [View.TYPES.MAGE_PLAYER] = { factory = msg.url("main_scene:/factories#projectile_mage_player_factory"), scale = 1, y_top = 50 },
     [View.TYPES.MAGE_ENEMY] = { factory = msg.url("main_scene:/factories#projectile_mage_enemy_factory"), scale = 1, y_top = 50 }
 }

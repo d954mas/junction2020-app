@@ -20,7 +20,7 @@ path_settings {
 }
 path_settings {
   path: "**"
-  profile: "Default No MipMaps"
+  profile: "Default MipMaps"
 }
 profiles {
   name: "Default MipMaps"

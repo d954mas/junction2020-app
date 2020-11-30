@@ -1,9 +1,9 @@
 {
      "timers": {
           "timerDelta": 0,
-          "time": 1606505413835.1,
-          "serverLastTime": 1606505413835.1,
-          "clientDeltaTime": 0
+          "time": 1606759875852.1,
+          "clientDeltaTime": 0,
+          "serverLastTime": 1606759875852.1
      },
      "version": {
           "server": "dev",
@@ -19,38 +19,6 @@
           "name": "name",
           "permisions":           {}
      },
-     "profile": {
-          "currentVersion": 421,
-          "tag": "",
-          "dtdId": "222f0ac3-7b80-441c-9e98-ed0adbb779d7",
-          "firstLaunchTimestamp": 1604618196,
-          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
-          "conversationIdAtStart": "1111",
-          "cheatsEnabled": true,
-          "isDev": true,
-          "webMonetization": false,
-          "conversationIdCurrent": "1111"
-     },
-     "timerDelta": 0,
-     "stat": {
-          "startGameCounter": 0,
-          "version": 4,
-          "dayAfterInstall": 0,
-          "gameLocaleVersion": "",
-          "intentIdx": 404,
-          "gameBackendVersion": "",
-          "gameSharedVersion": "",
-          "device": "google",
-          "userLevel": 1,
-          "platform": "google",
-          "gameConfigVersion": ""
-     },
-     "tutorials":      {},
-     "iap": {
-          "current_iap": ""
-     },
-     "time": 1586967396797,
-     "serverLastTime": 1586967396797,
      "level": {
           "ice": 0,
           "lose": false,
@@ -213,5 +181,37 @@
                }
           ],
           "caravanIdx": 0
-     }
+     },
+     "timerDelta": 0,
+     "profile": {
+          "currentVersion": 421,
+          "tag": "",
+          "dtdId": "222f0ac3-7b80-441c-9e98-ed0adbb779d7",
+          "firstLaunchTimestamp": 1604618196,
+          "uuid": "62e09997-327f-4e0a-865c-364f09141285",
+          "conversationIdAtStart": "1111",
+          "cheatsEnabled": true,
+          "isDev": true,
+          "webMonetization": false,
+          "conversationIdCurrent": "1111"
+     },
+     "stat": {
+          "startGameCounter": 0,
+          "version": 4,
+          "dayAfterInstall": 0,
+          "gameLocaleVersion": "",
+          "intentIdx": 574,
+          "gameBackendVersion": "",
+          "gameSharedVersion": "",
+          "device": "google",
+          "userLevel": 1,
+          "platform": "google",
+          "gameConfigVersion": ""
+     },
+     "iap": {
+          "current_iap": ""
+     },
+     "time": 1586967396797,
+     "serverLastTime": 1586967396797,
+     "tutorials":      {}
 }

@@ -17,7 +17,7 @@ use_accelerometer = 0
 [display]
 width = 1280
 height = 680
-high_dpi = 0
+high_dpi = 1
 fullscreen = 0
 update_frequency = 0
 display_profiles = /builtins/render/default.display_profilesc
@@ -49,7 +49,7 @@ manifest = /builtins/manifests/android/AndroidManifest.xml
 package = com.justai.monstrarium
 
 [graphics]
-texture_profiles = /render/fast.texture_profiles
+texture_profiles = /render/my.texture_profiles
 default_texture_min_filter = linear
 default_texture_mag_filter = linear
 verify_graphics_calls = 0

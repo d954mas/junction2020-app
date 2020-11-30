@@ -90,7 +90,7 @@ embedded_instances {
   children: "hp_text"
   data: ""
   position {
-    x: 3.0
+    x: 7.0
     y: 3.0
     z: 0.0
   }
@@ -117,7 +117,7 @@ embedded_instances {
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
+  "    x: 10.0\n"
   "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
@@ -130,8 +130,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -27.0
-    y: 83.0
+    x: -31.0
+    y: 86.0
     z: 0.0
   }
   rotation {
@@ -141,8 +141,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 0.4
-    y: 0.4
+    x: 0.3
+    y: 0.3
     z: 1.0
   }
 }
@@ -191,7 +191,7 @@ embedded_instances {
   "material: \\\"/assets/materials/label-df.material\\\"\\n"
   "\"\n"
   "  position {\n"
-  "    x: -9.091\n"
+  "    x: -6.061\n"
   "    y: 0.0\n"
   "    z: 0.0\n"
   "  }\n"
@@ -205,7 +205,7 @@ embedded_instances {
   ""
   position {
     x: -26.0
-    y: 86.0
+    y: 88.0
     z: 0.1
   }
   rotation {
@@ -226,7 +226,7 @@ embedded_instances {
   children: "attack_text"
   data: ""
   position {
-    x: 33.0
+    x: 34.0
     y: 3.0
     z: 0.0
   }
@@ -340,8 +340,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: -19.0
-    y: 86.0
+    x: -18.0
+    y: 88.0
     z: 0.1
   }
   rotation {

@@ -75,12 +75,37 @@ function Script:init()
     self.tooltips_animation.drop_empty = false
     WORLD.web_monetization:on_changed()--game is loading check all
 
-
-    self:tooltip_show({ name = "test", position = vmath.vector4(200, 0, 0, 0), text = "Hello w ww w w w w w w ", config = { left = false, top = false } })
+    self.tooltips_animation:add_action(function ()
+        COMMON.COROUTINES.coroutine_wait(0.5)
+        self:tooltips_enemy()
+        self.first_touch = false
+        COMMON.COROUTINES.coroutine_wait(1.5)
+        self:tooltips_hero()
+        while(not self.first_touch)do
+            pprint(self.views.tooltips["enemy say"].time)
+            self.views.tooltips["enemy say"].time =  2
+            self.views.tooltips["hero say"].time =  2
+            pprint(self.views.tooltips["enemy say"].time)
+            coroutine.yield()
+        end
+        COMMON.COROUTINES.coroutine_wait(0.3)
+    end)
     --self:speech_bubble_show({ position = vmath.vector4(200, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = false, top = false } })
-    self:speech_bubble_show({ position = vmath.vector4(820, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = true, top = false } })
-    self:speech_bubble_show({ position = vmath.vector4(200, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = false, top = true } })
-    self:speech_bubble_show({ position = vmath.vector4(820, 400, 0, 0), text = "Hello w ww w w w w w w ", config = { left = true, top = true } })
+end
+
+function Script:tooltips_enemy()
+    self:tooltip_show({ name = "enemy say" ,text = "<size=1.2>We are from moon.\n We will steal all your secrets</size>",
+                        time_show =4, position = vmath.vector4(1100, 400, 0, 0), config = { left = false, top = false } })
+end
+
+function Script:tooltips_hero()
+    self:tooltip_show({ name = "hero say" ,text = "<size=1.2>We will defend our secrets</size>",
+    time_show =4, position = vmath.vector4(500, 400, 0, 0), config = { left = true, top = false } })
+end
+
+function Script:tooltips_webmonetization_only()
+    self:tooltip_show({ name = "webmonetization_only" ,text = "<size=1.2>Available for web monetization user</size>",
+                        time_show =4, position = vmath.vector4(1200, 520, 0, 0), config = { left = false, top = false } })
 end
 
 function Script:on_turn_start()
@@ -103,22 +128,23 @@ function Script:change_tab(tab)
     end
 end
 
+
 function Script:tooltip_show(config)
-    checks("?", { name = "string", position = "userdata", text = "string", config = "table" })
+    checks("?", { name = "string", position = "userdata", text = "string", time_show = "nil|number", config = "table" })
     assert(config.name)
     if (self.views.tooltips[config.name]) then
-        self.views.tooltips[config.name].time = self.views.tooltips[config.name] + 1
+        self.views.tooltips[config.name].time = self.views.tooltips[config.name].time + 1
     else
         local view = SPEECH_BUBBLE_VIEW.create(config.config)
-        self.views.tooltips[config.name] = { time = 2, view = view }
+        self.views.tooltips[config.name] = { time = config.time_show, view = view }
         view:position_set(assert(config.position))
         view:text_set(assert(config.text))
         local action = ACTIONS.Sequence()
         action:add_action(view:animation_show())
         action:add_action(function()
-            local dt = 0
-            while dt < self.views.tooltips[config.name].time do
-                dt = dt + coroutine.yield()
+            while self.views.tooltips[config.name].time > 0  do
+                local dt = coroutine.yield()
+                self.views.tooltips[config.name].time = self.views.tooltips[config.name].time - dt
             end
             self.views.tooltips[config.name] = nil
         end)
@@ -238,6 +264,8 @@ function Script:init_gui()
         if (HAXE_WRAPPER.web_monetization_is()) then
             WORLD:game_speed_next()
             gui.set_text(self.views.btn_speed.vh.lbl, "Speed:" .. WORLD:game_speed_get())
+        else
+            self:tooltips_webmonetization_only()
         end
 
     end)
@@ -294,6 +322,9 @@ function Script:update(dt)
 end
 
 function Script:on_input(action_id, action)
+    if(self.first_touch == false and action_id == COMMON.HASHES.INPUT_TOUCH and action.pressed)then
+        self.first_touch = true
+    end
     self.views.btn_web_monetization:on_input(action_id, action)
 
     self.views.btn_help:on_input(action_id, action)
