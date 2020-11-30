@@ -136,6 +136,9 @@ function M.resources_get_mana()
 end
 
 function M.web_monetization_is()
+    if(webmonetization)then
+        return webmonetization.is_monetized()
+    end
     return M.get_world():webMonetizationIs()
 end
 return M

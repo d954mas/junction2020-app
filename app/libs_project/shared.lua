@@ -7371,6 +7371,7 @@ __shared_project_model_PlayerModel.prototype.unitsSpawnUnit = function(self,unit
     do return true end;
   else
     self.world.speechBuilder:text(Std.string("cant spawn ") .. Std.string(unitType));
+    __shared_base_event_EventHelper.levelTurnEnd(self.world);
     do return false end;
   end;
 end

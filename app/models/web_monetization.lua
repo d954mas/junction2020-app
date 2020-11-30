@@ -2,6 +2,7 @@ local COMMON = require "libs.common"
 local HAXE_WRAPPER = require "libs_project.haxe_wrapper"
 local COLORS_UTILS = require "richtext.color"
 local SPEECH = require "libs_project.speech"
+local WEB_MONETIZATION = require "libs_project.webmonetization"
 
 local COLORS = {
     ENABLE = vmath.vector4(1),
@@ -19,7 +20,10 @@ end
 
 function WebMonetization:update(dt)
     if (SPEECH.shared) then
+
+
         local web_monetization = HAXE_WRAPPER.web_monetization_is()
+
         if (self.web_monetization ~= web_monetization) then
             COMMON.i("change web_monetization:" .. tostring(web_monetization), TAG)
             self.web_monetization = web_monetization

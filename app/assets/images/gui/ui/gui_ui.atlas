@@ -8,90 +8,94 @@ images {
 }
 images {
   image: "/assets/images/gui/cirlce_white.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_mana.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/mana_bar.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_gold.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_unit_mage.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_unit_archer.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_unit_knight.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_unit_shield.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_unit_spearman.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_mage_fire.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_mage_ice.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_mage_mana.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_mage_caravan.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/lose_modal.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/icon_send_caravan.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/gui/ui/icons/icon_web_monetization.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/gui/button_skip_on.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/gui/button_skip_off.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/gui/button_units_skills_1.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/gui/button_units_skills_2.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/gui/speech_bubble.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
 }
 images {
   image: "/assets/images/game/win_modal.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
+}
+images {
+  image: "/assets/images/gui/ui/icons/icon_info.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0

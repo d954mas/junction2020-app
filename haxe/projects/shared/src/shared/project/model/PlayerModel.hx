@@ -41,6 +41,7 @@ class PlayerModel {
             return true;
         }else{
             world.speechBuilder.text("cant spawn " + unitType);
+            EventHelper.levelTurnEnd(world); //update all animations before turn end
             return false;
         }
     }

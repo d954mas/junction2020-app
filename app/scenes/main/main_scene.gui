@@ -3911,8 +3911,8 @@ nodes {
     w: 1.0
   }
   size {
-    x: 84.0
-    y: 84.0
+    x: 1.0
+    y: 1.0
     z: 0.0
     w: 1.0
   }
@@ -3924,7 +3924,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "gui_ui/cirlce_white"
+  texture: "gui_ui/empty"
   id: "btn_speed/bg"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -3944,6 +3944,7 @@ nodes {
   clipping_inverted: false
   alpha: 1.0
   overridden_fields: 1
+  overridden_fields: 9
   template_node_child: true
   size_mode: SIZE_MODE_AUTO
 }
@@ -3961,14 +3962,14 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 0.75
-    y: 0.75
+    x: 1.0
+    y: 1.0
     z: 1.0
     w: 1.0
   }
   size {
-    x: 40.0
-    y: 72.0
+    x: 80.0
+    y: 80.0
     z: 0.0
     w: 1.0
   }
@@ -3980,7 +3981,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "debug/icon_info"
+  texture: "gui_ui/icon_info"
   id: "btn_speed/icon"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
